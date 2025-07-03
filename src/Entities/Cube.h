@@ -3,6 +3,7 @@
 
 class Cube : Entity
 {
+public:
 	Cube();
 };
 

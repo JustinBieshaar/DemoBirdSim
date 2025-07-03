@@ -1,11 +1,11 @@
 #include "Renderer.h"
 
 #include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
 #include <backends/imgui_impl_opengl3_loader.h>
 
 #include "../ECS/Components/Transform.h"
 #include "../ECS/Components/MeshComponent.h"
+#include <glm/ext/matrix_transform.hpp>
 
 void Renderer::render(const std::vector<Entity*>& entities)
 {
@@ -13,10 +13,10 @@ void Renderer::render(const std::vector<Entity*>& entities)
     {
         Transform transform;
         MeshComponent mesh;
-        if (!entity->HasComponent<Transform>(transform))
+        if (!entity->tryGetComponent<Transform>(transform))
             continue;
 
-        if (!entity->HasComponent<MeshComponent>(mesh))
+        if (!entity->tryGetComponent<MeshComponent>(mesh))
             continue;
 
         auto model = glm::mat4(1.0f);

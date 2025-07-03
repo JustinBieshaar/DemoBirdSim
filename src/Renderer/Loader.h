@@ -8,7 +8,7 @@
 class Loader
 {
 public: 
-	MeshComponent loadToMeshComponent(const std::vector<float>& vertices, const std::vector<int>& indices);
+	MeshComponent loadToMeshComponent(const std::vector<float>& vertices, const std::vector<GLuint>& indices);
 	void cleanup();
 
 private:
@@ -20,5 +20,4 @@ private:
 
 	void storeDataInAttributeList(int attributeNumber, const std::vector<float>& data, int sizePerVertex = 3);
 	void bindIndices(const std::vector<unsigned int>& indices);
-
 };

@@ -1,14 +1,18 @@
+#include <glad/glad.h>
 #include "Loader.h"
 #include <backends/imgui_impl_opengl3_loader.h>
-#include <glad/glad.h>
 
-MeshComponent Loader::loadToMeshComponent(const std::vector<float>& vertices, const std::vector<int>& indices)
+MeshComponent Loader::loadToMeshComponent(const std::vector<float>& vertices, const std::vector<GLuint>& indices)
 {
-	GLuint vaoID = createVertexArrayObject();
-	bindIndicesBuffer(indices);
+	GLuint vao = createVertexArrayObject();
+	bindIndices(indices);
 	storeDataInAttributeList(0, vertices);
-	unbindVertexArrayObject();
-	return MeshComponent();
+	glBindVertexArray(0); // Unbind VAO after setup
+
+	MeshComponent mesh;
+	mesh.m_vertexArrayObject = vao;
+	mesh.m_vertexCount = static_cast<unsigned int>(indices.size());
+	return mesh;
 }
 
 void Loader::cleanup()
@@ -45,17 +49,7 @@ GLuint Loader::createVertexBufferObject(GLenum target, const void* data, size_t 
 	return vbo;
 }
 
-void Loader::bindIndicesBuffer(const std::vector<int>& indices)
-{
-	GLuint vboID;
-	glGenBuffers(1, &vboID);
-	m_vertexBufferObjects.push_back(vboID);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
-}
-
-void Loader::storeDataInAttributeList(int attributeNumber, const std::vector<float>& data, int sizePerVertex = 3)
+void Loader::storeDataInAttributeList(int attributeNumber, const std::vector<float>& data, int sizePerVertex)
 {
 	// Create VBO for attribute data
 	createVertexBufferObject(GL_ARRAY_BUFFER, data.data(), data.size() * sizeof(float));
@@ -65,12 +59,8 @@ void Loader::storeDataInAttributeList(int attributeNumber, const std::vector<flo
 	glEnableVertexAttribArray(attributeNumber);
 }
 
-GLuint Loader::storeDataInIntBuffer(const std::vector<int>& indices)
+void Loader::bindIndices(const std::vector<unsigned int>& indices)
 {
-	GLuint bufferID;
-	glGenBuffers(1, &bufferID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), indices.data(), GL_STATIC_DRAW);
-	return bufferID;
+	createVertexBufferObject(GL_ELEMENT_ARRAY_BUFFER, indices.data(), indices.size() * sizeof(unsigned int));
 }
 

@@ -1,9 +1,10 @@
 #pragma once
 
+#include "Component.h"
 #include <glm/vec2.hpp>
 #include <glm/vec4.hpp>
 
-struct SpriteComponent
+struct SpriteComponent : Component
 {
 	unsigned int m_textureID;
 	glm::vec2 m_size;

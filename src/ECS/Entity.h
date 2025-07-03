@@ -8,17 +8,43 @@
 class Entity
 {
 public:
-    template<typename T, typename... Args>
-    T& addComponent(Args&&... args);
+    template<typename T, typename ...Args>
+    T& addComponent(Args && ...args)
+    {
+        auto component = std::make_shared<T>(std::forward<Args>(args)...);
+        m_components[typeid(T)] = component;
+        return *component;
+    }
 
     template<typename T>
-    T* getComponent();
+    T* getComponent()
+    {
+        auto it = m_components.find(typeid(T));
+        if (it != m_components.end())
+        {
+            return static_cast<T*>(it->second.get());
+        }
+        return nullptr;
+    }
 
     template<typename T>
-    bool HasComponent();
+    bool hasComponent()
+    {
+        return m_components.find(typeid(T)) != m_components.end();
+    }
 
     template<typename T>
-    bool HasComponent(T& ref);
+    bool tryGetComponent(T& ref)
+    {
+        auto it = m_components.find(typeid(T));
+        if (it != m_components.end())
+        {
+            ref = *static_cast<T*>(it->second.get());
+            return true;
+        }
+        return false;
+    }
+
 
 private:
 	std::unordered_map<std::type_index, std::shared_ptr<Component>> m_components;

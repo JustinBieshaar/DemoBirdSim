@@ -16,22 +16,6 @@ private:
     void cleanup();
 
     GLFWwindow* m_window;
-
     float m_lastTime;
-
-    int cubeSize;
-    GLuint vertexBuffer;
-
-    const GLdouble coordinates[8][3] = {
-        {-0.5, -0.5, -0.5},
-        {0.5, -0.5, -0.5},
-        {0.5, -0.5, 0.5},
-        {-0.5, -0.5, 0.5},
-        {-0.5, 0.5, 0.5},
-        {-0.5, 0.5, -0.5},
-        {0.5, 0.5, -0.5},
-        {0.5, 0.5, 0.5}
-    };
-
 };
 
