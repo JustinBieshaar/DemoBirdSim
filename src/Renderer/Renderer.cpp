@@ -7,6 +7,8 @@
 #include "../ECS/Components/MeshComponent.h"
 #include <glm/ext/matrix_transform.hpp>
 
+#include <iostream>
+
 void Renderer::render(const std::vector<Entity*>& entities)
 {
     for (const auto& entity : entities)
@@ -19,15 +21,33 @@ void Renderer::render(const std::vector<Entity*>& entities)
         if (!entity->tryGetComponent<MeshComponent>(mesh))
             continue;
 
-        auto model = glm::mat4(1.0f);
+        // Build model matrix
+        glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, transform.m_position);
         model = glm::scale(model, transform.m_scale);
-        // Rotation omitted for simplicity
+        // Add rotation if needed
 
-        // Render Mesh
-            // Set shader uniforms, bind VAO, etc.
+        // Use shader
+        if (mesh.m_shader)
+        {
+            mesh.m_shader->use();
+            mesh.m_shader->setMat4("u_Model", model);
+        }
+
+        // Render mesh
         glBindVertexArray(mesh.m_vertexArrayObject);
-        // e.g., shader.setMat4("model", model);
+        glEnableVertexAttribArray(0); // Position
+        glEnableVertexAttribArray(1); // TexCoords / Normals etc.
+
+        //glActiveTexture(GL_TEXTURE0); // Optional: bind texture here
+
         glDrawElements(GL_TRIANGLES, mesh.m_vertexCount, GL_UNSIGNED_INT, 0);
+
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+        glBindVertexArray(0);
+
+       // std::cout << "tried to render: " << typeid(*entity).name() << " | vao is: " << mesh.m_vertexArrayObject << "\n";
+
     }
 }

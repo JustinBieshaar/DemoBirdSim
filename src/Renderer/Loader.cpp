@@ -1,18 +1,14 @@
 #include <glad/glad.h>
 #include "Loader.h"
-#include <backends/imgui_impl_opengl3_loader.h>
 
-MeshComponent Loader::loadToMeshComponent(const std::vector<float>& vertices, const std::vector<GLuint>& indices)
+std::shared_ptr<MeshComponent> Loader::loadToMeshComponent(const std::vector<float>& vertices, const std::vector<GLuint>& indices)
 {
 	GLuint vao = createVertexArrayObject();
 	bindIndices(indices);
 	storeDataInAttributeList(0, vertices);
 	glBindVertexArray(0); // Unbind VAO after setup
 
-	MeshComponent mesh;
-	mesh.m_vertexArrayObject = vao;
-	mesh.m_vertexCount = static_cast<unsigned int>(indices.size());
-	return mesh;
+	return std::make_shared<MeshComponent>(vao, indices.size());
 }
 
 void Loader::cleanup()

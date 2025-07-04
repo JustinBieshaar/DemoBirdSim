@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include "Entities/Cube.h"
 #include "Application.h"
 
 #include <glm/glm.hpp>
@@ -56,11 +57,13 @@ void Application::processInput(float deltaTime)
     // Handle keyboard/mouse if needed
 }
 
-void Application::render()
+void Application::render(Renderer& renderer)
 {
     glViewport(0, 0, Window_Width, Window_Height);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    renderer.render(m_entities);
 }
 
 void Application::renderUI()
@@ -80,6 +83,13 @@ void Application::renderUI()
 
 void Application::run()
 {
+    Renderer renderer;
+    Loader* loader = new Loader();
+
+    Cube* cube = new Cube(loader);
+    cube->addComponent<Transform>(glm::vec3(0,0,0), glm::vec3(0,0,0));
+
+    m_entities.push_back(cube);
     while (!glfwWindowShouldClose(m_window))
     {
         float currentTime = glfwGetTime();
@@ -89,7 +99,7 @@ void Application::run()
         glfwPollEvents();
         processInput(deltaTime);
 
-        render();
+        render(renderer);
         renderUI();
 
         glfwSwapBuffers(m_window);

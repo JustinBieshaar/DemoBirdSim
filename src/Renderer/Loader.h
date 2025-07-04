@@ -1,14 +1,15 @@
 #pragma once
 
+#include "../ECS/Components/MeshComponent.h"
+
+#include <memory>
 #include <vector>
 #include <GLFW/glfw3.h>
-
-#include "../ECS/Components/MeshComponent.h"
 
 class Loader
 {
 public: 
-	MeshComponent loadToMeshComponent(const std::vector<float>& vertices, const std::vector<GLuint>& indices);
+	std::shared_ptr<MeshComponent> loadToMeshComponent(const std::vector<float>& vertices, const std::vector<GLuint>& indices);
 	void cleanup();
 
 private:

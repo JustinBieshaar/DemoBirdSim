@@ -8,12 +8,20 @@
 class Entity
 {
 public:
+
+    virtual ~Entity() = default;
+
     template<typename T, typename ...Args>
     T& addComponent(Args && ...args)
     {
         auto component = std::make_shared<T>(std::forward<Args>(args)...);
         m_components[typeid(T)] = component;
         return *component;
+    }
+
+    void addComponent(std::shared_ptr<Component> component)
+    {
+        m_components[typeid(*component)] = component;
     }
 
     template<typename T>
