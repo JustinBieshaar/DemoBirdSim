@@ -21,9 +21,22 @@ project "Demo-Bird-Simulator"
     targetdir "bin/%{cfg.buildcfg}"
     objdir "obj/%{cfg.buildcfg}"
 
-    includedirs { "include/", "external/glad/include/", "external/glfw/include/", "external/glm/", "external/imgui/", "external/imgui/examples" }
+    includedirs { 
+        "include/", 
+        "external/glad/include/", 
+        "external/glfw/include/", 
+        "external/glm/", 
+        "external/imgui/", 
+        "external/imgui/examples" ,
+        "external/stb/"
+    }
 
-    files { "src/*.cpp", "src/**.h"}
+    files 
+    { 
+        -- Files
+        "src/**.cpp", 
+        "src/**.h",
+    }
 
     links { "GLFW", "GLM", "GLAD", "ImGui" }
 

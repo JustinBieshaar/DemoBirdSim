@@ -6,5 +6,7 @@ class Cube : public Entity
 {
 public:
 	Cube(Loader* loader);
+
+
 };
 

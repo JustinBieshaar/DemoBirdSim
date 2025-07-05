@@ -11,6 +11,7 @@
 #include "../Global/Globals.h"
 #include <glm/ext/matrix_clip_space.hpp>
 #include <GLFW/glfw3.h>
+#include "../ECS/Components/TextureComponent.h"
 
 void Renderer::render(const std::vector<Entity*>& entities)
 {
@@ -45,17 +46,19 @@ void Renderer::render(const std::vector<Entity*>& entities)
         // Render mesh
         glBindVertexArray(mesh.m_vertexArrayObject);
         glEnableVertexAttribArray(0); // Position
-        glEnableVertexAttribArray(1); // TexCoords / Normals etc.
+        glEnableVertexAttribArray(1); // TexCoords
 
-        //glActiveTexture(GL_TEXTURE0); // Optional: bind texture here
+        if (entity->hasComponent<TextureComponent>())
+        {
+            auto texture = entity->getComponent<TextureComponent>();
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, texture->m_textureID);
+        }
 
         glDrawElements(GL_TRIANGLES, mesh.m_vertexCount, GL_UNSIGNED_INT, 0);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
-
-       // std::cout << "tried to render: " << typeid(*entity).name() << " | vao is: " << mesh.m_vertexArrayObject << "\n";
-
     }
 }

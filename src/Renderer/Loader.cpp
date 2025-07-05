@@ -1,14 +1,58 @@
 #include <glad/glad.h>
 #include "Loader.h"
+#include <stb_image.h>
+#include <iostream>
+#include <filesystem>
 
-std::shared_ptr<MeshComponent> Loader::loadToMeshComponent(const std::vector<float>& vertices, const std::vector<GLuint>& indices)
+std::shared_ptr<MeshComponent> Loader::loadToMeshComponent(const std::vector<float>& vertices, const std::vector<float>& textureCoordinates, const std::vector<GLuint>& indices)
 {
 	GLuint vao = createVertexArrayObject();
 	bindIndices(indices);
-	storeDataInAttributeList(0, vertices);
+	storeDataInAttributeList(0, vertices, 3);
+	storeDataInAttributeList(1, textureCoordinates, 2);
 	glBindVertexArray(0); // Unbind VAO after setup
 
 	return std::make_shared<MeshComponent>(vao, indices.size());
+}
+
+GLuint Loader::loadTexture(const std::string& path)
+{
+	std::string fullPath = std::filesystem::current_path().string() + "/../resources/" + path;
+
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load(fullPath.c_str(), &width, &height, &nrChannels, 0);
+	if (!data)
+	{
+		std::cerr << "Failed to load texture: " << fullPath << std::endl;
+		return 0;
+	}
+
+	GLenum format;
+	if (nrChannels == 1)
+		format = GL_RED;
+	else if (nrChannels == 3)
+		format = GL_RGB;
+	else if (nrChannels == 4)
+		format = GL_RGBA;
+
+	GLuint textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	// Upload texture to GPU
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	// Set texture parameters (wrapping and filtering)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	stbi_image_free(data); // Free CPU image memory
+
+	m_textures.push_back(textureID);
+	return textureID;
 }
 
 void Loader::cleanup()

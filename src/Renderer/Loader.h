@@ -5,16 +5,19 @@
 #include <memory>
 #include <vector>
 #include <GLFW/glfw3.h>
+#include <string>
 
 class Loader
 {
 public: 
-	std::shared_ptr<MeshComponent> loadToMeshComponent(const std::vector<float>& vertices, const std::vector<GLuint>& indices);
+	std::shared_ptr<MeshComponent> loadToMeshComponent(const std::vector<float>& vertices, const std::vector<float>& textureCoordinates, const std::vector<GLuint>& indices);
+	GLuint loadTexture(const std::string& path);
 	void cleanup();
 
 private:
 	std::vector<GLuint> m_vertexArrayObjects;
 	std::vector<GLuint> m_vertexBufferObjects;
+	std::vector<GLuint> m_textures;
 
 	GLuint createVertexArrayObject();
 	GLuint createVertexBufferObject(GLenum target, const void* data, size_t size);

@@ -14,6 +14,7 @@
 #include "Global/Globals.h"
 
 #include <iostream>
+#include "ECS/Components/TextureComponent.h"
 
 bool Application::init()
 {
@@ -88,7 +89,10 @@ void Application::run()
     Loader* loader = new Loader();
 
     Cube* cube = new Cube(loader);
-    cube->addComponent<Transform>(glm::vec3(0,0,0), glm::vec3(0,0,0));
+    cube->addComponent<Transform>(glm::vec3(10000,0,-50), glm::vec3(0,0,0));
+    cube->addComponent<TextureComponent>(loader);
+
+    std::cout << "Run!" << "\n";
 
     m_entities.push_back(cube);
     while (!glfwWindowShouldClose(m_window))

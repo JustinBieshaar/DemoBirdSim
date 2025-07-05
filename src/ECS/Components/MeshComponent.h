@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Component.h"
-#include "../../Renderer/Shader.h"
+#include "../../Shaders/Shader.h"
 
 struct MeshComponent : Component
 {

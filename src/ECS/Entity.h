@@ -50,6 +50,7 @@ public:
             ref = *static_cast<T*>(it->second.get());
             return true;
         }
+
         return false;
     }
 

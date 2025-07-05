@@ -1,70 +1,91 @@
 #include "Cube.h"
+#include "../Shaders/Shader.h"
+#include "../Shaders/ColorShader.h"
+#include "../Shaders/TexturedShader.h"
 
 Cube::Cube(Loader* loader)
 {
     std::vector<float> vertices = {
         // positions        
-        -0.5f, -0.5f, -0.5f,  // back face
-         0.5f, -0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
+                        -0.5f,0.5f,0,
+                -0.5f,-0.5f,0,
+                0.5f,-0.5f,0,
+                0.5f,0.5f,0,
 
-        -0.5f, -0.5f,  0.5f,  // front face
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
+                -0.5f,0.5f,1,
+                -0.5f,-0.5f,1,
+                0.5f,-0.5f,1,
+                0.5f,0.5f,1,
 
-        -0.5f,  0.5f,  0.5f,  // left face
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
+                0.5f,0.5f,0,
+                0.5f,-0.5f,0,
+                0.5f,-0.5f,1,
+                0.5f,0.5f,1,
 
-         0.5f,  0.5f,  0.5f,  // right face
-         0.5f,  0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
+                -0.5f,0.5f,0,
+                -0.5f,-0.5f,0,
+                -0.5f,-0.5f,1,
+                -0.5f,0.5f,1,
 
-        -0.5f, -0.5f, -0.5f,  // bottom face
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f, -0.5f,
+                -0.5f,0.5f,1,
+                -0.5f,0.5f,0,
+                0.5f,0.5f,0,
+                0.5f,0.5f,1,
 
-        -0.5f,  0.5f, -0.5f,  // top face
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f
+                -0.5f,-0.5f,1,
+                -0.5f,-0.5f,0,
+                0.5f,-0.5f,0,
+                0.5f,-0.5f,1
+
+    };
+
+    std::vector<float> textureCoords = {
+				0,0,
+				0,1,
+				1,1,
+				1,0,
+				0,0,
+				0,1,
+				1,1,
+				1,0,
+				0,0,
+				0,1,
+				1,1,
+				1,0,
+				0,0,
+				0,1,
+				1,1,
+				1,0,
+				0,0,
+				0,1,
+				1,1,
+				1,0,
+				0,0,
+				0,1,
+				1,1,
+				1,0
+
     };
 
     std::vector<GLuint> indices = {
-        // back face
-        0, 1, 2, 2, 3, 0,
-        // front face
-        4, 5, 6, 6, 7, 4,
-        // left face
-        4, 0, 3, 3, 7, 4,
-        // right face
-        1, 5, 6, 6, 2, 1,
-        // bottom face
-        4, 5, 1, 1, 0, 4,
-        // top face
-        3, 2, 6, 6, 7, 3
+        				0,1,3,	
+				3,1,2,	
+				4,5,7,
+				7,5,6,
+				8,9,11,
+				11,9,10,
+				12,13,15,
+				15,13,14,	
+				16,17,19,
+				19,17,18,
+				20,21,23,
+				23,21,22
+
     };
 
-	auto meshComponent = loader->loadToMeshComponent(vertices, indices);
+	auto meshComponent = loader->loadToMeshComponent(vertices, textureCoords, indices);
 
-    Shader* shader = new Shader("Basic.vert", "Basic.frag"); // todo, no new instance here..
+    TexturedShader* shader = new TexturedShader(); // todo, no new instance here..
     meshComponent->m_shader = shader;
 	addComponent(meshComponent);
 }

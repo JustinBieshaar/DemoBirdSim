@@ -2,7 +2,6 @@
 
 #include "../ECS/Entity.h"
 #include "../ECS/Components/Transform.h"
-#include "../ECS/Components/SpriteComponent.h"
 #include "../ECS/Components/MeshComponent.h"
 
 class Renderer

@@ -6,43 +6,52 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <filesystem>
 
-Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
+Shader::Shader(const std::string& name)
 {
-    std::string shaderBasePath = std::filesystem::current_path().string() + "/../src/Shaders/";
-    std::string vertexCode = loadShaderSource(shaderBasePath + vertexPath);
-    std::string fragmentCode = loadShaderSource(shaderBasePath + fragmentPath);
+    std::string shaderBasePath = std::filesystem::current_path().string() + "/Shaders/frag-vert/";
+    std::string vertexCode = loadShaderSource(shaderBasePath + name + ".vert");
+    std::string fragmentCode = loadShaderSource(shaderBasePath + name + ".frag");
 
-    GLuint vertex = compileShader(GL_VERTEX_SHADER, vertexCode);
-    GLuint fragment = compileShader(GL_FRAGMENT_SHADER, fragmentCode);
+    m_vertex = compileShader(GL_VERTEX_SHADER, vertexCode);
+    m_fragment = compileShader(GL_FRAGMENT_SHADER, fragmentCode);
 
-    std::cout << "vertex shader: " << vertex << " | frag shader: " << fragment << "\n";
+    m_shaderId = glCreateProgram();
+    glAttachShader(m_shaderId, m_vertex);
+    glAttachShader(m_shaderId, m_fragment);
+}
 
-    m_ID = glCreateProgram();
-    glAttachShader(m_ID, vertex);
-    glAttachShader(m_ID, fragment);
-    glLinkProgram(m_ID);
+void Shader::init()
+{
+    bindAttributes();
+
+    glLinkProgram(m_shaderId);
 
     GLint success;
-    glGetProgramiv(m_ID, GL_LINK_STATUS, &success);
+    glGetProgramiv(m_shaderId, GL_LINK_STATUS, &success);
     if (!success)
     {
         char infoLog[512];
-        glGetProgramInfoLog(m_ID, 512, nullptr, infoLog);
+        glGetProgramInfoLog(m_shaderId, 512, nullptr, infoLog);
         std::cerr << "Shader Linking Error:\n" << infoLog << std::endl;
     }
 
-    glDeleteShader(vertex);
-    glDeleteShader(fragment);
+    glDeleteShader(m_vertex);
+    glDeleteShader(m_fragment);
 }
 
 void Shader::use() const
 {
-    glUseProgram(m_ID);
+    glUseProgram(m_shaderId);
 }
 
 void Shader::stop() const
 {
     glUseProgram(0);
+}
+
+void Shader::bindAttribute(int attribute, const GLchar* variableName)
+{
+    glBindAttribLocation(m_shaderId, attribute, variableName);
 }
 
 std::string Shader::loadShaderSource(const std::string& filePath)
@@ -76,5 +85,5 @@ GLuint Shader::compileShader(GLenum type, const std::string& source)
 
 void Shader::setMat4(const std::string& name, const glm::mat4& matrix) const
 {
-    glUniformMatrix4fv(glGetUniformLocation(m_ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
+    glUniformMatrix4fv(glGetUniformLocation(m_shaderId, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
 }
