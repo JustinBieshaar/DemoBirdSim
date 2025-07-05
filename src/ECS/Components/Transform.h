@@ -3,7 +3,7 @@
 #include "Component.h"
 #include <glm/vec3.hpp>
 
-struct Transform : Component
+struct Transform : public Component
 {
 	glm::vec3 m_position;
 	glm::vec3 m_rotation;

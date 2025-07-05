@@ -2,9 +2,9 @@
 
 #include <glad/glad.h>
 #include "Component.h"
-#include "../../Renderer/Loader.h"
+#include "../../Rendering/Loading/Loader.h"
 
-struct TextureComponent : Component
+struct TextureComponent : public Component
 {
 	GLuint m_textureID;
 

@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include "ECS/Components/TextureComponent.h"
+#include "ECS/Components/Transform.h"
 
 bool Application::init()
 {

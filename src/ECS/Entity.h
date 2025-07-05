@@ -42,15 +42,14 @@ public:
     }
 
     template<typename T>
-    bool tryGetComponent(T& ref)
+    bool tryGetComponent(T*& ref)
     {
         auto it = m_components.find(typeid(T));
         if (it != m_components.end())
         {
-            ref = *static_cast<T*>(it->second.get());
+            ref = static_cast<T*>(it->second.get()); // cast Component* to T*
             return true;
         }
-
         return false;
     }
 

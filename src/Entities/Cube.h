@@ -1,6 +1,6 @@
 #pragma once
 #include "../ECS/Entity.h"
-#include "../Renderer/Loader.h"
+#include "../Rendering/Loading/Loader.h"
 
 class Cube : public Entity
 {

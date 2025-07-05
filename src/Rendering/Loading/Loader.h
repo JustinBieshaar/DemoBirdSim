@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ECS/Components/MeshComponent.h"
+#include "../../ECS/Components/MeshComponent.h"
 
 #include <memory>
 #include <vector>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Renderer/Renderer.h"
+#include "Rendering/Renderer.h"
 #include "ECS/Entity.h"
 
 #include "GLFW/glfw3.h"

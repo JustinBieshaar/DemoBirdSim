@@ -3,7 +3,7 @@
 #include "Component.h"
 #include "../../Shaders/Shader.h"
 
-struct MeshComponent : Component
+struct MeshComponent : public Component
 {
 	GLuint m_vertexArrayObject; // vertex array object
 	unsigned int m_vertexCount;
