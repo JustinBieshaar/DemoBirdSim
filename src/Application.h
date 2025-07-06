@@ -5,6 +5,7 @@
 
 #include "GLFW/glfw3.h"
 #include <vector>
+#include "DI/Bootstrappers/MainBootstrapper.h"
 
 
 class Application
@@ -25,5 +26,6 @@ private:
     float m_lastTime;
 
     std::vector<Entity*> m_entities;
+    MainBootstrapper* m_mainBootstrapper;
 };
 

@@ -1,9 +1,56 @@
 #include "Camera.h"
 #include <glm/ext/matrix_transform.hpp>
+#include <GLFW/glfw3.h>
+#include <iostream>
 
-Camera::Camera(glm::vec3 position, float pitch, float yaw)
-    : m_position(position), m_pitch(pitch), m_yaw(yaw)
+Camera::Camera(std::shared_ptr<IInputManager> inputManager, glm::vec3 position, float pitch, float yaw)
+    : m_inputManager(inputManager), m_position(position), m_pitch(pitch), m_yaw(yaw)
 {
+}
+
+void Camera::update()
+{
+    // quick implementation
+    if (m_inputManager->isKeyPressed(GLFW_KEY_A))
+    {
+        m_position.x -= 0.01f;
+    }
+
+    if (m_inputManager->isKeyPressed(GLFW_KEY_D))
+    {
+        m_position.x += 0.01f;
+    }
+
+    if (m_inputManager->isKeyPressed(GLFW_KEY_S))
+    {
+        m_position.z -= 0.01f;
+    }
+
+    if (m_inputManager->isKeyPressed(GLFW_KEY_W))
+    {
+        m_position.z += 0.01f;
+    }
+
+    if (m_inputManager->isKeyPressed(GLFW_KEY_Z))
+    {
+        m_pitch -= 0.01f;
+    }
+    if (m_inputManager->isKeyPressed(GLFW_KEY_X))
+    {
+        m_pitch += 0.01f;
+    }
+
+
+    if (m_inputManager->isKeyPressed(GLFW_KEY_C))
+    {
+        m_yaw -= 0.1f;
+    }
+    if (m_inputManager->isKeyPressed(GLFW_KEY_V))
+    {
+        m_yaw += 0.1f;
+    }
+
+    std::cout << "position.x = " << m_position.x << "\n";
 }
 
 glm::mat4 Camera::getViewMatrix()
@@ -18,7 +65,7 @@ glm::mat4 Camera::getViewMatrix()
 
     // Translate by the negative camera position
     glm::vec3 negativeCameraPos = -m_position;
-    viewMatrix = glm::translate(viewMatrix, negativeCameraPos);
+    viewMatrix = glm::translate(viewMatrix, m_position);
 
     return viewMatrix;
 }

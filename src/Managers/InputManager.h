@@ -8,11 +8,11 @@ class InputManager : public IInputManager
 public:
     InputManager(GLFWwindow* win);
 
-    void Update();
+    void update(float deltaTime) override;
 
-    bool IsKeyPressed(int key) const override;
-    bool IsMouseButtonPressed(int button) const override;
-    std::pair<double, double> GetMousePosition() const override;
+    bool isKeyPressed(int key) const override;
+    bool isMouseButtonPressed(int button) const override;
+    std::pair<double, double> getMousePosition() const override;
 
 private:
     GLFWwindow* window;

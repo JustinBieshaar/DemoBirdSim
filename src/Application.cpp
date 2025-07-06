@@ -16,6 +16,7 @@
 #include <iostream>
 #include "ECS/Components/TextureComponent.h"
 #include "ECS/Components/Transform.h"
+#include "Rendering/Camera/Camera.h"
 
 bool Application::init()
 {
@@ -51,12 +52,16 @@ bool Application::init()
 
     glEnable(GL_DEPTH_TEST);
 
+    m_mainBootstrapper = new MainBootstrapper(m_window);
+    m_mainBootstrapper->configureBindings();
+    m_mainBootstrapper->initialize();
+
     return true;
 }
 
 void Application::processInput(float deltaTime)
 {
-    // Handle keyboard/mouse if needed
+    m_mainBootstrapper->getInputManager()->update(deltaTime);
 }
 
 void Application::render(Renderer& renderer)
@@ -86,8 +91,11 @@ void Application::renderUI()
 
 void Application::run()
 {
-    Renderer renderer;
     Loader* loader = new Loader();
+
+    Camera camera(m_mainBootstrapper->getInputManager(), { 0,0,-3 }, 0, 0);
+
+    Renderer renderer(&camera);
 
     Cube* cube = new Cube(loader);
     cube->addComponent<Transform>(glm::vec3(10000,0,-50), glm::vec3(0,0,0));
@@ -104,6 +112,7 @@ void Application::run()
 
         glfwPollEvents();
         processInput(deltaTime);
+        camera.update();
 
         render(renderer);
         renderUI();

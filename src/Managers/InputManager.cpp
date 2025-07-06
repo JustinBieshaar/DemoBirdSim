@@ -5,7 +5,7 @@ InputManager::InputManager(GLFWwindow* win)
 {
 }
 
-void InputManager::Update()
+void InputManager::update(float deltaTime)
 {
     keys.clear();
     mouseButtons.clear();
@@ -26,19 +26,19 @@ void InputManager::Update()
     glfwGetCursorPos(window, &mouseX, &mouseY);
 }
 
-bool InputManager::IsKeyPressed(int key) const
+bool InputManager::isKeyPressed(int key) const
 {
     auto it = keys.find(key);
     return it != keys.end() && it->second;
 }
 
-bool InputManager::IsMouseButtonPressed(int button) const
+bool InputManager::isMouseButtonPressed(int button) const
 {
     auto it = mouseButtons.find(button);
     return it != mouseButtons.end() && it->second;
 }
 
-std::pair<double, double> InputManager::GetMousePosition() const
+std::pair<double, double> InputManager::getMousePosition() const
 {
     return { mouseX, mouseY };
 }

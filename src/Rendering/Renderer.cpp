@@ -25,7 +25,7 @@ void Renderer::render(const std::vector<Entity*>& entities)
         if (!entity->tryGetComponent(mesh))
             continue;
 
-        std::cout << "transform position: " << transform->m_position.x << ", " << transform->m_position.y << ", " << transform->m_position.z << "\n";
+        //std::cout << "transform position: " << transform->m_position.x << ", " << transform->m_position.y << ", " << transform->m_position.z << "\n";
 
         // Build model matrix
         glm::mat4 model = glm::mat4(1.0f);
@@ -41,7 +41,8 @@ void Renderer::render(const std::vector<Entity*>& entities)
         {
             mesh->m_shader->use();
             mesh->m_shader->setMat4("u_Model", model);
-            mesh->m_shader->setMat4("u_View", view);
+            //mesh->m_shader->setMat4("u_View", view);
+            mesh->m_shader->setMat4("u_View", m_camera->getViewMatrix());
             mesh->m_shader->setMat4("u_Projection", projection);
         }
 

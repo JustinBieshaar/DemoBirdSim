@@ -5,7 +5,8 @@ class IInputManager
 {
 public:
     virtual ~IInputManager() {}
-    virtual bool IsKeyPressed(int key) const = 0;
-    virtual bool IsMouseButtonPressed(int button) const = 0;
-    virtual std::pair<double, double> GetMousePosition() const = 0;
+    virtual bool isKeyPressed(int key) const = 0;
+    virtual bool isMouseButtonPressed(int button) const = 0;
+    virtual std::pair<double, double> getMousePosition() const = 0;
+    virtual void update(float deltaTime) = 0;
 };
