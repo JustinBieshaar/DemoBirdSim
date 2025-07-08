@@ -16,7 +16,13 @@
 
 namespace ObjLoader
 {
-	// TODO add comments :)
+	/// <summary>
+	/// Parsing face lines. This happens as soon as we enter the 'f' lines in the obj file.
+	/// Each face line defines a triangle using vertex indices that reference positions,
+	/// texture coordinates (UVs), and normals.
+	/// This method extracts and stores those attributes for each vertex of the triangle.
+	/// It handles shared vertex data properly by referencing the indexed temporary arrays.
+	/// </summary>
 	inline void parseFaceLine(
 		const std::string& line,
 		const std::vector<glm::vec3>& tempPositions,
@@ -68,6 +74,10 @@ namespace ObjLoader
 		}
 	}
 
+	/// <summary>
+	/// Reads an obj file and parses it into a MeshComponent object.
+	/// This can then be used to render this mesh.
+	/// </summary>
 	inline std::shared_ptr<MeshComponent> loadMeshFromObjFile(std::string fileName, Loader* loader)
 	{
 		std::string fullPath = std::filesystem::current_path().string() + "/../resources/obj/" + fileName + ".obj";
