@@ -1,15 +1,15 @@
-#include <glad/glad.h>
 #include "Loader.h"
 #include <stb_image.h>
 #include <iostream>
 #include <filesystem>
 
-std::shared_ptr<MeshComponent> Loader::loadToMeshComponent(const std::vector<float>& vertices, const std::vector<float>& textureCoordinates, const std::vector<GLuint>& indices)
+std::shared_ptr<MeshComponent> Loader::loadToMeshComponent(const std::vector<float>& vertices, const std::vector<float>& textureCoordinates, const std::vector<float>& normals, const std::vector<GLuint>& indices)
 {
 	GLuint vao = createVertexArrayObject();
 	bindIndices(indices);
 	storeDataInAttributeList(0, vertices, 3);
-	storeDataInAttributeList(1, textureCoordinates, 2);
+	storeDataInAttributeList(1, normals, 3);
+	storeDataInAttributeList(2, textureCoordinates, 2);
 	glBindVertexArray(0); // Unbind VAO after setup
 
 	return std::make_shared<MeshComponent>(vao, indices.size());

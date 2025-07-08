@@ -9,5 +9,11 @@ public:
 
 protected:
 	void bindAttributes() override;
+
+	std::vector<int> getAttributeUsage() override { return { 0, 1, 3 }; }
+
+private:
+	int lightPositionLocation;
+	int lightColorLocation;
 };
 

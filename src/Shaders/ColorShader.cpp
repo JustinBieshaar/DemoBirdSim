@@ -8,4 +8,5 @@ ColorShader::ColorShader() : Shader("BasicColor")
 void ColorShader::bindAttributes()
 {
 	bindAttribute(0, "in_position");
+	bindAttribute(1, "in_normal");
 }

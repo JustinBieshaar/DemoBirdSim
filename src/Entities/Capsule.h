@@ -2,9 +2,8 @@
 #include "../Rendering/Loading/Loader.h"
 #include "../ECS/Entity.h"
 
-class Cube : public Entity
+class Capsule : public Entity
 {
 public:
-	Cube(Loader* loader);
+	Capsule(Loader* loader);
 };
-

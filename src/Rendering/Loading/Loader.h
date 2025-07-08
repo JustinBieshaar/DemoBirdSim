@@ -4,13 +4,15 @@
 
 #include <memory>
 #include <vector>
+
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <string>
 
 class Loader
 {
 public: 
-	std::shared_ptr<MeshComponent> loadToMeshComponent(const std::vector<float>& vertices, const std::vector<float>& textureCoordinates, const std::vector<GLuint>& indices);
+	std::shared_ptr<MeshComponent> loadToMeshComponent(const std::vector<float>& vertices, const std::vector<float>& textureCoordinates, const std::vector<float>& normals, const std::vector<GLuint>& indices);
 	GLuint loadTexture(const std::string& path);
 	void cleanup();
 

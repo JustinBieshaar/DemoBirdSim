@@ -3,6 +3,7 @@
 #include <string>
 #include <glad/glad.h>
 #include <glm/fwd.hpp>
+#include <vector>
 
 class Shader
 {
@@ -17,14 +18,20 @@ public:
     void use() const;
     void stop() const;
 
+    void enableAttribs();
+    void disableAttribs();
+
     GLuint getID() const { return m_shaderId; }
+
     void setMat4(const std::string& name, const glm::mat4& matrix) const;
+    void setVec3(const std::string& name, const glm::vec3& vec) const;
 
 protected:
-
     virtual void bindAttributes() = 0; // abstract
 
     void bindAttribute(int attribute, const GLchar* variableName);
+
+    virtual std::vector<int> getAttributeUsage() = 0; // abstract
 
 private:
     GLuint m_shaderId;

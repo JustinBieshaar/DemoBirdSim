@@ -1,8 +1,7 @@
 #pragma once
 
-#include <glad/glad.h>
-#include "Component.h"
 #include "../../Rendering/Loading/Loader.h"
+#include "Component.h"
 
 struct TextureComponent : public Component
 {

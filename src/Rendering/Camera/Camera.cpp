@@ -1,5 +1,7 @@
 #include "Camera.h"
 #include <glm/ext/matrix_transform.hpp>
+
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <iostream>
 
@@ -10,7 +12,7 @@ Camera::Camera(std::shared_ptr<IInputManager> inputManager, glm::vec3 position, 
 
 void Camera::update()
 {
-    // quick implementation
+    // quick implementation todo: add events to input manager
     if (m_inputManager->isKeyPressed(GLFW_KEY_A))
     {
         m_position.x -= 0.01f;
@@ -31,26 +33,34 @@ void Camera::update()
         m_position.z += 0.01f;
     }
 
+    if (m_inputManager->isKeyPressed(GLFW_KEY_R))
+    {
+        m_position.y -= 0.01f;
+    }
+
+    if (m_inputManager->isKeyPressed(GLFW_KEY_F))
+    {
+        m_position.y += 0.01f;
+    }
+
     if (m_inputManager->isKeyPressed(GLFW_KEY_Z))
     {
-        m_pitch -= 0.01f;
+        m_pitch -= 1.0f;
     }
     if (m_inputManager->isKeyPressed(GLFW_KEY_X))
     {
-        m_pitch += 0.01f;
+        m_pitch += 1.0f;
     }
 
 
     if (m_inputManager->isKeyPressed(GLFW_KEY_C))
     {
-        m_yaw -= 0.1f;
+        m_yaw -= 1.0f;
     }
     if (m_inputManager->isKeyPressed(GLFW_KEY_V))
     {
-        m_yaw += 0.1f;
+        m_yaw += 1.0f;
     }
-
-    std::cout << "position.x = " << m_position.x << "\n";
 }
 
 glm::mat4 Camera::getViewMatrix()

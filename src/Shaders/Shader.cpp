@@ -1,4 +1,3 @@
-#include <glad/glad.h>
 #include "Shader.h"
 #include <fstream>
 #include <sstream>
@@ -49,6 +48,22 @@ void Shader::stop() const
     glUseProgram(0);
 }
 
+void Shader::enableAttribs()
+{
+    for (int attributeIndex : getAttributeUsage())
+    {
+        glEnableVertexAttribArray(attributeIndex);
+    }
+}
+
+void Shader::disableAttribs()
+{
+    for (int attributeIndex : getAttributeUsage())
+    {
+        glDisableVertexAttribArray(attributeIndex);
+    }
+}
+
 void Shader::bindAttribute(int attribute, const GLchar* variableName)
 {
     glBindAttribLocation(m_shaderId, attribute, variableName);
@@ -86,4 +101,9 @@ GLuint Shader::compileShader(GLenum type, const std::string& source)
 void Shader::setMat4(const std::string& name, const glm::mat4& matrix) const
 {
     glUniformMatrix4fv(glGetUniformLocation(m_shaderId, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
+void Shader::setVec3(const std::string& name, const glm::vec3& vec) const
+{
+    glUniform3f(glGetUniformLocation(m_shaderId, name.c_str()), vec.x, vec.y, vec.z);
 }

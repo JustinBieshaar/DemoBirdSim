@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
 
 #include "imgui.h"
@@ -17,6 +19,7 @@
 #include "ECS/Components/TextureComponent.h"
 #include "ECS/Components/Transform.h"
 #include "Rendering/Camera/Camera.h"
+#include "Entities/Capsule.h"
 
 bool Application::init()
 {
@@ -94,15 +97,21 @@ void Application::run()
     Loader* loader = new Loader();
 
     Camera camera(m_mainBootstrapper->getInputManager(), { 0,0,-3 }, 0, 0);
+    Light light({ 0,0,5 });
 
-    Renderer renderer(&camera);
+    Renderer renderer(&camera, &light);
 
     Cube* cube = new Cube(loader);
-    cube->addComponent<Transform>(glm::vec3(10000,0,-50), glm::vec3(0,0,0));
+    cube->addComponent<Transform>(glm::vec3(5,0,-8), glm::vec3(0,0,0));
     cube->addComponent<TextureComponent>(loader);
+
+    Capsule* capsule = new Capsule(loader);
+    capsule->addComponent<Transform>(glm::vec3(0, 0, -5), glm::vec3(0, 0, 0));
+    capsule->addComponent<TextureComponent>(loader);
 
     std::cout << "Run!" << "\n";
 
+    m_entities.push_back(capsule);
     m_entities.push_back(cube);
     while (!glfwWindowShouldClose(m_window))
     {
