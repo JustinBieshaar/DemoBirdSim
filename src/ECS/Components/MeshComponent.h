@@ -3,7 +3,7 @@
 #include "Component.h"
 
 #include "../../Shaders/Shader.h"
-#include "../../Rendering/Lighting/Light.h"
+#include "../../Entities/Lighting/Light.h"
 
 #include <glm/glm.hpp>
 #include <memory>

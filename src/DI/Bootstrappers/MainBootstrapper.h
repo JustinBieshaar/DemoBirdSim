@@ -2,6 +2,8 @@
 
 #include "../BaseBootstrapper.h"
 #include "../../Managers/InputManager.h"
+#include "../../Scenes/ISceneManager.h"
+#include "../../Scenes/SceneManager.h"
 
 class MainBootstrapper : public BaseBootstrapper
 {
@@ -10,6 +12,7 @@ public:
 
     void configureBindings() override
     {
+        m_container->bind<ISceneManager, SceneManager>(DI::Lifetime::Singleton);
         m_container->bind<IInputManager, InputManager>(DI::Lifetime::Singleton, m_window);
     }
 

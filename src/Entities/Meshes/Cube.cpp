@@ -1,7 +1,7 @@
 #include "Cube.h"
-#include "../Shaders/Shader.h"
-#include "../Shaders/ColorShader.h"
-#include "../Shaders/TexturedShader.h"
+#include "../../Shaders/Shader.h"
+#include "../../Shaders/ColorShader.h"
+#include "../../Shaders/TexturedShader.h"
 
 Cube::Cube(Loader* loader)
 {

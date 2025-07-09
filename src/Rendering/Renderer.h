@@ -3,8 +3,8 @@
 #include "../ECS/Entity.h"
 #include "../ECS/Components/Transform.h"
 #include "../ECS/Components/MeshComponent.h"
-#include "Camera/Camera.h"
-#include "Lighting/Light.h"
+#include "../Entities/Camera/Camera.h"
+#include "../Entities/Lighting/Light.h"
 
 class Renderer
 {

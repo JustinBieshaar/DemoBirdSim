@@ -1,7 +1,7 @@
-#include "../Utils/ObjLoader.h"
+#include "../../Utils/ObjLoader.h"
 #include "Capsule.h"
-#include "../Shaders/ColorShader.h"
-#include "../Shaders/TexturedShader.h"
+#include "../../Shaders/ColorShader.h"
+#include "../../Shaders/TexturedShader.h"
 
 Capsule::Capsule(Loader* loader)
 {

@@ -1,5 +1,4 @@
 #include <glad/glad.h>
-#include "Entities/Cube.h"
 #include "Application.h"
 
 #include <glm/glm.hpp>
@@ -18,8 +17,9 @@
 #include <iostream>
 #include "ECS/Components/TextureComponent.h"
 #include "ECS/Components/Transform.h"
-#include "Rendering/Camera/Camera.h"
-#include "Entities/Capsule.h"
+#include "Entities/Camera/Camera.h"
+#include "Entities/Meshes/Cube.h"
+#include "Entities/Meshes/Capsule.h"
 
 bool Application::init()
 {
