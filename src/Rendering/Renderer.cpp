@@ -26,16 +26,14 @@ void Renderer::render(const std::vector<Entity*>& entities)
         glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)Window_Width / Window_Height, 0.1f, 100.0f);
 
         // Use shader
-        if (mesh->m_shader)
-        {
-            mesh->m_shader->use();
+        mesh->useShader();
             mesh->setModelViewProjection(transform->getTransformationMatrix(), m_camera->getViewMatrix(), projection);
             mesh->setLightLocation(m_light);
-        }
+        
 
         // Render mesh
         glBindVertexArray(mesh->m_vertexArrayObject);
-        mesh->m_shader->enableAttribs();
+        mesh->enableShaderAttributes();
 
         if (entity->hasComponent<TextureComponent>())
         {
@@ -46,7 +44,7 @@ void Renderer::render(const std::vector<Entity*>& entities)
 
         glDrawElements(GL_TRIANGLES, mesh->m_vertexCount, GL_UNSIGNED_INT, 0);
 
-        mesh->m_shader->disableAttribs();
+        mesh->disableShaderAttributes();
         glBindVertexArray(0);
     }
 }

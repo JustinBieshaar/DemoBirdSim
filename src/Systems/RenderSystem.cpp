@@ -43,13 +43,13 @@ void RenderSystem::render()
 
         // Use shader
         glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
-        mesh->m_shader->use();
+        mesh->useShader();
         mesh->setModelViewProjection(transform->getTransformationMatrix(), m_camera->getViewMatrix(), projection);
         mesh->setLightLocation(m_light);
 
         // Render mesh
         glBindVertexArray(mesh->m_vertexArrayObject);
-        mesh->m_shader->enableAttribs();
+        mesh->enableShaderAttributes();
 
         if (entity->hasComponent<TextureComponent>())
         {
@@ -60,8 +60,8 @@ void RenderSystem::render()
 
         glDrawElements(GL_TRIANGLES, mesh->m_vertexCount, GL_UNSIGNED_INT, 0);
 
-        mesh->m_shader->disableAttribs();
-        mesh->m_shader->stop();
+        mesh->disableShaderAttributes();
+        mesh->stopShader();
         glBindVertexArray(0);
     }
 }

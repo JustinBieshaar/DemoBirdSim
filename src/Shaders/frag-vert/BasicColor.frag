@@ -5,6 +5,7 @@ in vec3 pass_toLightFactor;
 
 out vec4 out_Color;
 
+uniform vec3 u_color;
 uniform vec3 u_lightColor;
 
 void main()
@@ -13,8 +14,8 @@ void main()
     vec3 unitLightVector = normalize(pass_toLightFactor);
 
     float d = dot(unitNormal, unitLightVector);
-    float brightness = max(d, 0.);
-    vec3 diffuse = brightness * u_lightColor;
+    float brightness = max(d, 0.25);
+    vec3 diffuse = brightness * u_lightColor * u_color;
 
     out_Color = vec4(diffuse, 1.0);
 }

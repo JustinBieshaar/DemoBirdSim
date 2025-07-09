@@ -1,11 +1,12 @@
 #pragma once
 
+#include <glm/vec3.hpp>
 #include "Shader.h"
 
 class ColorShader : public Shader
 {
 public:
-	ColorShader();
+	ColorShader(const glm::vec3& color = {1,1,1});
 
 protected:
 	void bindAttributes() override;

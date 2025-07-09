@@ -21,7 +21,13 @@ struct Transform : public Component
 	glm::mat4 getTransformationMatrix()
 	{
 		glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), m_scale);
-		glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+
+		glm::mat4 rotationX = glm::rotate(glm::mat4(1.0f), m_rotation.x, glm::vec3(1, 0, 0));
+		glm::mat4 rotationY = glm::rotate(glm::mat4(1.0f), m_rotation.y, glm::vec3(0, 1, 0));
+		glm::mat4 rotationZ = glm::rotate(glm::mat4(1.0f), m_rotation.z, glm::vec3(0, 0, 1));
+
+		glm::mat4 rotationMatrix = rotationZ * rotationY * rotationX; // ZYX order (common in many engines)
+
 		glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), m_position);
 
 		glm::mat4 model = translationMatrix * rotationMatrix * scaleMatrix;

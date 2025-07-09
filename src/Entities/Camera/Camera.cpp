@@ -44,21 +44,21 @@ void Camera::update(float deltaTime)
 
     if (m_inputManager->isKeyPressed(GLFW_KEY_Z))
     {
-        m_camera->m_pitch -= 1.0f;
+        m_camera->m_pitch -= .1f;
     }
     if (m_inputManager->isKeyPressed(GLFW_KEY_X))
     {
-        m_camera->m_pitch += 1.0f;
+        m_camera->m_pitch += .1f;
     }
 
 
     if (m_inputManager->isKeyPressed(GLFW_KEY_C))
     {
-        m_camera->m_yaw -= 1.0f;
+        m_camera->m_yaw -= .1f;
     }
     if (m_inputManager->isKeyPressed(GLFW_KEY_V))
     {
-        m_camera->m_yaw += 1.0f;
+        m_camera->m_yaw += .1f;
     }
 
 }

@@ -80,7 +80,7 @@ void Application::run()
     sceneManager->addScene("Menu", std::make_shared<MainMenuScene>(m_mainBootstrapper));
     sceneManager->addScene("Game", std::make_shared<GameScene>(m_mainBootstrapper));
 
-    sceneManager->loadScene("Game");
+    sceneManager->loadScene("Menu");
 
     while (!glfwWindowShouldClose(m_window))
     {

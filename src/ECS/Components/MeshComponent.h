@@ -11,37 +11,94 @@
 
 struct MeshComponent : public Component
 {
-	GLuint m_vertexArrayObject; // vertex array object
-	unsigned int m_vertexCount;
+private:
+    Shader* m_shader = nullptr;
 
-	Shader* m_shader;
+public:
+    GLuint m_vertexArrayObject = 0;
+    unsigned int m_vertexCount = 0;
 
-	MeshComponent() {}
+    MeshComponent() {}
 
-	MeshComponent(const GLuint& vao, const unsigned int& vertexCount)
-		: m_vertexArrayObject(vao), m_vertexCount(vertexCount)
-	{ }
+    MeshComponent(const GLuint& vao, const unsigned int& vertexCount)
+        : m_vertexArrayObject(vao), m_vertexCount(vertexCount)
+    {}
 
-	MeshComponent(const GLuint& vao, const unsigned int& vertexCount, Shader* shader)
-		: m_vertexArrayObject(vao), m_vertexCount(vertexCount), m_shader(shader)
-	{ }
+    MeshComponent(const GLuint& vao, const unsigned int& vertexCount, Shader* shader)
+        : m_vertexArrayObject(vao), m_vertexCount(vertexCount), m_shader(shader)
+    {}
 
-	void render()
-	{
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-	}
+    void setShader(Shader* shader)
+    {
+        m_shader = shader;
+        setRepeat(1); // Default repeat
+    }
 
-	void setModelViewProjection(glm::mat4 model, glm::mat4 view, glm::mat4 projection)
-	{
-		m_shader->setMat4("u_model", model);
-		m_shader->setMat4("u_view", view);
-		m_shader->setMat4("u_projection", projection);
-	}
+    void render()
+    {
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        // bind VAO + draw here
+    }
 
-	void setLightLocation(Light* light)
-	{
-		m_shader->setVec3("u_lightPosition", light->m_position);
-		m_shader->setVec3("u_lightColor", light->m_color);
-	}
+    void useShader()
+    {
+        if (m_shader)
+        {
+            m_shader->use();
+        }
+    }
+
+    void stopShader()
+    {
+        if (m_shader)
+        {
+            m_shader->stop();
+        }
+    }
+
+    void setModelViewProjection(glm::mat4 model, glm::mat4 view, glm::mat4 projection)
+    {
+        if (m_shader)
+        {
+            m_shader->setMat4("u_model", model);
+            m_shader->setMat4("u_view", view);
+            m_shader->setMat4("u_projection", projection);
+        }
+    }
+
+    void setLightLocation(Light* light)
+    {
+        if (m_shader)
+        {
+            m_shader->setVec3("u_lightPosition", light->m_position);
+            m_shader->setVec3("u_lightColor", light->m_color);
+        }
+    }
+
+    void setRepeat(int repeat)
+    {
+        if (m_shader)
+        {
+            m_shader->use();
+            m_shader->setInt("u_repeat", repeat);
+        }
+    }
+
+    void enableShaderAttributes()
+    {
+        if (m_shader)
+        {
+            m_shader->enableAttribs();
+        }
+    }
+
+    void disableShaderAttributes()
+    {
+        if (m_shader)
+        {
+            m_shader->disableAttribs();
+        }
+    }
+
 };

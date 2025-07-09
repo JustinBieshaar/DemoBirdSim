@@ -8,8 +8,8 @@ struct TextureComponent : public Component
 {
 	GLuint m_textureID;
 
-	TextureComponent(std::shared_ptr<Loader> loader)
+	TextureComponent(std::shared_ptr<Loader> loader, const std::string& fileName = "default.png")
 	{
-		m_textureID = loader->loadTexture("test.png");
+		m_textureID = loader->loadTexture(fileName);
 	}
 };

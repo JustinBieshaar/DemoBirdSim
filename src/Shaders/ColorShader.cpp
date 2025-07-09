@@ -1,8 +1,13 @@
 #include "ColorShader.h"
 
-ColorShader::ColorShader() : Shader("BasicColor")
+
+ColorShader::ColorShader(const glm::vec3& color) : Shader("BasicColor")
 {
 	Shader::init();
+
+	use();
+	setVec3("u_color", color);
+	stop();
 }
 
 void ColorShader::bindAttributes()

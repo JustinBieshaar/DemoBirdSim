@@ -13,10 +13,11 @@ uniform mat4 u_view;
 uniform mat4 u_projection;
 
 uniform vec3 u_lightPosition;
+uniform int u_repeat;
 
 void main()
 {
-    pass_textureCoords = in_textureCoords;
+    pass_textureCoords = in_textureCoords * u_repeat;
     
     vec4 worldPosition = u_model * vec4(in_position, 1.0);
     gl_Position = u_projection * u_view * worldPosition;

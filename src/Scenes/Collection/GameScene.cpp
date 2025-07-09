@@ -5,6 +5,7 @@
 #include <iostream>
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
+#include "../../Entities/Terrain/Terrain.h"
 
 GameScene::GameScene(MainBootstrapper* mainBootstrapper) : Scene(), m_mainBootstrapper(mainBootstrapper)
 {
@@ -15,9 +16,14 @@ void GameScene::load()
 {
 	Scene::load();
 	std::cout << "load game scene \n";
-	auto cam = createEntity<Camera>(m_mainBootstrapper->getInputManager());
+    auto cam = createEntity<Camera>(m_mainBootstrapper->getInputManager(), glm::vec3{ 0,-8, -20 }, 20, 0);
 	createEntity<Capsule>(m_loader, glm::vec3{ 0,0,-5});
     createEntity<Capsule>(m_loader, glm::vec3(5, 0, -8));
+    createEntity<Terrain>(m_loader, glm::vec3(0, 0, -1));
+    createEntity<Terrain>(m_loader, glm::vec3(-1, 0, -1));
+    createEntity<Terrain>(m_loader, glm::vec3(0, 0, 0));
+    createEntity<Terrain>(m_loader, glm::vec3(-1, 0, 0));
+    //createEntity<Terrain>(m_loader, glm::vec3(-1, 0, -1));
 
 	m_renderer->setCamera(cam);
 }
