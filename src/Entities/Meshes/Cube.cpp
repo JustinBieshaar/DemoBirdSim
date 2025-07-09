@@ -3,7 +3,7 @@
 #include "../../Shaders/ColorShader.h"
 #include "../../Shaders/TexturedShader.h"
 
-Cube::Cube(Loader* loader)
+Cube::Cube(std::shared_ptr<Loader> loader)
 {
     std::vector<float> vertices = {
         // positions        

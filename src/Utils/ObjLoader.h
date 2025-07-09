@@ -78,7 +78,7 @@ namespace ObjLoader
 	/// Reads an obj file and parses it into a MeshComponent object.
 	/// This can then be used to render this mesh.
 	/// </summary>
-	inline std::shared_ptr<MeshComponent> loadMeshFromObjFile(std::string fileName, Loader* loader)
+	inline std::shared_ptr<MeshComponent> loadMeshFromObjFile(std::string fileName, std::shared_ptr<Loader> loader)
 	{
 		std::string fullPath = std::filesystem::current_path().string() + "/../resources/obj/" + fileName + ".obj";
 		std::ifstream file(fullPath);

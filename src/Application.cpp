@@ -20,6 +20,8 @@
 #include "Entities/Camera/Camera.h"
 #include "Entities/Meshes/Cube.h"
 #include "Entities/Meshes/Capsule.h"
+#include "Scenes/Collection/MainMenuScene.h"
+#include "Scenes/Collection/GameScene.h"
 
 bool Application::init()
 {
@@ -62,55 +64,27 @@ bool Application::init()
     return true;
 }
 
-void Application::processInput(float deltaTime)
-{
-    m_mainBootstrapper->getInputManager()->update(deltaTime);
-}
-
-void Application::render(Renderer& renderer)
+void Application::render()
 {
     glViewport(0, 0, Window_Width, Window_Height);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    renderer.render(m_entities);
-}
 
-void Application::renderUI()
-{
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-    ImGui::SetNextWindowSize(ImVec2(100, 50));
-
-    ImGui::Begin("Debug Info");
-    ImGui::Text("Demo config");
-    ImGui::End();
-
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    m_mainBootstrapper->getSceneManager()->render();
 }
 
 void Application::run()
 {
     Loader* loader = new Loader();
 
-    Camera camera(m_mainBootstrapper->getInputManager(), { 0,0,-3 }, 0, 0);
-    Light light({ 0,0,5 });
+    auto sceneManager = m_mainBootstrapper->getSceneManager();
+    sceneManager->addScene("Menu", std::make_shared<MainMenuScene>(m_mainBootstrapper));
+    sceneManager->addScene("Game", std::make_shared<GameScene>(m_mainBootstrapper));
 
-    Renderer renderer(&camera, &light);
+    sceneManager->loadScene("Game");
 
-    Cube* cube = new Cube(loader);
-    cube->addComponent<Transform>(glm::vec3(5,0,-8), glm::vec3(0,0,0));
-    cube->addComponent<TextureComponent>(loader);
-
-    Capsule* capsule = new Capsule(loader);
-    capsule->addComponent<Transform>(glm::vec3(0, 0, -5), glm::vec3(0, 0, 0));
-    capsule->addComponent<TextureComponent>(loader);
-
-    m_entities.push_back(capsule);
-    m_entities.push_back(cube);
     while (!glfwWindowShouldClose(m_window))
     {
         float currentTime = glfwGetTime();
@@ -118,11 +92,11 @@ void Application::run()
         m_lastTime = currentTime;
 
         glfwPollEvents();
-        processInput(deltaTime);
-        camera.update();
 
-        render(renderer);
-        renderUI();
+        m_mainBootstrapper->getInputManager()->update(deltaTime);
+        m_mainBootstrapper->getSceneManager()->update(deltaTime);
+
+        render();
 
         glfwSwapBuffers(m_window);
     }

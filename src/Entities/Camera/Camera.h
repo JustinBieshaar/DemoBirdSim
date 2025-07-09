@@ -8,7 +8,7 @@
 class Camera : public GameObject
 {
 public:
-	Camera(std::shared_ptr<IInputManager> inputManager, glm::vec3 position, float pitch, float yaw);
+	Camera(std::shared_ptr<IInputManager> inputManager, glm::vec3 position = {}, float pitch = 0.0f, float yaw = 0.0f);
 
 	void update();
 

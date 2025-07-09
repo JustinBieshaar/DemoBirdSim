@@ -14,9 +14,8 @@ class Application
 {
 public:
     bool init();
-    void processInput(float deltaTime);
 
-    void render(Renderer& renderer);
+    void render();
     void renderUI();
 
     void run();

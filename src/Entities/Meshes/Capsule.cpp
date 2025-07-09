@@ -3,7 +3,7 @@
 #include "../../Shaders/ColorShader.h"
 #include "../../Shaders/TexturedShader.h"
 
-Capsule::Capsule(Loader* loader)
+Capsule::Capsule(std::shared_ptr<Loader> loader)
 {
 	auto meshComponent = ObjLoader::loadMeshFromObjFile("Capsule", loader);
 

@@ -27,7 +27,6 @@ namespace ECS
 		std::vector<Entity*> getEntitiesWith();
 		
 	private:
-
-		std::vector<std::unique_ptr<Entity>> m_entities;
+		std::vector<std::shared_ptr<Entity>> m_entities;
 	};
 }
