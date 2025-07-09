@@ -109,8 +109,6 @@ void Application::run()
     capsule->addComponent<Transform>(glm::vec3(0, 0, -5), glm::vec3(0, 0, 0));
     capsule->addComponent<TextureComponent>(loader);
 
-    std::cout << "Run!" << "\n";
-
     m_entities.push_back(capsule);
     m_entities.push_back(cube);
     while (!glfwWindowShouldClose(m_window))

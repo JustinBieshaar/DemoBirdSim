@@ -13,6 +13,6 @@ public:
 	GameObject(glm::vec3 position = {}, glm::vec3 rotation = {}, glm::vec3 scale = {}) : m_transform(addComponent<Transform>(position, rotation, scale)) {}
 
 protected:
-	Transform& m_transform;
+	std::shared_ptr<Transform> m_transform;
 };
 

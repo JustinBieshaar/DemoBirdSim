@@ -12,8 +12,10 @@ public:
 
 	void update();
 
+	glm::mat4 getViewMatrix() { return m_camera->getViewMatrix(); }
+
 private:
 	std::shared_ptr<IInputManager> m_inputManager;
-	CameraComponent& m_camera;
+	std::shared_ptr<CameraComponent> m_camera;
 };
 
