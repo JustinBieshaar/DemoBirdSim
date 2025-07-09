@@ -18,7 +18,6 @@
 #include "ECS/Components/TextureComponent.h"
 #include "ECS/Components/Transform.h"
 #include "Entities/Camera/Camera.h"
-#include "Entities/Meshes/Cube.h"
 #include "Entities/Meshes/Capsule.h"
 #include "Scenes/Collection/MainMenuScene.h"
 #include "Scenes/Collection/GameScene.h"
@@ -77,8 +76,6 @@ void Application::render()
 
 void Application::run()
 {
-    Loader* loader = new Loader();
-
     auto sceneManager = m_mainBootstrapper->getSceneManager();
     sceneManager->addScene("Menu", std::make_shared<MainMenuScene>(m_mainBootstrapper));
     sceneManager->addScene("Game", std::make_shared<GameScene>(m_mainBootstrapper));

@@ -3,7 +3,7 @@
 #include "../../Shaders/ColorShader.h"
 #include "../../Shaders/TexturedShader.h"
 
-Capsule::Capsule(std::shared_ptr<Loader> loader)
+Capsule::Capsule(std::shared_ptr<Loader> loader, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject(position, rotation, scale)
 {
 	auto meshComponent = ObjLoader::loadMeshFromObjFile("Capsule", loader);
 

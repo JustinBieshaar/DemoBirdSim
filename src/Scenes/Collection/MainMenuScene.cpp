@@ -12,18 +12,17 @@ MainMenuScene::MainMenuScene(MainBootstrapper* mainBootstrapper) : Scene(), m_ma
 
 void MainMenuScene::load()
 {
+    Scene::load();
 }
 
 void MainMenuScene::unload()
 {
-	m_loader->cleanup();
-
-	delete m_loader;
+    Scene::unload();
 }
 
 bool MainMenuScene::isLoaded()
 {
-	return true; // todo, add check
+	return false; // todo, add check
 }
 
 void MainMenuScene::update(float deltaTime)

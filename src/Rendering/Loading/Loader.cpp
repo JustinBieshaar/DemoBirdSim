@@ -57,6 +57,7 @@ GLuint Loader::loadTexture(const std::string& path)
 
 void Loader::cleanup()
 {
+	std::cout << "clean up loader, cleaning up vao size: " << m_vertexArrayObjects.size() << " vbo size: " << m_vertexBufferObjects.size() << "\n";
 	for (auto vao : m_vertexArrayObjects)
 	{
 		glDeleteVertexArrays(1, &vao);
@@ -76,6 +77,8 @@ GLuint Loader::createVertexArrayObject()
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 	m_vertexArrayObjects.push_back(vao);
+
+	std::cout << "creating new vao: " << m_vertexArrayObjects.size() << "\n";
 	return vao;
 }
 
@@ -86,6 +89,8 @@ GLuint Loader::createVertexBufferObject(GLenum target, const void* data, size_t 
 	glBindBuffer(target, vbo);
 	glBufferData(target, size, data, GL_STATIC_DRAW);
 	m_vertexBufferObjects.push_back(vbo);
+
+	std::cout << "creating new vbo: " << m_vertexBufferObjects.size() << "\n";
 	return vbo;
 }
 

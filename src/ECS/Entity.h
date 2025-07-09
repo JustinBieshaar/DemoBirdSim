@@ -52,6 +52,7 @@ public:
         return false;
     }
 
+    virtual void update(float deltaTime) = 0;
 
 private:
 	std::unordered_map<std::type_index, std::shared_ptr<Component>> m_components;

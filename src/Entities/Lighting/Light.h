@@ -2,6 +2,7 @@
 
 #include <glm/vec3.hpp>
 
+//todo make entity
 class Light
 {
 public:

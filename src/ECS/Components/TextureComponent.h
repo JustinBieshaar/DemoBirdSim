@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "../../Rendering/Loading/Loader.h"
 #include "Component.h"
 
@@ -7,7 +8,7 @@ struct TextureComponent : public Component
 {
 	GLuint m_textureID;
 
-	TextureComponent(Loader* loader)
+	TextureComponent(std::shared_ptr<Loader> loader)
 	{
 		m_textureID = loader->loadTexture("test.png");
 	}

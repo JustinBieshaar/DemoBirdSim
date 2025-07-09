@@ -1,16 +1,19 @@
 #include "Camera.h"
 #include <iostream>
 
-Camera::Camera(std::shared_ptr<IInputManager> inputManager, glm::vec3 position, float pitch, float yaw)
+Camera::Camera(std::shared_ptr<IInputManager> inputManager, const glm::vec3& position, const float& pitch, const float& yaw)
     : GameObject(position), m_inputManager(inputManager), m_camera(addComponent<CameraComponent>(m_transform, pitch, yaw))
 {
 }
 
-void Camera::update()
+void Camera::update(float deltaTime)
 {
+    GameObject::update(deltaTime);
+
     // quick implementation todo: add events to input manager
     if (m_inputManager->isKeyPressed(GLFW_KEY_A))
     {
+        std::cout << "move camera! \n \n";
         m_transform->m_position.x -= 0.01f;
     }
 
@@ -57,4 +60,5 @@ void Camera::update()
     {
         m_camera->m_yaw += 1.0f;
     }
+
 }

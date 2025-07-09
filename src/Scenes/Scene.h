@@ -24,10 +24,16 @@ public:
 
 	virtual bool isLoaded() = 0;
 
-	virtual void update(float deltaTime) = 0;
+	virtual void update(float deltaTime)
+	{
+		for (auto entity : m_entities)
+		{
+			entity->update(deltaTime);
+		}
+	}
+
 	virtual void render() = 0;
 
 protected:
-	std::vector<std::unique_ptr<Entity>> m_entities;
 	std::shared_ptr<Loader> m_loader;
 };

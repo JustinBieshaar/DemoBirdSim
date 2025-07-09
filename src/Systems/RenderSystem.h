@@ -8,14 +8,17 @@
 class RenderSystem : ECS::System
 {
 public:
-	RenderSystem(ECS::Registry& registry, Camera* camera, glm::vec3 lightPosition)
-		: m_registry(registry), m_camera(camera), m_light(lightPosition) { }
+	RenderSystem(ECS::Registry& registry, Light* light)
+		: m_registry(registry), m_light(light) { }
 
 	void update(float deltaTime) override;
+	void render();
+
+	void setCamera(std::shared_ptr<Camera> camera) { m_camera = camera; }
 
 private:
 	ECS::Registry& m_registry;
-	Camera* m_camera;
-	glm::vec3 m_light;
+	std::shared_ptr<Camera> m_camera;
+	Light* m_light;
 };
 

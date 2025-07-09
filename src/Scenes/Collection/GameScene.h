@@ -1,6 +1,7 @@
 #pragma once
 #include "../Scene.h"
 #include "../../DI/Bootstrappers/MainBootstrapper.h"
+#include "../../Systems/RenderSystem.h"
 
 class GameScene : public Scene
 {
@@ -16,5 +17,6 @@ public:
 
 private:
 	MainBootstrapper* m_mainBootstrapper;
+	RenderSystem* m_renderer;
 };
 

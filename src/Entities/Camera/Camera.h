@@ -8,9 +8,9 @@
 class Camera : public GameObject
 {
 public:
-	Camera(std::shared_ptr<IInputManager> inputManager, glm::vec3 position = {}, float pitch = 0.0f, float yaw = 0.0f);
+	Camera(std::shared_ptr<IInputManager> inputManager, const glm::vec3& position = {}, const float& pitch = 0.0f, const float& yaw = 0.0f);
 
-	void update();
+	void update(float deltaTime) override;
 
 	glm::mat4 getViewMatrix() { return m_camera->getViewMatrix(); }
 
