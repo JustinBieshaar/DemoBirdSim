@@ -1,10 +1,17 @@
 #include "SceneManager.h"
 
+/// <summary>
+/// Adds a new scene to the scene registry. (surprise ;P)
+/// </summary>
 void SceneManager::addScene(const std::string& sceneName, std::shared_ptr<Scene> scene)
 {
 	m_scenes[sceneName] = scene;
 }
 
+/// <summary>
+/// Loads a scene by name and adds it to the active scenes if it's not already loaded.
+/// </summary>
+/// <param name="sceneName"></param>
 void SceneManager::loadScene(const std::string& sceneName)
 {
 	auto target = m_scenes.find(sceneName);
@@ -20,6 +27,9 @@ void SceneManager::loadScene(const std::string& sceneName)
 	m_activeScenes.push_back(sceneToAdd);
 }
 
+/// <summary>
+/// Unloads a scene by name and removes it from the active scenes list.
+/// </summary>
 void SceneManager::unloadScene(const std::string& sceneName)
 {
 	auto target = m_scenes.find(sceneName);
@@ -27,7 +37,6 @@ void SceneManager::unloadScene(const std::string& sceneName)
 
 	auto sceneToRemove = target->second;
 
-	// Call unload hook
 	sceneToRemove->unload();
 
 	// Remove from active list

@@ -10,27 +10,37 @@
 GameScene::GameScene(MainBootstrapper* mainBootstrapper) : Scene(), m_mainBootstrapper(mainBootstrapper)
 {
 	m_renderer = new RenderSystem(*this, new Light({0,0,5}));
+    m_debugWindow = new SceneGuiInspectorWindow("Game Scene");
 }
 
+/// <summary>
+/// Constructs a new GameScene, initializing the render system and main bootstrapper.
+/// </summary>
 void GameScene::load()
 {
 	Scene::load();
 	std::cout << "load game scene \n";
     auto cam = createEntity<Camera>(m_mainBootstrapper->getInputManager(), glm::vec3{ 0,-8, -20 }, 20, 0);
+
+    // Create various entities: player capsules and terrain chunks
 	createEntity<Capsule>(m_loader, glm::vec3{ 0,0,-5});
     createEntity<Capsule>(m_loader, glm::vec3(5, 0, -8));
     createEntity<Terrain>(m_loader, glm::vec3(0, 0, -1));
     createEntity<Terrain>(m_loader, glm::vec3(-1, 0, -1));
     createEntity<Terrain>(m_loader, glm::vec3(0, 0, 0));
     createEntity<Terrain>(m_loader, glm::vec3(-1, 0, 0));
-    //createEntity<Terrain>(m_loader, glm::vec3(-1, 0, -1));
 
 	m_renderer->setCamera(cam);
+    m_debugWindow->setEntities(m_entities);
 }
 
+/// <summary>
+/// Unloads the game scene. Delegates cleanup to base Scene class.
+/// </summary>
 void GameScene::unload()
 {
     Scene::unload();
+    m_entities.clear();
 }
 
 bool GameScene::isLoaded()
@@ -46,7 +56,7 @@ void GameScene::update(float deltaTime)
 
 void GameScene::render()
 {
-	//std::cout << "render game scene \n";
+	//TEMPORARY rendering of a back button
 	m_renderer->render();
 
     ImGui_ImplOpenGL3_NewFrame();
@@ -61,9 +71,6 @@ void GameScene::render()
 
     if (ImGui::Button("<", ImVec2(50, 50)))
     {
-        // Trigger scene transition
-        std::cout << " pressed play! \n";
-
         m_mainBootstrapper->getSceneManager()->unloadScene("Game");
         m_mainBootstrapper->getSceneManager()->loadScene("Menu");
 
@@ -71,6 +78,9 @@ void GameScene::render()
 
     ImGui::End();
 
+    m_debugWindow->render();
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 }

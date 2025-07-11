@@ -9,14 +9,19 @@
 #include <glm/ext/matrix_clip_space.hpp>
 #include "glm/gtc/matrix_transform.hpp"
 
-struct Transform : public Component
+#include "../../Tools/ImGuiDebug/IInspectable.h"
+
+struct Transform : public Component, public IInspectable
 {
 	glm::vec3 m_position;
 	glm::vec3 m_rotation;
 	glm::vec3 m_scale = glm::vec3(1.0f);
 
-	Transform(const glm::vec3& position = {}, const glm::vec3& rotation = {}, const glm::vec3& scale = glm::vec3(1.0f))
-		: m_position(position), m_rotation(rotation), m_scale(scale){ }
+	Transform(const glm::vec3& position = {}, const glm::vec3& rotation = {}, const glm::vec3& scale = glm::vec3(1.0f), bool valuesChangableByDebug = true)
+		: m_position(position), m_rotation(rotation), m_scale(scale)
+	{
+		m_valuesChangableByDebug = valuesChangableByDebug;
+	}
 
 	glm::mat4 getTransformationMatrix()
 	{
@@ -33,4 +38,7 @@ struct Transform : public Component
 		glm::mat4 model = translationMatrix * rotationMatrix * scaleMatrix;
 		return model;
 	}
+
+	// Inherited via IInspectable
+	void RenderImGui() override;
 };
