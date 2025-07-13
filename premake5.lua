@@ -40,6 +40,14 @@ project "Demo-Bird-Simulator"
 
     links { "GLFW", "GLM", "GLAD", "ImGui" }
 
+    filter "configurations:Debug"
+        defines { "_DEBUG" }
+        symbols "On"
+
+    filter "configurations:Release"
+        defines { "_RELEASE" }
+        optimize "On"
+
 -- Project
 group "Dependencies"
     include "external/glfw.lua"

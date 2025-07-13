@@ -11,8 +11,9 @@
 
 #include "../../Tools/ImGuiDebug/IInspectable.h"
 
-struct Transform : public Component, public IInspectable
+class Transform : public Component, public IInspectable
 {
+public:
 	glm::vec3 m_position;
 	glm::vec3 m_rotation;
 	glm::vec3 m_scale = glm::vec3(1.0f);
@@ -39,6 +40,6 @@ struct Transform : public Component, public IInspectable
 		return model;
 	}
 
-	// Inherited via IInspectable
 	void RenderImGui() override;
+	void update(float deltaTime) override;
 };

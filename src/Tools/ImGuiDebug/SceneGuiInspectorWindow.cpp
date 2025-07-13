@@ -5,11 +5,13 @@
 
 void SceneGuiInspectorWindow::renderInspectables()
 {
+    m_scene->RenderImGui();
+
     if (ImGui::CollapsingHeader("Entities"))
     {
         for (const auto& entity : m_entities)
         {
-            std::string label = "Entity " + StringUtils::runtime_type_name(*entity) +
+            std::string label = StringUtils::runtime_type_name(*entity) +
                 "##" + std::to_string(reinterpret_cast<uintptr_t>(entity.get()));
             if (ImGui::TreeNode(label.c_str()))
             {

@@ -4,12 +4,13 @@
 
 #include "../../Shaders/Shader.h"
 #include "../../Entities/Lighting/Light.h"
+#include "../../Tools/ImGuiDebug/IInspectable.h"
 
 #include <glm/glm.hpp>
 #include <memory>
 #include <iostream>
 
-struct MeshComponent : public Component
+class MeshComponent : public Component, public IInspectable
 {
 private:
     Shader* m_shader = nullptr;
@@ -100,5 +101,11 @@ public:
             m_shader->disableAttribs();
         }
     }
+
+    void update(float deltaTime) override;
+
+
+    // Inherited via IInspectable
+    void RenderImGui() override;
 
 };

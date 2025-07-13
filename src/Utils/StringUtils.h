@@ -71,4 +71,11 @@ namespace StringUtils
     {
         return cleanTypeName(typeid(obj).name());
     }
+
+    template <typename T>
+    std::string runtime_type_name(T* ptr)
+    {
+        if (!ptr) return "<null>";
+        return cleanTypeName(typeid(*ptr).name());
+    }
 }

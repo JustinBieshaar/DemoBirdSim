@@ -10,7 +10,7 @@
 GameScene::GameScene(MainBootstrapper* mainBootstrapper) : Scene(), m_mainBootstrapper(mainBootstrapper)
 {
 	m_renderer = new RenderSystem(*this, new Light({0,0,5}));
-    m_debugWindow = new SceneGuiInspectorWindow("Game Scene");
+    m_debugWindow = new SceneGuiInspectorWindow("Game Scene", this);
 }
 
 /// <summary>
@@ -73,12 +73,13 @@ void GameScene::render()
     {
         m_mainBootstrapper->getSceneManager()->unloadScene("Game");
         m_mainBootstrapper->getSceneManager()->loadScene("Menu");
-
     }
 
     ImGui::End();
 
+#ifdef _DEBUG
     m_debugWindow->render();
+#endif
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

@@ -86,6 +86,14 @@ public:
         return result;
     }
 
+    void updateAllComponents(float deltaTime)
+    {
+        for (const auto& [type, component] : m_components)
+        {
+            component->update(deltaTime);
+        }
+    }
+
     virtual void update(float deltaTime) = 0;
 
 private:

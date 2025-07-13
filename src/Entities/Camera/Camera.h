@@ -13,9 +13,14 @@ public:
 	void update(float deltaTime) override;
 
 	glm::mat4 getViewMatrix() { return m_camera->getViewMatrix(); }
+	glm::mat4 getProjectionMatrix() { return m_camera->getProjectionMatrix(); }
 
 private:
 	std::shared_ptr<IInputManager> m_inputManager;
 	std::shared_ptr<CameraComponent> m_camera;
+
+	std::shared_ptr<CameraComponent> m_followTarget;
+
+	float m_followSpeed;
 };
 

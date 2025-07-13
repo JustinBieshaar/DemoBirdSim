@@ -12,7 +12,7 @@
 /// Inherits from ECS::Registry for managing entities in systems.
 /// Using ECS::Registry allows us to do operations like getEntitiesWith<A,B,C...> etc
 /// </summary>
-class Scene : public ECS::Registry
+class Scene : public ECS::Registry, public IInspectable
 {
 public:
 	virtual ~Scene() = default;
@@ -42,12 +42,19 @@ public:
 	{
 		for (auto entity : m_entities)
 		{
+			// update entity first
 			entity->update(deltaTime);
+			entity->updateAllComponents(deltaTime);
 		}
 	}
 
 	virtual void render() = 0;
 
+	void RenderImGui() override;
+
 protected:
 	std::shared_ptr<Loader> m_loader;
+
+private:
+	bool m_toggleWireframes = false;
 };
