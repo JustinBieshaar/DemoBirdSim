@@ -5,7 +5,7 @@
 
 void SceneGuiInspectorWindow::renderInspectables()
 {
-    if (ImGui::Begin("Entities"))
+    if (ImGui::CollapsingHeader("Entities"))
     {
         for (const auto& entity : m_entities)
         {
@@ -16,12 +16,16 @@ void SceneGuiInspectorWindow::renderInspectables()
                 auto inspectableComponents = entity->getAllComponentsOfType<IInspectable>();
                 for (auto inspectableComponent : inspectableComponents)
                 {
-                    inspectableComponent->RenderImGui();
+                    std::string inspectableComponentLabel = StringUtils::runtime_type_name(*inspectableComponent) +
+                        "##" + std::to_string(reinterpret_cast<uintptr_t>(inspectableComponent.get()));
+                    if (ImGui::CollapsingHeader(inspectableComponentLabel.c_str()))
+                    {
+                        inspectableComponent->RenderImGui();
+                    }
                 }
 
                 ImGui::TreePop();
             }
         }
     }
-    ImGui::End();
 }
