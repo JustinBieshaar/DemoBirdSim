@@ -6,6 +6,8 @@
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
 #include "../../Entities/Terrain/Terrain.h"
+#include "../../Entities/Playable/Player.h"
+#include "../../ECS/Components/FollowTargetComponent.h"
 
 GameScene::GameScene(MainBootstrapper* mainBootstrapper) : Scene(), m_mainBootstrapper(mainBootstrapper)
 {
@@ -20,15 +22,18 @@ void GameScene::load()
 {
 	Scene::load();
 	std::cout << "load game scene \n";
-    auto cam = createEntity<Camera>(m_mainBootstrapper->getInputManager(), glm::vec3{ 0,-8, -20 }, 20, 0);
+    auto cam = createEntity<Camera>(m_mainBootstrapper->getInputManager(), glm::vec3{ 0,10, 30 }, 20, 0);
+    auto inputManager = m_mainBootstrapper->getInputManager();
 
     // Create various entities: player capsules and terrain chunks
-	createEntity<Capsule>(m_loader, glm::vec3{ 0,0,-5});
+	auto player = createEntity<Player>(m_loader, inputManager, glm::vec3{ 0,0,-5});
     createEntity<Capsule>(m_loader, glm::vec3(5, 0, -8));
     createEntity<Terrain>(m_loader, glm::vec3(0, 0, -1));
     createEntity<Terrain>(m_loader, glm::vec3(-1, 0, -1));
     createEntity<Terrain>(m_loader, glm::vec3(0, 0, 0));
     createEntity<Terrain>(m_loader, glm::vec3(-1, 0, 0));
+
+    cam->addComponent<FollowTargetComponent>(player->getComponent<Transform>(), glm::vec3(0 , 10.0f, 30.0f));
 
 	m_renderer->setCamera(cam);
     m_debugWindow->setEntities(m_entities);

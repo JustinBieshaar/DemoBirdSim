@@ -5,3 +5,5 @@ const float Window_Height = 720;
 
 const float Terrain_Size = 800;
 const int Terrain_VertexCount = 128;
+
+extern bool EnableWireframeMode;

@@ -24,6 +24,13 @@ void RenderSystem::render()
         (float)Window_Width / Window_Height,
         0.1f, 100.0f);
 
+#ifdef _DEBUG
+    if (EnableWireframeMode)
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+#endif
+
     for (auto entity : renderableEntities)
     {
         Transform* transform = nullptr;
@@ -61,4 +68,11 @@ void RenderSystem::render()
         mesh->stopShader();
         glBindVertexArray(0);
     }
+
+#ifdef _DEBUG
+    if (EnableWireframeMode)
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+#endif
 }

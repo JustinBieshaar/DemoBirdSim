@@ -54,7 +54,4 @@ public:
 
 protected:
 	std::shared_ptr<Loader> m_loader;
-
-private:
-	bool m_toggleWireframes = false;
 };

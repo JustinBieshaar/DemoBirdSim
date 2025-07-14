@@ -19,6 +19,7 @@ public:
     {
         auto component = std::make_shared<T>(std::forward<Args>(args)...);
         m_components[typeid(T)] = component;
+        component->setOwner(this);
         return component;
     }
 
@@ -28,18 +29,19 @@ public:
     void addComponent(std::shared_ptr<Component> component)
     {
         m_components[typeid(*component)] = component;
+        component->setOwner(this);
     }
 
     /// <summary>
     /// Retrieves a pointer to the component of type T, or nullptr if not found. ;)
     /// </summary>
     template<typename T>
-    T* getComponent()
+    std::shared_ptr<T> getComponent()
     {
         auto it = m_components.find(typeid(T));
         if (it != m_components.end())
         {
-            return static_cast<T*>(it->second.get());
+            return std::dynamic_pointer_cast<T>(it->second);
         }
         return nullptr;
     }

@@ -19,6 +19,7 @@ public:
 private:
 	ECS::Registry& m_registry;
 	std::shared_ptr<Camera> m_camera;
+
 	Light* m_light;
 };
 
