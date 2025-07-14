@@ -15,7 +15,7 @@ glm::mat4 CameraComponent::getViewMatrix() const
 	viewMatrix = glm::rotate(viewMatrix, glm::radians(m_roll + m_transform->m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	// Translate by the negative camera position
-	viewMatrix = glm::translate(viewMatrix, m_transform->m_position);
+	viewMatrix = glm::translate(viewMatrix, -m_transform->m_position);
 
 	return viewMatrix;
 }
