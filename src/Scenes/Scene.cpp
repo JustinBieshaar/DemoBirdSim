@@ -11,4 +11,14 @@ void Scene::RenderImGui()
 	{
 		EnableWireframeMode = !EnableWireframeMode;
 	}
+
+	int totalVertexCount = 0;
+	auto meshEntities = getEntitiesWith<MeshComponent>();
+
+	for (auto meshEntity : meshEntities)
+	{
+		totalVertexCount += meshEntity->getComponent<MeshComponent>()->m_vertexCount;
+	}
+
+	ImGui::Text("Total vertex count: %d", totalVertexCount);
 }
