@@ -10,6 +10,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 #include "../../Tools/ImGuiDebug/IInspectable.h"
+#include <cmath>
 
 class Transform : public Component, public IInspectable
 {
@@ -38,6 +39,17 @@ public:
 
 		glm::mat4 model = translationMatrix * rotationMatrix * scaleMatrix;
 		return model;
+	}
+
+	glm::vec3 getForward() const
+	{
+		glm::vec3 forward;
+
+		forward.x = std::cos(m_rotation.x) * std::sin(m_rotation.y);
+		forward.y = -std::sin(m_rotation.x);
+		forward.z = std::cos(m_rotation.x) * std::cos(m_rotation.y);
+
+		return forward;
 	}
 
 	void RenderImGui() override;
