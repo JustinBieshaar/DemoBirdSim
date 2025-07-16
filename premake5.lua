@@ -50,7 +50,7 @@ project "Demo-Bird-Simulator"
         "game/src/**.h",
     }
 
-    links { "GLFW", "GLM", "GLAD", "ImGui", "Shader", "ECS", "SimpleDI", "Scenes", "ImGuiWindow", "Utils" }
+    links { "GLFW", "GLM", "GLAD", "ImGui", "Shader", "ECS", "SimpleDI", "Scenes", "Rendering", "ImGuiWindow", "Utils" }
 
     filter "configurations:Debug"
         defines { "_DEBUG" }
@@ -61,6 +61,51 @@ project "Demo-Bird-Simulator"
         optimize "On"    
 
 ---------- TOOLS (tbc) ----------
+
+group "Tools" 
+project "BirdGenerator"
+    location "tools/BirdGenerator/src"
+    kind "ConsoleApp"
+    language "C++"
+    cppdialect "C++20"
+    staticruntime "on"
+
+    targetdir "bin/%{cfg.buildcfg}"
+    objdir "obj/%{cfg.buildcfg}"
+
+    includedirs { 
+        "include/", 
+
+        --- External
+        "external/glad/include/", 
+        "external/glfw/include/", 
+        "external/glm/", 
+        "external/imgui/", 
+        "external/imgui/examples" ,
+
+        --- Core
+        "core/Shader/",
+        "core/Rendering/",
+        "core/ECS/",
+        "core/Utils/"
+    }
+
+    files 
+    { 
+        -- Files
+        "tools/BirdGenerator/src/**.cpp", 
+        "tools/BirdGenerator/src/**.h",
+    }
+
+    links { "GLFW", "GLM", "GLAD", "ImGui", "Shader", "Rendering", "ECS", "Utils" }
+
+    filter "configurations:Debug"
+        defines { "_DEBUG" }
+        symbols "On"
+
+    filter "configurations:Release"
+        defines { "_RELEASE" }
+        optimize "On"  
 
 ---------- CORE ----------
 
