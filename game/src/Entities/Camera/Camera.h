@@ -19,8 +19,6 @@ private:
 	std::shared_ptr<IInputManager> m_inputManager;
 	std::shared_ptr<CameraComponent> m_camera;
 
-	std::shared_ptr<CameraComponent> m_followTarget;
-
-	float m_followSpeed;
+	float m_scrollSpeed = 0.6f;
 };
 

@@ -20,6 +20,7 @@ private:
 	std::shared_ptr<Transform> m_transform;
 	std::shared_ptr<Transform> m_target;
 	glm::vec3 m_offset;
+	float m_distanceClamp = 0.5f;
 
 	// Inherited via IInspectable
 	void RenderImGui() override;

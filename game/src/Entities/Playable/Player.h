@@ -14,6 +14,6 @@ public:
 	void update(float deltaTime) override;
 private:
 	std::shared_ptr<IInputManager> m_inputManager;
-	float m_speed = 1.0f;
-	float m_rotationSpeed = 30.0f;
+	float m_speed = 10.0f;
+	float m_rotationSpeed = 5.0f;
 };

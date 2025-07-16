@@ -8,5 +8,7 @@ Camera::Camera(std::shared_ptr<IInputManager> inputManager, const glm::vec3& pos
 
 void Camera::update(float deltaTime)
 {
+    // not ideal in an update.. maybe better to make it link to an event as well
+    m_camera->Zoom(m_inputManager->getMouseScroll().second * m_scrollSpeed);
 
 }

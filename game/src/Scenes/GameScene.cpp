@@ -12,7 +12,7 @@
 
 GameScene::GameScene(MainBootstrapper* mainBootstrapper) : Scene(), m_mainBootstrapper(mainBootstrapper)
 {
-	m_renderer = new RenderSystem(*this, new Light({0,0,5}));
+	m_renderer = new RenderSystem(*this, new Light({100,10,5}));
     m_debugWindow = new SceneGuiInspectorWindow("Game Scene", this);
 }
 

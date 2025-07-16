@@ -17,7 +17,7 @@ std::tuple<GLuint, size_t> Loader::loadToMeshComponent(const std::vector<float>&
 
 GLuint Loader::loadTexture(const std::string& path)
 {
-	std::string fullPath = std::filesystem::current_path().string() + "../../../resources/" + path;
+	std::string fullPath = std::filesystem::current_path().string() + "../../../resources/textures/" + path;
 
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load(fullPath.c_str(), &width, &height, &nrChannels, 0);

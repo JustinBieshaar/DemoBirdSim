@@ -1,6 +1,8 @@
 #include "FollowTargetComponent.h"
 #include <glm/gtc/quaternion.hpp>
 #include <imgui.h>
+#include <string>
+#include <iostream>
 
 void FollowTargetComponent::update(float deltaTime)
 {
@@ -9,11 +11,20 @@ void FollowTargetComponent::update(float deltaTime)
         return;
     }
 
+    auto targetPosition = m_target->m_position + m_offset;
+    auto distance = glm::distance(m_transform->m_position, targetPosition);
+
+    if (distance < m_distanceClamp)
+    {
+        // too close to move
+        return;
+    }
+
     // --- SMOOTH POSITION ---
     float positionLerpSpeed = 5.0f; // higher = faster follow
     m_transform->m_position = glm::mix(
         m_transform->m_position,
-        m_target->m_position + m_offset,
+        targetPosition,
         deltaTime * positionLerpSpeed
     );
 
@@ -40,4 +51,13 @@ void FollowTargetComponent::update(float deltaTime)
 void FollowTargetComponent::RenderImGui()
 {
     ImGui::DragFloat3("offset", &m_offset.x);
+    auto targetPosition = m_target->m_position + m_offset;
+    auto distance = glm::distance(m_transform->m_position, targetPosition);
+
+    std::string distanceLabel = "distance: " + std::to_string(distance);
+    ImGui::Text(distanceLabel.c_str());
+    if (distance < m_distanceClamp)
+    {
+        ImGui::Text("DISABLED, distance is too low");
+    }
 }

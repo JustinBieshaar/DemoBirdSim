@@ -80,7 +80,7 @@ namespace ObjLoader
 	/// </summary>
 	inline std::tuple<GLuint, size_t> loadMeshFromObjFile(std::string fileName, std::shared_ptr<Loader> loader)
 	{
-		std::string fullPath = std::filesystem::current_path().string() + "../../../resources/obj/" + fileName + ".obj";
+		std::string fullPath = std::filesystem::current_path().string() + "../../../resources/3d-obj/" + fileName + ".obj";
 		std::ifstream file(fullPath);
 		if (!file.is_open())
 		{

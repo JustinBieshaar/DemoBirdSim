@@ -90,8 +90,12 @@ void Application::run()
 
         glfwPollEvents();
 
+        // update all
         m_mainBootstrapper->getInputManager()->update(deltaTime);
         m_mainBootstrapper->getSceneManager()->update(deltaTime);
+
+        // late update all
+        m_mainBootstrapper->getInputManager()->lateUpdate(deltaTime);
 
         render();
 
