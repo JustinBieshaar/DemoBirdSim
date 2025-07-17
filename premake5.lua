@@ -63,49 +63,49 @@ project "Demo-Bird-Simulator"
 ---------- TOOLS (tbc) ----------
 
 group "Tools" 
-project "BirdGenerator"
-    location "tools/BirdGenerator/src"
-    kind "ConsoleApp"
-    language "C++"
-    cppdialect "C++20"
-    staticruntime "on"
+    project "BirdGenerator"
+        location "tools/BirdGenerator/src"
+        kind "ConsoleApp"
+        language "C++"
+        cppdialect "C++20"
+        staticruntime "on"
 
-    targetdir "bin/%{cfg.buildcfg}"
-    objdir "obj/%{cfg.buildcfg}"
+        targetdir "bin/%{cfg.buildcfg}"
+        objdir "obj/%{cfg.buildcfg}"
 
-    includedirs { 
-        "include/", 
+        includedirs { 
+            "include/", 
 
-        --- External
-        "external/glad/include/", 
-        "external/glfw/include/", 
-        "external/glm/", 
-        "external/imgui/", 
-        "external/imgui/examples" ,
+            --- External
+            "external/glad/include/", 
+            "external/glfw/include/", 
+            "external/glm/", 
+            "external/imgui/", 
+            "external/imgui/examples" ,
 
-        --- Core
-        "core/Shader/",
-        "core/Rendering/",
-        "core/ECS/",
-        "core/Utils/"
-    }
+            --- Core
+            "core/Shader/",
+            "core/Rendering/",
+            "core/ECS/",
+            "core/Utils/"
+        }
 
-    files 
-    { 
-        -- Files
-        "tools/BirdGenerator/src/**.cpp", 
-        "tools/BirdGenerator/src/**.h",
-    }
+        files 
+        { 
+            -- Files
+            "tools/BirdGenerator/src/**.cpp", 
+            "tools/BirdGenerator/src/**.h",
+        }
 
-    links { "GLFW", "GLM", "GLAD", "ImGui", "Shader", "Rendering", "ECS", "Utils" }
+        links { "GLFW", "GLM", "GLAD", "ImGui", "Shader", "Rendering", "ECS", "Utils" }
 
-    filter "configurations:Debug"
-        defines { "_DEBUG" }
-        symbols "On"
+        filter "configurations:Debug"
+            defines { "_DEBUG" }
+            symbols "On"
 
-    filter "configurations:Release"
-        defines { "_RELEASE" }
-        optimize "On"  
+        filter "configurations:Release"
+            defines { "_RELEASE" }
+            optimize "On"
 
 ---------- CORE ----------
 
@@ -229,5 +229,18 @@ group "Core"
             }, 
         links = { "GLFW", "GLM", "GLAD", "ECS", "Shader", "Rendering", "ImGuiWindow", "ImGui", "Utils" }
     }
+group "Tools"
+    createStaticLib { -- Birds Factory
+        name = "BirdsFactory",
+        path = "tools/BirdsFactory",
+        includes = 
+            { 
+                "core/Shader",
+                "core/ECS", -- includes ECS as a scene is also a ECS registry
+                "core/Utils", -- TODO: add utils to imgui window to add a method to get the name of the object for fields.
 
+                "external/nlohmann/" -- for JSon parsing and reading
+            }, 
+        links = { "ECS", "Shader", "Utils" }
+    }
 group ""

@@ -64,7 +64,6 @@ void Application::render()
 
 void Application::run()
 {
-
     while (!glfwWindowShouldClose(m_window))
     {
         float currentTime = glfwGetTime();
