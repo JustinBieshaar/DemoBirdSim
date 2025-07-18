@@ -181,7 +181,12 @@ group "Core"
     }
     createStaticLib { -- Utilities
         name = "Utils",
-        path = "core/Utils"
+        path = "core/Utils",
+        debugDefines = '_SOLUTIONDIR=R"(%{wks.location})"'
+    }
+    createStaticLib { -- Signal handling to observe and pass events
+        name = "Signals",
+        path = "core/Signals"
     }
     createStaticLib { -- Shader
         name = "Shader",
