@@ -78,4 +78,64 @@ namespace StringUtils
         if (!ptr) return "<null>";
         return cleanTypeName(typeid(*ptr).name());
     }
+
+    std::string toPascalCase(const std::string& name)
+    {
+        std::string out = name;
+        out[0] = std::toupper(out[0]);
+        return out;
+    }
+
+    std::string toCamelCase(const std::string& name)
+    {
+        std::string out = name;
+        out[0] = std::tolower(out[0]);
+        return out;
+    }
+
+    std::string toUpperCase(const std::string& input)
+    {
+        std::string out = input;
+        for (char& c : out)
+        {
+            c = std::toupper(static_cast<unsigned char>(c));
+        }
+        return out;
+    }
+
+    std::string toLowerCase(const std::string& input)
+    {
+        std::string out = input;
+        for (char& c : out)
+        {
+            c = std::tolower(static_cast<unsigned char>(c));
+        }
+        return out;
+    }
+
+    std::string toUpperSnakeCase(const std::string& input)
+    {
+        std::string result;
+
+        for (size_t i = 0; i < input.size(); ++i)
+        {
+            char c = input[i];
+
+            // Check for transition boundaries
+            if (i > 0 && std::isupper(c))
+            {
+                char prev = input[i - 1];
+                char next = (i + 1 < input.size()) ? input[i + 1] : '\0';
+
+                if (std::islower(prev) || (std::isupper(prev) && std::islower(next)))
+                {
+                    result += '_';
+                }
+            }
+
+            result += std::toupper(static_cast<unsigned char>(c));
+        }
+
+        return result;
+    }
 }

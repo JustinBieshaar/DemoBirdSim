@@ -3,12 +3,15 @@
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
 
-class Application
+#include <vector>
+
+class BirdGeneratorApp
 {
 public:
     bool init();
 
-    void render();
+    void render3D();
+    void renderUI();
 
     void run();
 
@@ -17,5 +20,7 @@ private:
 
     GLFWwindow* m_window;
     float m_lastTime;
+
+    
 };
 

@@ -1,6 +1,7 @@
 #pragma once
+#include "IView.h"
 
-class BirdDataView
+class BirdDataView : public IView
 {
 public:
 	void render();

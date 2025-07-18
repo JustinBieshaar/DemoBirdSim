@@ -1,21 +1,18 @@
 // BirdFactory.h
 #pragma once
-#include "Birds/Bird.h"
-#include <memory>
-#include <unordered_map>
-#include <functional>
-#include <string>
+#include <json.hpp>
 
 class BirdsFactory
 {
 public:
-    static BirdsFactory& getInstance();
-
-    std::shared_ptr<Bird> createBird(const std::string& name);
-
-    void registerBird(const std::string& name, std::function<std::shared_ptr<Bird>()> constructor);
+    static void generateBirds(const nlohmann::json& birdsJson);
 
 private:
-    std::unordered_map<std::string, std::function<std::shared_ptr<Bird>()>> registry;
-    BirdsFactory() {}
+    static std::string toMacro(const std::string& name);
+
+    static void generateBirdClass(const std::string& name, const std::string& obj, int speed);
+    static void generateDefines(const nlohmann::json& birds);
+    static void generateRegisterIncludes(const nlohmann::json& birds);
+    static void generateRegistryAccessors(const nlohmann::json& birds);
+    static void runPremake();
 };

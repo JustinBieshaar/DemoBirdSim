@@ -1,0 +1,14 @@
+{
+  "robin": {
+    "obj_name": "robin.obj",
+    "speed": 10
+  },
+  "goose": {
+    "obj_name": "goose.obj",
+    "speed": 5
+  },
+  "gull": {
+    "obj_name": "gull.obj",
+    "speed": 7
+  }
+}

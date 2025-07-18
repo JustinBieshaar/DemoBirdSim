@@ -1,8 +1,8 @@
-#include "Application.h"
+#include "BirdGeneratorApp.h"
 
 int main()
 {
-    Application app;
+    BirdGeneratorApp app;
     if (!app.init()) return -1;
     app.run();
     return 0;

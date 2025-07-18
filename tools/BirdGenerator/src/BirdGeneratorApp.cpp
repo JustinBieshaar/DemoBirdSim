@@ -1,5 +1,5 @@
 #include <glad/glad.h>
-#include "Application.h"
+#include "BirdGeneratorApp.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -14,9 +14,16 @@
 
 #include "Global/Globals.h"
 
+#include <BirdsFactory.h>
+#include <json.hpp>
+#include <fstream>
+
+#include <PathManager.h>
+
+#include <string>
 #include <iostream>
 
-bool Application::init()
+bool BirdGeneratorApp::init()
 {
     if (!glfwInit()) return false;
 
@@ -53,16 +60,42 @@ bool Application::init()
     return true;
 }
 
-void Application::render()
+void BirdGeneratorApp::render3D()
 {
     glViewport(0, 0, Window_Width, Window_Height);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // todo: render preview
 }
 
-void Application::run()
+void BirdGeneratorApp::renderUI()
+{
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    ImGui::Begin("Testing");
+    if (ImGui::Button("Generate"))
+    {
+        PathManager::setResourceRoot(_SOLUTIONDIR);
+
+        std::ifstream input(PathManager::getConfigPath("birds.json"));
+        nlohmann::json birds;
+        input >> birds;
+        std::cout << "birds: " << birds << "\n";
+
+        BirdsFactory::generateBirds(birds);
+    }
+    ImGui::End();
+
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void BirdGeneratorApp::run()
 {
     while (!glfwWindowShouldClose(m_window))
     {
@@ -72,7 +105,8 @@ void Application::run()
 
         glfwPollEvents();
 
-        render();
+        render3D();
+        renderUI();
 
         glfwSwapBuffers(m_window);
     }
@@ -80,7 +114,7 @@ void Application::run()
     cleanup();
 }
 
-void Application::cleanup()
+void BirdGeneratorApp::cleanup()
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();

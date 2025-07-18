@@ -12,7 +12,6 @@ public:
     bool init();
 
     void render();
-    void renderUI();
 
     void run();
 

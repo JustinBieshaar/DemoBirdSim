@@ -40,7 +40,10 @@ project "Demo-Bird-Simulator"
         "core/Scenes/",
         "core/Rendering/",
         "core/ImGuiWindow/",
-        "core/Utils/"
+        "core/Utils/",
+
+        --- Tools
+        "tools/BirdsFactory"
     }
 
     files 
@@ -82,12 +85,16 @@ group "Tools"
             "external/glm/", 
             "external/imgui/", 
             "external/imgui/examples" ,
+            "external/nlohmann/", -- for JSon parsing and reading
 
             --- Core
             "core/Shader/",
             "core/Rendering/",
             "core/ECS/",
-            "core/Utils/"
+            "core/Utils/",
+
+            --- Tools
+            "tools/BirdsFactory"
         }
 
         files 
@@ -97,10 +104,13 @@ group "Tools"
             "tools/BirdGenerator/src/**.h",
         }
 
-        links { "GLFW", "GLM", "GLAD", "ImGui", "Shader", "Rendering", "ECS", "Utils" }
+        links { "GLFW", "GLM", "GLAD", "ImGui", "Shader", "Rendering", "ECS", "Utils", "BirdsFactory" }
 
         filter "configurations:Debug"
-            defines { "_DEBUG" }
+            defines { 
+                "_DEBUG",
+                '_SOLUTIONDIR=R"(%{wks.location})"'
+            }
             symbols "On"
 
         filter "configurations:Release"
@@ -139,11 +149,20 @@ function createStaticLib(params)
         end
 
         filter "configurations:Debug"
-            defines { "_DEBUG" }
+        if params.debugDefines then
+           defines { "_DEBUG", params.debugDefines}
+        else
+           defines { "_DEBUG" }
+        end
             symbols "On"
 
+
         filter "configurations:Release"
-            defines { "_RELEASE" }
+        if params.releaseDefines then
+           defines { "_RELEASE", params.releaseDefines}
+        else
+           defines { "_RELEASE" }
+        end
             optimize "On"
 end
 
@@ -241,6 +260,7 @@ group "Tools"
 
                 "external/nlohmann/" -- for JSon parsing and reading
             }, 
-        links = { "ECS", "Shader", "Utils" }
+        links = { "ECS", "Shader", "Utils" },
+        debugDefines = '_SOLUTIONDIR=R"(%{wks.location})"'
     }
 group ""
