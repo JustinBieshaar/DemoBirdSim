@@ -1,6 +1,7 @@
 project "GLM"
 	kind "None"
-	language "C"
+    language "C++"
+    cppdialect "C++20"
 	architecture "x86_64"
 
 	targetdir ("../bin/%{cfg.buildcfg}")

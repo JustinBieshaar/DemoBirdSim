@@ -20,8 +20,8 @@ project "BirdGenerator"
     cppdialect "C++20"
     staticruntime "on"
 
-    targetdir "bin/%{cfg.buildcfg}"
-    objdir "obj/%{cfg.buildcfg}"
+    targetdir "../bin/%{cfg.buildcfg}"
+    objdir "../obj/%{cfg.buildcfg}"
 
     includedirs {
         "../include/",

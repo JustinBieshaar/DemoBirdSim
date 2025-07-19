@@ -8,8 +8,8 @@ function createStaticLib(params)
         cppdialect "C++20"
         staticruntime "on"
 
-        targetdir ("bin/" .. outputdir .. "/" .. params.name)
-        objdir ("obj/" .. outputdir .. "/" .. params.name)
+        targetdir ("../bin/" .. outputdir .. "/" .. params.name)
+        objdir ("../obj/" .. outputdir .. "/" .. params.name)
 
         files { params.path .. "/**.h", params.path .. "/**.cpp" }
         includedirs { params.path }
