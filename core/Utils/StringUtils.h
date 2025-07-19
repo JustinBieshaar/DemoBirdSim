@@ -79,21 +79,21 @@ namespace StringUtils
         return cleanTypeName(typeid(*ptr).name());
     }
 
-    std::string toPascalCase(const std::string& name)
+    inline std::string toPascalCase(const std::string& name)
     {
         std::string out = name;
         out[0] = std::toupper(out[0]);
         return out;
     }
 
-    std::string toCamelCase(const std::string& name)
+    inline std::string toCamelCase(const std::string& name)
     {
         std::string out = name;
         out[0] = std::tolower(out[0]);
         return out;
     }
 
-    std::string toUpperCase(const std::string& input)
+    inline std::string toUpperCase(const std::string& input)
     {
         std::string out = input;
         for (char& c : out)
@@ -103,7 +103,7 @@ namespace StringUtils
         return out;
     }
 
-    std::string toLowerCase(const std::string& input)
+    inline std::string toLowerCase(const std::string& input)
     {
         std::string out = input;
         for (char& c : out)
@@ -113,7 +113,7 @@ namespace StringUtils
         return out;
     }
 
-    std::string toUpperSnakeCase(const std::string& input)
+    inline std::string toUpperSnakeCase(const std::string& input)
     {
         std::string result;
 
