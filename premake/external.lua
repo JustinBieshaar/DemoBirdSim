@@ -1,0 +1,6 @@
+group "Dependencies"
+    include "../external/glfw.lua"
+    include "../external/glad.lua"
+    include "../external/glm.lua"
+    include "../external/imgui.lua"
+group ""
