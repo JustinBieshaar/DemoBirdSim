@@ -1,13 +1,13 @@
 #include "GameScene.h"
-#include "../Entities/Camera/Camera.h"
-#include "../Entities/Meshes/Capsule.h"
+#include "../Prefabs/Camera/Camera.h"
+#include "../Prefabs/Meshes/Capsule.h"
 
 #include <iostream>
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
-#include "../Entities/Terrain/Terrain.h"
-#include "../Entities/Playable/Player.h"
-#include "../Entities/Lighting/Light.h"
+#include "../Prefabs/Terrain/Terrain.h"
+#include "../Prefabs/Playable/Player.h"
+#include "../Prefabs/Lighting/Light.h"
 #include "../Components/FollowTargetComponent.h"
 
 GameScene::GameScene(MainBootstrapper* mainBootstrapper) : Scene(), m_mainBootstrapper(mainBootstrapper)

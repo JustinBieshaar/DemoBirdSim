@@ -3,8 +3,8 @@
 
 #include <System.h>
 #include <Registry.h>
-#include "../Entities/Camera/Camera.h"
-#include "../Entities/Lighting/Light.h"
+#include "../Prefabs/Camera/Camera.h"
+#include "../Prefabs/Lighting/Light.h"
 
 class RenderSystem : ECS::System
 {

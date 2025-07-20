@@ -17,8 +17,8 @@
 #include <iostream>
 #include <Components/TextureComponent.h>
 #include <Components/Transform.h>
-#include "Entities/Camera/Camera.h"
-#include "Entities/Meshes/Capsule.h"
+#include "Prefabs/Camera/Camera.h"
+#include "Prefabs/Meshes/Capsule.h"
 #include "Scenes/MainMenuScene.h"
 #include "Scenes/GameScene.h"
 
