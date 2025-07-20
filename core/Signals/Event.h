@@ -2,7 +2,7 @@
 
 
 template<typename T>
-class Event : public IEvent
+class Event : public ISignal
 {
 public:
     T data;

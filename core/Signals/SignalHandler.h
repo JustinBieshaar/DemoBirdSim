@@ -20,7 +20,7 @@ public:
     {
         std::type_index index = typeid(T);
         observers[index].emplace_back(
-            [callback](IEvent& evt)
+            [callback](ISignal& evt)
             {
                 callback(static_cast<Event<T>&>(evt));
             }
