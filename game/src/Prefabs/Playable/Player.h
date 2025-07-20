@@ -1,7 +1,7 @@
 #pragma once
 #include <Loader.h>
 #include <Entity.h>
-#include "../GameObject.h"
+#include <GameObject.h>
 
 #include <memory>
 #include "../../Managers/IInputManager.h"

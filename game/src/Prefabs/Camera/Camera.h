@@ -3,7 +3,7 @@
 #include <memory>
 #include "../../Managers/IInputManager.h"
 #include "../../Components/CameraComponent.h"
-#include "../GameObject.h"
+#include <GameObject.h>
 
 class Camera : public GameObject
 {

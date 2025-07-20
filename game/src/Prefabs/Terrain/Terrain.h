@@ -2,7 +2,7 @@
 #include <memory>
 #include <glm/vec3.hpp>
 #include <Loader.h>
-#include "../GameObject.h"
+#include <GameObject.h>
 
 class Terrain : public GameObject
 {
