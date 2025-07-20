@@ -3,13 +3,14 @@ project "GoogleTests"
     language "C++"
     cppdialect "C++20"
 	architecture "x86_64"
+    staticruntime "on"
 
 	targetdir "../bin/%{cfg.buildcfg}"
 	objdir "../obj/%{cfg.buildcfg}"
     
     includedirs {
         "googletests/include",
-        "googletests/googletest"
+        "googletests/"
     }
 
     files {
