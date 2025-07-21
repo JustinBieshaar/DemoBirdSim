@@ -12,7 +12,7 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
-#include "Views/GenerationView.h"
+#include "Views/ControlsView.h"
 
 #include "Global/Globals.h"
 
@@ -24,6 +24,9 @@
 #include <string>
 #include <iostream>
 #include "Views/BirdDataView.h"
+#include "Validation/JsonValidator.h"
+
+#include <Console.h>
 
 bool BirdGeneratorApp::init()
 {
@@ -87,6 +90,8 @@ void BirdGeneratorApp::renderUI()
         view->render();
     }
 
+    Console::drawImGui();
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -95,17 +100,20 @@ void BirdGeneratorApp::run()
 {
     m_loader = std::make_shared<Loader>();
     m_signalHandler = std::make_shared<SignalHandler>();
-    updateJson();
+
+    fetchAndValidateJson();
 
     m_previewer = std::make_unique<BirdPreviewer>(m_loader);
-    m_views.push_back(std::make_unique<GenerationView>(m_signalHandler, m_json));
     m_views.push_back(std::make_unique<BirdDataView>(m_signalHandler, m_json));
+    m_views.push_back(std::make_unique<ControlsView>(m_signalHandler, m_json));
 
     m_previewer->subscribeSignals(m_signalHandler);
     for (auto& view : m_views)
     {
         view->init();
     }
+
+    m_signalHandler->invokeEvent(ChangeBirdSignal{ DefaultBird, m_json[DefaultBird]}); // select first default bird.
 
     m_lastTime = glfwGetTime(); // otherwise we get extreme first value
     while (!glfwWindowShouldClose(m_window))
@@ -137,9 +145,43 @@ void BirdGeneratorApp::cleanup()
     glfwTerminate();
 }
 
-void BirdGeneratorApp::updateJson()
+void BirdGeneratorApp::fetchAndValidateJson()
 {
+    // Load birds.json
     std::ifstream input(PathManager::getConfigPath("birds.json"));
-    input >> m_json;
-    m_signalHandler->invokeEvent(JsonUpdatedSignal { m_json });
+    if (!input)
+    {
+        std::cerr << "Failed to open birds.json\n";
+        return;
+    }
+
+    nlohmann::ordered_json birdsJson;
+    input >> birdsJson;
+
+    // Load template.json
+    std::ifstream templateInput(PathManager::getConfigPath("template.json"));
+    if (!templateInput)
+    {
+        std::cerr << "Failed to open template.json\n";
+        return;
+    }
+
+    nlohmann::ordered_json templateJson;
+    templateInput >> templateJson;
+
+    // Validate and update birds json
+    JsonValidator::validate(birdsJson, templateJson);
+
+    // Save updated birds.json back to file
+    std::ofstream outFile(PathManager::getConfigPath("birds.json"));
+    if (!outFile)
+    {
+        std::cerr << "Failed to write birds.json\n";
+        return;
+    }
+    outFile << birdsJson.dump(4);
+
+    // Update internal state and notify listeners
+    m_json = birdsJson;
+    m_signalHandler->invokeEvent(JsonUpdatedSignal{ m_json });
 }

@@ -23,7 +23,7 @@ public:
 
 private:
     void cleanup();
-    void updateJson();
+    void fetchAndValidateJson();
 
     GLFWwindow* m_window;
     float m_lastTime;

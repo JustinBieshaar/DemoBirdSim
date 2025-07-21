@@ -1,0 +1,17 @@
+{
+  "default": {
+    "obj_name": "",
+    "texture": "",
+    "core": {
+      "mass": 1.0,
+      "wingspan": 1.0
+    },
+    "flight": {
+      "max_speed": 1.0,
+      "acceleration": 1.0,
+      "ltd_ratio": 1.0,
+      "flap_rate": 1.0
+    },
+    "newValue": 0.0
+  }
+}

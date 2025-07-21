@@ -5,6 +5,7 @@
 #include <TexturedShader.h>
 #include <ObjLoader.h>
 #include <PathManager.h>
+#include <LogChannels.h>
 
 #include <iostream>
 
@@ -15,10 +16,6 @@ Bird::Bird(std::shared_ptr<Loader> loader,
 {
 	m_colorShader = new ColorShader();
 	m_texturedShader = new TexturedShader();
-
-	PathManager::setResourceRoot(_SOLUTIONDIR);
-	auto [vao, vertexCount] = ObjLoader::loadMeshFromObjFile(DefaultBird, loader);
-	auto mesh = addComponent<MeshComponent>(vao, vertexCount, m_colorShader);
 }
 
 void Bird::subscribeSignals(std::shared_ptr<SignalHandler> signalHandler)
@@ -37,8 +34,6 @@ void Bird::update(float deltaTime)
 
 void Bird::onBirdChanged(Event<ChangeBirdSignal>& signal)
 {
-	std::cout << "bird changed!\n";
-
 	m_name = signal.data.name;
 
 	m_loader->unloadMesh(getComponent<MeshComponent>()->m_vertexArrayObject);
@@ -56,7 +51,7 @@ void Bird::onBirdChanged(Event<ChangeBirdSignal>& signal)
 
 	bool hasTexture = texture != "none";
 
-
+	PathManager::setResourceRoot(_SOLUTIONDIR);
 	auto [vao, vertexCount] = ObjLoader::loadMeshFromObjFile(objname, m_loader);
 	auto mesh = addComponent<MeshComponent>(vao, vertexCount);
 
@@ -69,4 +64,6 @@ void Bird::onBirdChanged(Event<ChangeBirdSignal>& signal)
 	{
 		mesh->setShader(m_colorShader);
 	}
+
+	DefaultChannel.log("Bird updated to: " + m_name);
 }

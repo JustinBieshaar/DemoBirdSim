@@ -58,6 +58,11 @@ GLuint Loader::loadTexture(const std::string& path)
 
 void Loader::unloadTexture(const GLuint& textureId)
 {
+	if (m_textures.empty())
+	{
+		return;
+	}
+
 	// Delete the texture from GPU
 	glDeleteTextures(1, &textureId);
 
@@ -76,6 +81,11 @@ void Loader::unloadTexture(const GLuint& textureId)
 
 void Loader::unloadMesh(const GLuint& vao)
 {
+	if (m_vaoToVbos.empty())
+	{
+		return;
+	}
+
 	// Delete VBOs associated with this VAO
 	if (m_vaoToVbos.count(vao))
 	{
@@ -124,8 +134,6 @@ GLuint Loader::createVertexArrayObject()
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 	m_vertexArrayObjects.push_back(vao);
-
-	std::cout << "creating new vao: " << m_vertexArrayObjects.size() << "\n";
 	return vao;
 }
 
@@ -143,7 +151,6 @@ GLuint Loader::createVertexBufferObject(GLenum target, const void* data, size_t 
 	if (boundVao != 0)
 		m_vaoToVbos[boundVao].push_back(vbo);
 
-	std::cout << "creating new vbo: " << m_vertexBufferObjects.size() << "\n";
 	return vbo;
 }
 

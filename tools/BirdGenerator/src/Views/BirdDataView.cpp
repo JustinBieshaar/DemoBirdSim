@@ -2,8 +2,12 @@
 
 #include <imgui.h>
 #include <ImGuiJsonDrawer.h>
+#include <PathManager.h>
 
-BirdDataView::BirdDataView(std::shared_ptr<SignalHandler> signalHandler, nlohmann::ordered_json json) : IView(signalHandler), m_json(json)
+#include "../Global/Globals.h"
+#include "../Signals/ChangeBirdSignal.h"
+
+BirdDataView::BirdDataView(std::shared_ptr<SignalHandler> signalHandler, nlohmann::ordered_json json) : IView(signalHandler), m_json(json), m_editingBirdKey(DefaultBird)
 {
 }
 
@@ -18,15 +22,16 @@ void BirdDataView::render()
     if (!m_json.empty())
     {
         // Get first bird entry
-        auto it = m_json.begin();
+
+        auto it = m_json.find(m_editingBirdKey);
+        if (it == m_json.end())
+        {
+            ImGui::End();
+            return;
+        }
+
         std::string currentKey = it.key();
         nlohmann::ordered_json& bird = it.value();
-
-        // Initialize editable key once
-        if (m_editingBirdKey.empty())
-        {
-            m_editingBirdKey = currentKey;
-        }
 
         ImGui::AlignTextToFramePadding();
         ImGui::Text("%s", "name");
@@ -64,19 +69,26 @@ void BirdDataView::render()
 void BirdDataView::init()
 {
 	// subscribe signals (if needed)
+    m_signalHandler->observeEvent<ChangeBirdSignal>(
+        [this](Event<ChangeBirdSignal>& event) { m_editingBirdKey = event.data.name; }
+    );
 }
 
 void BirdDataView::renderJson(nlohmann::ordered_json& json, const std::string& path)
 {
     std::vector<std::string> priority = { "obj_name", "texture" };
+    std::map<std::string, std::string> dropDowns = {
+        { "obj_name", PathManager::getObjFolderPath()},
+        { "texture", PathManager::getTexturesFolderPath()},
+    };
 
     // Render prioritized fields first
-    for (const auto& key : priority)
+    for ( auto& [key, path] : dropDowns)
     {
         if (json.contains(key))
         {
             std::string fullPath = path.empty() ? key : path + "." + key;
-            ImGuiJsonDrawer::drawJsonValue(key, json[key]);
+            ImGuiJsonDrawer::drawJsonDropdownBasedOnFolderPath(key, json[key], path);
         }
     }
 
