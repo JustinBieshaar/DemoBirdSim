@@ -20,8 +20,6 @@ void GenerationView::init()
 
 void GenerationView::render()
 {
-    ImGui::NewFrame();
-
     ImGui::Begin("Testing");
     if (ImGui::Button("Generate"))
     {

@@ -23,6 +23,7 @@
 
 #include <string>
 #include <iostream>
+#include "Views/BirdDataView.h"
 
 bool BirdGeneratorApp::init()
 {
@@ -79,6 +80,8 @@ void BirdGeneratorApp::renderUI()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
 
+    ImGui::NewFrame();
+
     for (auto& view : m_views)
     {
         view->render();
@@ -96,6 +99,7 @@ void BirdGeneratorApp::run()
 
     m_previewer = std::make_unique<BirdPreviewer>(m_loader);
     m_views.push_back(std::make_unique<GenerationView>(m_signalHandler, m_json));
+    m_views.push_back(std::make_unique<BirdDataView>(m_signalHandler, m_json));
 
     m_previewer->subscribeSignals(m_signalHandler);
     for (auto& view : m_views)

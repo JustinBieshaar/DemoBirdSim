@@ -39,7 +39,7 @@ void BirdPreviewer::render()
     mesh->render();
 
     // camera settings
-    auto cameraPosition = glm::vec3{ 0,0,-15 };
+    auto cameraPosition = glm::vec3{ 3,0,-15 };
     glm::mat4 view = glm::translate(glm::mat4(1.0f), cameraPosition);
     glm::mat4 projection = glm::perspective(
         glm::radians(45.0f),
