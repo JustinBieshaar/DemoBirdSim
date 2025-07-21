@@ -8,6 +8,7 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <string>
+#include <unordered_map>
 
 class Loader
 {
@@ -24,11 +25,17 @@ public:
 	/// Returns the index the texture is stored at.
 	/// </summary>
 	GLuint loadTexture(const std::string& path);
+	void unloadTexture(const GLuint& textureId);
+
+	void unloadMesh(const GLuint& vao);
 	void cleanup();
 
 private:
 	std::vector<GLuint> m_vertexArrayObjects;
 	std::vector<GLuint> m_vertexBufferObjects;
+
+	std::unordered_map<GLuint, std::vector<GLuint>> m_vaoToVbos; // for individual deletion
+
 	std::vector<GLuint> m_textures;
 
 	GLuint createVertexArrayObject();

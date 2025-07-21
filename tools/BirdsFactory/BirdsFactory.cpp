@@ -22,8 +22,9 @@ void BirdsFactory::generateBirds(const json& birds)
     for (auto& [name, data] : birds.items())
     {
         std::string obj = data["obj_name"];
-        int speed = data["speed"];
-        generateBirdClass(name, obj, speed);
+        auto core = data["core"];
+        auto flight = data["flight"];
+        generateBirdClass(name, obj, core, flight);
     }
 
     generateDefines(birds);
@@ -43,7 +44,7 @@ std::string BirdsFactory::toMacro(const std::string& name)
     return macro;
 }
 
-void BirdsFactory::generateBirdClass(const std::string& name, const std::string& obj, int speed)
+void BirdsFactory::generateBirdClass(const std::string& name, const std::string& obj, nlohmann::json& core, nlohmann::json& flight)
 {
     std::string className = StringUtils::toPascalCase(name);
     std::filesystem::path filePath = BASE_DIR / "Birds" / (className + ".h");
@@ -55,7 +56,7 @@ void BirdsFactory::generateBirdClass(const std::string& name, const std::string&
         << "public:\n"
         << "    " << className << "() {}\n"
         << "    std::string getObjName() const override { return \"" << obj << "\"; }\n"
-        << "    int getSpeed() const override { return " << speed << "; }\n"
+        << "    int getAcceleration() const override { return " << flight["acceleration"] << "; }\n"
         << "    std::string getName() const override { return \"" << name << "\"; }\n"
         << "};";
 }

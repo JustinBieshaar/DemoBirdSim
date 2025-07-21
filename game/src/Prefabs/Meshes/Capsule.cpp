@@ -1,8 +1,8 @@
 #include <ObjLoader.h>
 #include <Components/TextureComponent.h>
 #include "Capsule.h"
-#include "../../Shaders/ColorShader.h"
-#include "../../Shaders/TexturedShader.h"
+#include <ColorShader.h>
+#include <TexturedShader.h>
 #include <Components/MeshComponent.h>
 
 Capsule::Capsule(std::shared_ptr<Loader> loader, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject(position, rotation, scale)

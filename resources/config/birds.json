@@ -1,14 +1,31 @@
 {
+  "default": {
+    "obj_name": "capsule",
+    "texture": "none",
+    "core": {
+      "mass": 1,
+      "wingspan": 1
+    },
+    "flight": {
+      "max_speed": 1,
+      "acceleration": 1,
+      "ltd_ratio": 1,
+      "flap_rate": 1
+    }
+  },
+
   "robin": {
-    "obj_name": "robin.obj",
-    "speed": 10
-  },
-  "goose": {
-    "obj_name": "goose.obj",
-    "speed": 5
-  },
-  "gull": {
-    "obj_name": "gull.obj",
-    "speed": 7
+    "obj_name": "Robin-bird",
+    "texture": "robin-texture.png",
+    "core": {
+      "mass": 1,
+      "wingspan": 1
+    },
+    "flight": {
+      "max_speed": 1,
+      "acceleration": 1,
+      "ltd_ratio": 1,
+      "flap_rate": 1
+    }
   }
 }

@@ -1,0 +1,28 @@
+#pragma once
+
+#include <string>
+
+#include <GameObject.h>
+#include <Loader.h>
+#include <SignalHandler.h>
+
+#include "../Signals/ChangeBirdSignal.h"
+
+class Bird : public GameObject
+{
+public:
+	Bird(std::shared_ptr<Loader> loader, 
+		const glm::vec3& position = glm::vec3(0.0f), const glm::vec3& rotation = glm::vec3(0.0f), const glm::vec3& scale = glm::vec3(1.0f));
+
+	void subscribeSignals(std::shared_ptr<SignalHandler> signalHandler);
+	void update(float deltaTime) override;
+
+private:
+	void onBirdChanged(Event<ChangeBirdSignal>& signal);
+	std::shared_ptr<Loader> m_loader;
+
+	float m_rotationSpeed = .5f;
+	float m_test = 0.0f;
+
+	std::string m_name;
+};

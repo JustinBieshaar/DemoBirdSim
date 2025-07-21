@@ -6,6 +6,8 @@
 #include <ISignal.h>
 #include <Event.h>
 
+#include <iostream>
+
 class SignalHandler
 {
 public:
@@ -32,11 +34,25 @@ public:
     {
         std::type_index index = typeid(T);
 
-        // Reconstruct the event (overwrite if already exists)
-        eventCache[index] = std::make_shared<Event<T>>(data);
+        std::cout << "Creating event for type: " << index.name() << std::endl;
+
+        try
+        {
+            eventCache[index] = std::make_shared<Event<T>>(data); // crash likely here
+        }
+        catch (const std::exception& e)
+        {
+            std::cerr << "Exception during event creation: " << e.what() << std::endl;
+        }
+
+        if (!eventCache[index])
+        {
+            std::cerr << "eventCache[index] is nullptr!\n";
+            return;
+        }
+
         auto& event = *eventCache[index];
 
-        // Call observers
         if (observers.count(index))
         {
             for (auto& callback : observers[index])

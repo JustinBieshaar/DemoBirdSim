@@ -2,7 +2,7 @@
 #include <vector>
 #include <Components/TextureComponent.h>
 #include <Components/MeshComponent.h>
-#include "../../Shaders/TexturedShader.h"
+#include <TexturedShader.h>
 #include "../../Global/Globals.h"
 
 Terrain::Terrain(std::shared_ptr<Loader> loader, const glm::vec3& position) : GameObject(glm::vec3(position.x * Terrain_Size, 0, position.z * Terrain_Size))

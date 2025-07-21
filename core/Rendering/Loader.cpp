@@ -2,6 +2,7 @@
 #include <stb_image.h>
 #include <iostream>
 #include <filesystem>
+#include <PathManager.h>
 
 std::tuple<GLuint, size_t> Loader::loadToMeshComponent(const std::vector<float>& vertices, const std::vector<float>& textureCoordinates, const std::vector<float>& normals, const std::vector<GLuint>& indices)
 {
@@ -17,7 +18,7 @@ std::tuple<GLuint, size_t> Loader::loadToMeshComponent(const std::vector<float>&
 
 GLuint Loader::loadTexture(const std::string& path)
 {
-	std::string fullPath = std::filesystem::current_path().string() + "../../../resources/textures/" + path;
+	std::string fullPath = std::filesystem::current_path().string() + "/" + PathManager::getTexturePath(path);//std::filesystem::current_path().string() + "../../../resources/textures/" + path;
 
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load(fullPath.c_str(), &width, &height, &nrChannels, 0);
@@ -55,6 +56,45 @@ GLuint Loader::loadTexture(const std::string& path)
 	return textureID;
 }
 
+void Loader::unloadTexture(const GLuint& textureId)
+{
+	// Delete the texture from GPU
+	glDeleteTextures(1, &textureId);
+
+	// Remove it from internal tracking list
+	auto it = std::find(m_textures.begin(), m_textures.end(), textureId);
+	if (it != m_textures.end())
+	{
+		m_textures.erase(it);
+		std::cout << "Unloaded texture ID: " << textureId << std::endl;
+	}
+	else
+	{
+		std::cerr << "Attempted to unload unknown texture ID: " << textureId << std::endl;
+	}
+}
+
+void Loader::unloadMesh(const GLuint& vao)
+{
+	// Delete VBOs associated with this VAO
+	if (m_vaoToVbos.count(vao))
+	{
+		for (GLuint vbo : m_vaoToVbos[vao])
+		{
+			glDeleteBuffers(1, &vbo);
+			// Remove from global list
+			m_vertexBufferObjects.erase(std::remove(m_vertexBufferObjects.begin(), m_vertexBufferObjects.end(), vbo), m_vertexBufferObjects.end());
+		}
+		m_vaoToVbos.erase(vao);
+	}
+
+	// Delete the VAO itself
+	glDeleteVertexArrays(1, &vao);
+	m_vertexArrayObjects.erase(std::remove(m_vertexArrayObjects.begin(), m_vertexArrayObjects.end(), vao), m_vertexArrayObjects.end());
+
+	std::cout << "Unloaded VAO: " << vao << " and its associated VBOs.\n";
+}
+
 void Loader::cleanup()
 {
 	std::cout << "clean up loader, cleaning up vao size: " << m_vertexArrayObjects.size() << " vbo size: " << m_vertexBufferObjects.size() << "\n";
@@ -69,6 +109,13 @@ void Loader::cleanup()
 		glDeleteBuffers(1, &vbo);
 	}
 	m_vertexBufferObjects.clear();
+
+	for (GLuint texId : m_textures)
+	{
+		glDeleteTextures(1, &texId);
+	}
+	m_textures.clear();
+	std::cout << "All textures unloaded.\n";
 }
 
 GLuint Loader::createVertexArrayObject()
@@ -89,6 +136,12 @@ GLuint Loader::createVertexBufferObject(GLenum target, const void* data, size_t 
 	glBindBuffer(target, vbo);
 	glBufferData(target, size, data, GL_STATIC_DRAW);
 	m_vertexBufferObjects.push_back(vbo);
+
+	// Track which VAO this VBO is bound to
+	GLint boundVao = 0;
+	glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &boundVao);
+	if (boundVao != 0)
+		m_vaoToVbos[boundVao].push_back(vbo);
 
 	std::cout << "creating new vbo: " << m_vertexBufferObjects.size() << "\n";
 	return vbo;

@@ -1,8 +1,8 @@
 #include "Player.h"
 #include <ObjLoader.h>
 #include <Components/MeshComponent.h>
-#include "../../Shaders/ColorShader.h"
-#include "../../Shaders/TexturedShader.h"
+#include <ColorShader.h>
+#include <TexturedShader.h>
 #include <Components/TextureComponent.h>
 
 

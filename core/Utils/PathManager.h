@@ -10,6 +10,7 @@ public:
     static std::string getConfigPath(const std::string& filename);
     static std::string getTexturePath(const std::string& filename);
     static std::string getObjPath(const std::string& filename);
+    static std::string getShaderPath();
 
 private:
     static std::filesystem::path resourceRoot;

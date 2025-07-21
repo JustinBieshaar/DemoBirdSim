@@ -10,7 +10,7 @@ public:
 private:
     static std::string toMacro(const std::string& name);
 
-    static void generateBirdClass(const std::string& name, const std::string& obj, int speed);
+    static void generateBirdClass(const std::string& name, const std::string& obj, nlohmann::json& core, nlohmann::json& flight);
     static void generateDefines(const nlohmann::json& birds);
     static void generateRegisterIncludes(const nlohmann::json& birds);
     static void generateRegistryAccessors(const nlohmann::json& birds);

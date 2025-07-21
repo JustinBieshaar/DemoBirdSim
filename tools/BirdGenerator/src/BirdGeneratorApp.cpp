@@ -12,10 +12,11 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
+#include "Views/GenerationView.h"
+
 #include "Global/Globals.h"
 
 #include <BirdsFactory.h>
-#include <json.hpp>
 #include <fstream>
 
 #include <PathManager.h>
@@ -57,6 +58,8 @@ bool BirdGeneratorApp::init()
 
     glEnable(GL_DEPTH_TEST);
 
+    PathManager::setResourceRoot(_SOLUTIONDIR);
+
     return true;
 }
 
@@ -68,28 +71,18 @@ void BirdGeneratorApp::render3D()
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // todo: render preview
+    m_previewer->render();
 }
 
 void BirdGeneratorApp::renderUI()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
 
-    ImGui::Begin("Testing");
-    if (ImGui::Button("Generate"))
+    for (auto& view : m_views)
     {
-        PathManager::setResourceRoot(_SOLUTIONDIR);
-
-        std::ifstream input(PathManager::getConfigPath("birds.json"));
-        nlohmann::json birds;
-        input >> birds;
-        std::cout << "birds: " << birds << "\n";
-
-        BirdsFactory::generateBirds(birds);
+        view->render();
     }
-    ImGui::End();
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -97,6 +90,20 @@ void BirdGeneratorApp::renderUI()
 
 void BirdGeneratorApp::run()
 {
+    m_loader = std::make_shared<Loader>();
+    m_signalHandler = std::make_shared<SignalHandler>();
+    updateJson();
+
+    m_previewer = std::make_unique<BirdPreviewer>(m_loader);
+    m_views.push_back(std::make_unique<GenerationView>(m_signalHandler, m_json));
+
+    m_previewer->subscribeSignals(m_signalHandler);
+    for (auto& view : m_views)
+    {
+        view->init();
+    }
+
+    m_lastTime = glfwGetTime(); // otherwise we get extreme first value
     while (!glfwWindowShouldClose(m_window))
     {
         float currentTime = glfwGetTime();
@@ -104,6 +111,8 @@ void BirdGeneratorApp::run()
         m_lastTime = currentTime;
 
         glfwPollEvents();
+
+        m_previewer->update(deltaTime);
 
         render3D();
         renderUI();
@@ -122,4 +131,11 @@ void BirdGeneratorApp::cleanup()
 
     glfwDestroyWindow(m_window);
     glfwTerminate();
+}
+
+void BirdGeneratorApp::updateJson()
+{
+    std::ifstream input(PathManager::getConfigPath("birds.json"));
+    input >> m_json;
+    m_signalHandler->invokeEvent(JsonUpdatedSignal { m_json });
 }

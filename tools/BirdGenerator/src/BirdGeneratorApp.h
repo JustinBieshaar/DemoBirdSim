@@ -4,6 +4,12 @@
 #include "GLFW/glfw3.h"
 
 #include <vector>
+#include <Loader.h>
+#include <json.hpp>
+#include <SignalHandler.h>
+
+#include "Previewer/BirdPreviewer.h"
+#include "Views/IView.h"
 
 class BirdGeneratorApp
 {
@@ -17,10 +23,17 @@ public:
 
 private:
     void cleanup();
+    void updateJson();
 
     GLFWwindow* m_window;
     float m_lastTime;
 
-    
+    std::vector<std::unique_ptr<IView>> m_views;
+
+    std::shared_ptr<Loader> m_loader;
+    std::shared_ptr<SignalHandler> m_signalHandler;
+    std::unique_ptr<BirdPreviewer> m_previewer;
+
+    nlohmann::json m_json;
 };
 

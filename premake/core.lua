@@ -58,9 +58,11 @@ group "Core"
             { 
                 "../external/glad/include/",
                 "../external/glfw/include/",
-                "../external/glm/" 
+                "../external/glm/",
+                "../core/Utils" -- for path manager
             },
-        links = { "GLFW", "GLM", "GLAD" }
+        links = { "GLFW", "GLM", "GLAD" },
+        debugDefines = '_SOLUTIONDIR=R"(%{os.getcwd()})"'
     }
     createStaticLib { -- Rendering, for reading obj files and defining vao, vbo and ebo.
         name = "Rendering",
@@ -71,7 +73,8 @@ group "Core"
                 "../external/glfw/include/",
                 "../external/glm/",
                 "../external/stb/",
-                "../core/Shader" 
+                "../core/Shader",
+                "../core/Utils" 
             },
         links = { "GLFW", "GLM", "GLAD", "Shader" }
     }

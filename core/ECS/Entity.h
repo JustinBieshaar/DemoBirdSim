@@ -88,6 +88,25 @@ public:
         return result;
     }
 
+    /// <summary>
+    /// Removes the component of type T from the entity, if it exists.
+    /// </summary>
+    template<typename T>
+    void destroyComponent()
+    {
+        auto it = m_components.find(typeid(T));
+        if (it != m_components.end())
+        {
+            // Optionally: Notify the component it's being removed
+            if (it->second)
+            {
+                it->second->setOwner(nullptr); // cleanup reference to owner
+            }
+
+            m_components.erase(it);
+        }
+    }
+
     void updateAllComponents(float deltaTime)
     {
         for (const auto& [type, component] : m_components)

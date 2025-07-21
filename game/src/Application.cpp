@@ -82,6 +82,7 @@ void Application::run()
 
     sceneManager->loadScene("Menu");
 
+    m_lastTime = glfwGetTime(); // otherwise we get extreme first value
     while (!glfwWindowShouldClose(m_window))
     {
         float currentTime = glfwGetTime();

@@ -4,10 +4,11 @@
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>
 #include <filesystem>
+#include <PathManager.h>
 
 Shader::Shader(const std::string& name)
 {
-    std::string shaderBasePath = std::filesystem::current_path().string() + "/Shaders/frag-vert/";
+    std::string shaderBasePath = std::filesystem::current_path().string() + "/" + PathManager::getShaderPath(); //     std::string shaderBasePath = std::filesystem::current_path().string() + "/Shaders/frag-vert/";
     std::string vertexCode = loadShaderSource(shaderBasePath + name + ".vert");
     std::string fragmentCode = loadShaderSource(shaderBasePath + name + ".frag");
 

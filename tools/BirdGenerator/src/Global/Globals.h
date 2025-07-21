@@ -3,4 +3,5 @@
 const float Window_Width = 800;
 const float Window_Height = 600;
 
-const char* BirdsJsonLocation = "birds.json";
+extern const char* BirdsJsonLocation;
+extern const char* DefaultBird;
