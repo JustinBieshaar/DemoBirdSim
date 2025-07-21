@@ -28,11 +28,17 @@ void BirdDataView::render()
             m_editingBirdKey = currentKey;
         }
 
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text("%s", "name");
+        ImGui::SameLine();
+
+        std::string inputId = "##name";  // Unique but invisible label
+
         char buffer[256];
         std::strncpy(buffer, m_editingBirdKey.c_str(), sizeof(buffer));
         buffer[sizeof(buffer) - 1] = '\0';
 
-        if (ImGui::InputText("name", buffer, sizeof(buffer)))
+        if (ImGui::InputText(inputId.c_str(), buffer, sizeof(buffer)))
         {
             m_editingBirdKey = std::string(buffer);
         }
@@ -99,13 +105,19 @@ void BirdDataView::renderJson(nlohmann::json& json, const std::string& path)
 
 bool BirdDataView::renderJsonField(const std::string& fieldLabel, nlohmann::json& json)
 {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("%s", fieldLabel.c_str());
+    ImGui::SameLine();
+
+    std::string inputId = "##" + fieldLabel;  // Unique but invisible label
+
     if (json.is_string())
     {
         std::string val = json.get<std::string>();
         char buffer[256];
         std::strncpy(buffer, val.c_str(), sizeof(buffer));
-        buffer[sizeof(buffer) - 1] = '\0'; // Ensure null-termination
-        if (ImGui::InputText(fieldLabel.c_str(), buffer, sizeof(buffer)))
+        buffer[sizeof(buffer) - 1] = '\0';
+        if (ImGui::InputText(inputId.c_str(), buffer, sizeof(buffer)))
         {
             json = std::string(buffer);
             return true;
@@ -114,7 +126,7 @@ bool BirdDataView::renderJsonField(const std::string& fieldLabel, nlohmann::json
     else if (json.is_number_float())
     {
         float val = json.get<float>();
-        if (ImGui::InputFloat(fieldLabel.c_str(), &val))
+        if (ImGui::InputFloat(inputId.c_str(), &val))
         {
             json = val;
             return true;
@@ -123,7 +135,7 @@ bool BirdDataView::renderJsonField(const std::string& fieldLabel, nlohmann::json
     else if (json.is_number_integer())
     {
         int val = json.get<int>();
-        if (ImGui::InputInt(fieldLabel.c_str(), &val))
+        if (ImGui::InputInt(inputId.c_str(), &val))
         {
             json = val;
             return true;
@@ -132,13 +144,12 @@ bool BirdDataView::renderJsonField(const std::string& fieldLabel, nlohmann::json
     else if (json.is_boolean())
     {
         bool val = json.get<bool>();
-        if (ImGui::Checkbox(fieldLabel.c_str(), &val))
+        if (ImGui::Checkbox(inputId.c_str(), &val))
         {
             json = val;
             return true;
         }
     }
 
-    // todo: handle other types (arrays, nulls, etc.)
     return false;
 }
