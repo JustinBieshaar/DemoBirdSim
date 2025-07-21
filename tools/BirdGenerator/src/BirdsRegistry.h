@@ -3,11 +3,11 @@
 #include "BirdDefines.h"
 
 namespace BirdsRegistry {
-    inline std::shared_ptr<Bird> Goose() {
-        return BirdFactory::getInstance().getBird(BIRD_GOOSE);
+    inline std::shared_ptr<Bird> Bodine() {
+        return BirdFactory::getInstance().getBird(BIRD_BODINE);
     }
-    inline std::shared_ptr<Bird> Gull() {
-        return BirdFactory::getInstance().getBird(BIRD_GULL);
+    inline std::shared_ptr<Bird> Default() {
+        return BirdFactory::getInstance().getBird(BIRD_DEFAULT);
     }
     inline std::shared_ptr<Bird> Robin() {
         return BirdFactory::getInstance().getBird(BIRD_ROBIN);

@@ -27,5 +27,20 @@
       "ltd_ratio": 1,
       "flap_rate": 1
     }
+  },
+
+  "bodine": {
+    "obj_name": "Robin-bird",
+    "texture": "robin-texture.png",
+    "core": {
+      "mass": 1,
+      "wingspan": 1
+    },
+    "flight": {
+      "max_speed": 1,
+      "acceleration": 1,
+      "ltd_ratio": 1,
+      "flap_rate": 1
+    }
   }
 }

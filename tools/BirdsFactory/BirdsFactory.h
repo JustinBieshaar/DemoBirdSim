@@ -5,14 +5,15 @@
 class BirdsFactory
 {
 public:
-    static void generateBirds(const nlohmann::json& birdsJson);
+    static void generateBirds(nlohmann::json& birdsJson);
 
 private:
     static std::string toMacro(const std::string& name);
 
-    static void generateBirdClass(const std::string& name, const std::string& obj, nlohmann::json& core, nlohmann::json& flight);
-    static void generateDefines(const nlohmann::json& birds);
-    static void generateRegisterIncludes(const nlohmann::json& birds);
-    static void generateRegistryAccessors(const nlohmann::json& birds);
+    static void generateBirdInterface(nlohmann::json& json);
+    static void generateBirdClass(const std::string& name, nlohmann::json& json);
+    static void generateDefines(nlohmann::json& birds);
+    static void generateRegisterIncludes(nlohmann::json& birds);
+    static void generateRegistryAccessors(nlohmann::json& birds);
     static void runPremake();
 };

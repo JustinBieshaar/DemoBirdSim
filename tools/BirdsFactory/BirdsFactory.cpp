@@ -5,7 +5,7 @@
 #include <iostream>
 #include <StringUtils.h>
 
-using json = nlohmann::json;
+#include "JsonUtils.h"
 
 const std::filesystem::path BASE_DIR = std::filesystem::path(__FILE__).parent_path();
 
@@ -14,17 +14,20 @@ const std::filesystem::path BASE_DIR = std::filesystem::path(__FILE__).parent_pa
 * This may be overwhelming to look at. But it's working completely fine. ;P
 */
 
-void BirdsFactory::generateBirds(const json& birds)
+void BirdsFactory::generateBirds(nlohmann::json& birds)
 {
     std::filesystem::remove_all(BASE_DIR / "Birds");
     std::filesystem::create_directory(BASE_DIR / "Birds");
 
+    // getting first entry just to fill the bird interface as it will just generate getters for all fields.
+    auto it = birds.begin();
+    std::string currentKey = it.key();
+    nlohmann::json& firstEntry = it.value();
+    generateBirdInterface(firstEntry);
+
     for (auto& [name, data] : birds.items())
     {
-        std::string obj = data["obj_name"];
-        auto core = data["core"];
-        auto flight = data["flight"];
-        generateBirdClass(name, obj, core, flight);
+        generateBirdClass(name, data);
     }
 
     generateDefines(birds);
@@ -44,7 +47,44 @@ std::string BirdsFactory::toMacro(const std::string& name)
     return macro;
 }
 
-void BirdsFactory::generateBirdClass(const std::string& name, const std::string& obj, nlohmann::json& core, nlohmann::json& flight)
+void BirdsFactory::generateBirdInterface(nlohmann::json& json)
+{
+    std::string className = "IBird";
+    std::filesystem::path filePath = BASE_DIR / (className + ".h");
+
+    std::ofstream file(filePath);
+    file << "#pragma once\n"
+        << "#include <string>\n\n"
+        << "class " << className << "\n"
+        << "{\n"
+        << "public:\n"
+        << "    " << className << "() {}\n";
+
+    for (auto& [key, value] : json.items())
+    {
+        // when value is an object it's designed to be a layer of values. We can ignore this layer
+        // here and loop through all values.
+        // todo, support multi layer
+        if (value.is_object())
+        {
+            for (auto& [key2, value2] : value.items())
+            {
+
+                file << "   virtual " << JsonUtils::getJsonFieldTypeToString(key2, value2) << " get" << StringUtils::toPascalCase(key2) << "() const = 0;\n";
+            }
+        }
+        else
+        {
+            file << "   virtual " << JsonUtils::getJsonFieldTypeToString(key, value) << " get" << StringUtils::toPascalCase(key) << "() const = 0;\n";
+        }
+    }
+
+
+    file << "};";
+        
+}
+
+void BirdsFactory::generateBirdClass(const std::string& name, nlohmann::json& json)
 {
     std::string className = StringUtils::toPascalCase(name);
     std::filesystem::path filePath = BASE_DIR / "Birds" / (className + ".h");
@@ -54,14 +94,29 @@ void BirdsFactory::generateBirdClass(const std::string& name, const std::string&
         << "#include \"../IBird.h\"\n\n"
         << "class " << className << " : public IBird {\n"
         << "public:\n"
-        << "    " << className << "() {}\n"
-        << "    std::string getObjName() const override { return \"" << obj << "\"; }\n"
-        << "    int getAcceleration() const override { return " << flight["acceleration"] << "; }\n"
-        << "    std::string getName() const override { return \"" << name << "\"; }\n"
-        << "};";
+        << "    " << className << "() {}\n";
+
+    for (auto& [key, value] : json.items())
+    {
+
+        if (value.is_object())
+        {
+            for (auto& [key2, value2] : value.items())
+            {
+                file << "    " << JsonUtils::getJsonFieldTypeToString(key2, value2) << " get" << StringUtils::toPascalCase(key2) << "() const override { return " << JsonUtils::getJsonFieldValueToString(value2) << "; }\n";
+            }
+        }
+        else
+        {
+            file << "    " << JsonUtils::getJsonFieldTypeToString(key, value) << " get" << StringUtils::toPascalCase(key) << "() const override { return " << JsonUtils::getJsonFieldValueToString(value) << "; }\n";
+        }
+    }
+
+
+    file << "};";
 }
 
-void BirdsFactory::generateDefines(const json& birds)
+void BirdsFactory::generateDefines(nlohmann::json& birds)
 {
     std::ofstream defines((BASE_DIR / "BirdDefines.h").string());
     defines << "#pragma once\n\n";
@@ -71,7 +126,7 @@ void BirdsFactory::generateDefines(const json& birds)
     }
 }
 
-void BirdsFactory::generateRegisterIncludes(const json& birds)
+void BirdsFactory::generateRegisterIncludes(nlohmann::json& birds)
 {
     std::ofstream reg((BASE_DIR / "BirdRegistry.h").string());
 
@@ -136,7 +191,7 @@ void BirdsFactory::generateRegisterIncludes(const json& birds)
     reg << "};";
 }
 
-void BirdsFactory::generateRegistryAccessors(const json& birds)
+void BirdsFactory::generateRegistryAccessors(nlohmann::json& birds)
 {
     std::ofstream reg("BirdsRegistry.h");
     reg << "#pragma once\n";
