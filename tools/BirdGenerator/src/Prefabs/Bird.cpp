@@ -13,9 +13,12 @@
 Bird::Bird(std::shared_ptr<Loader> loader,
 	const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject(position, rotation, scale), m_loader(loader)
 {
+	m_colorShader = new ColorShader();
+	m_texturedShader = new TexturedShader();
+
 	PathManager::setResourceRoot(_SOLUTIONDIR);
 	auto [vao, vertexCount] = ObjLoader::loadMeshFromObjFile(DefaultBird, loader);
-	auto mesh = addComponent<MeshComponent>(vao, vertexCount, new ColorShader());
+	auto mesh = addComponent<MeshComponent>(vao, vertexCount, m_colorShader);
 }
 
 void Bird::subscribeSignals(std::shared_ptr<SignalHandler> signalHandler)
@@ -53,15 +56,17 @@ void Bird::onBirdChanged(Event<ChangeBirdSignal>& signal)
 
 	bool hasTexture = texture != "none";
 
-	Shader* shader = hasTexture
-		? static_cast<Shader*>(new TexturedShader())
-		: static_cast<Shader*>(new ColorShader());
 
 	auto [vao, vertexCount] = ObjLoader::loadMeshFromObjFile(objname, m_loader);
-	addComponent<MeshComponent>(vao, vertexCount, shader);
+	auto mesh = addComponent<MeshComponent>(vao, vertexCount);
 
 	if (hasTexture)
 	{
+		mesh->setShader(m_texturedShader);
 		addComponent<TextureComponent>(m_loader, texture);
+	}
+	else
+	{
+		mesh->setShader(m_colorShader);
 	}
 }

@@ -6,6 +6,9 @@
 #include <Loader.h>
 #include <SignalHandler.h>
 
+#include <ColorShader.h>
+#include <TexturedShader.h>
+
 #include "../Signals/ChangeBirdSignal.h"
 
 class Bird : public GameObject
@@ -20,6 +23,9 @@ public:
 private:
 	void onBirdChanged(Event<ChangeBirdSignal>& signal);
 	std::shared_ptr<Loader> m_loader;
+
+	TexturedShader* m_texturedShader;
+	ColorShader* m_colorShader;
 
 	float m_rotationSpeed = .5f;
 	float m_test = 0.0f;

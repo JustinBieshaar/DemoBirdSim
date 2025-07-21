@@ -19,11 +19,6 @@ void RenderSystem::render()
     // todo: update this list only when entities update.
     auto renderableEntities = m_registry.getEntitiesWith<Transform, MeshComponent>();
 
-    glm::mat4 projection = glm::perspective(
-        glm::radians(45.0f),
-        (float)Window_Width / Window_Height,
-        0.1f, 100.0f);
-
 #ifdef _DEBUG
     if (EnableWireframeMode)
     {
@@ -46,7 +41,6 @@ void RenderSystem::render()
         auto cameraPosition = m_camera->getComponent<Transform>();
 
         // Use shader
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
         mesh->useShader();
         mesh->setModelViewProjection(transform->getTransformationMatrix(), m_camera->getViewMatrix(), m_camera->getProjectionMatrix());
         mesh->setLightLocation(m_light->m_position, m_light->m_color);

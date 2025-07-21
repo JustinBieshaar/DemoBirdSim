@@ -55,10 +55,8 @@ void BirdPreviewer::render()
     glBindVertexArray(mesh->m_vertexArrayObject);
     mesh->enableShaderAttributes();
 
-    TextureComponent* textureComponent = nullptr;
-    if (m_bird->tryGetComponent(textureComponent))
+    if (m_bird->hasComponent<TextureComponent>())
     {
-
         auto texture = m_bird->getComponent<TextureComponent>();
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture->m_textureID);
