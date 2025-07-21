@@ -8,7 +8,7 @@
 class GenerationView : public IView
 {
 public:
-	GenerationView(std::shared_ptr<SignalHandler> signalHander, nlohmann::json json);
+	GenerationView(std::shared_ptr<SignalHandler> signalHander, nlohmann::ordered_json json);
 
 	// Inherited via IView
 	void render() override;
@@ -16,7 +16,7 @@ public:
 private:
 	void onJsonUpdated(Event<JsonUpdatedSignal>& signal);
 
-	nlohmann::json m_json;
+	nlohmann::ordered_json m_json;
 
 	// Inherited via IView
 	void init() override;

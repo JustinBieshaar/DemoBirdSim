@@ -35,8 +35,10 @@ project "Demo-Bird-Simulator"
         "core/SimpleDI/",
         "core/Scenes/",
         "core/Rendering/",
-        "core/ImGuiWindow/",
         "core/Utils/",
+
+        -- Debug
+        "core/debug/ImGuiWindow/",
 
         --- Tools
         "tools/BirdsFactory"
@@ -65,5 +67,6 @@ project "Demo-Bird-Simulator"
 
 include "premake/external.lua"
 include "premake/core.lua"
+include "premake/debug.lua"
 include "premake/tools.lua"
 include "premake/tests.lua"

@@ -3,5 +3,5 @@
 
 struct JsonUpdatedSignal
 {
-	nlohmann::json json;
+	nlohmann::ordered_json json;
 };

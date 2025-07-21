@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-GenerationView::GenerationView(std::shared_ptr<SignalHandler> signalHander, nlohmann::json json) : IView(signalHander), m_json(json)
+GenerationView::GenerationView(std::shared_ptr<SignalHandler> signalHander, nlohmann::ordered_json json) : IView(signalHander), m_json(json)
 {
 }
 

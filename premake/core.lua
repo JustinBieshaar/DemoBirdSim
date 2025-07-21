@@ -78,12 +78,6 @@ group "Core"
             },
         links = { "GLFW", "GLM", "GLAD", "Shader" }
     }
-    createStaticLib { -- ImGui window system to create automatic inspectable objects
-        name = "ImGuiWindow",
-        path = "../core/ImGuiWindow",
-        includes = { "../external/imgui/"  },
-        links = { "ImGui" }
-    }
     createStaticLib { -- Entity component system
         name = "ECS",
         path = "../core/ECS",
@@ -96,7 +90,7 @@ group "Core"
                 "../core/Shader",
                 "../core/Rendering",
                 "../core/Utils", -- TODO: add utils to imgui window to add a method to get the name of the object for fields.
-                "../core/ImGuiWindow", -- inspector
+                "../core/debug/ImGuiWindow", -- inspector
                 "../external/imgui/" -- ^
             },
         links = { "GLFW", "GLM", "GLAD", "Shader", "Rendering", "ImGuiWindow", "ImGui", "Utils" }
@@ -114,7 +108,7 @@ group "Core"
                 "../core/ECS", -- includes ECS as a scene is also a ECS registry
                 "../core/Rendering", -- rendering for the loader
                 "../core/Utils", -- TODO: add utils to imgui window to add a method to get the name of the object for fields.
-                "../core/ImGuiWindow", -- inspector
+                "../core/debug/ImGuiWindow", -- inspector
                 "../external/imgui/" -- ^
             }, 
         links = { "GLFW", "GLM", "GLAD", "ECS", "Shader", "Rendering", "ImGuiWindow", "ImGui", "Utils" }

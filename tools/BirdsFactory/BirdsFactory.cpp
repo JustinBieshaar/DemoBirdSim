@@ -14,7 +14,7 @@ const std::filesystem::path BASE_DIR = std::filesystem::path(__FILE__).parent_pa
 * This may be overwhelming to look at. But it's working completely fine. ;P
 */
 
-void BirdsFactory::generateBirds(nlohmann::json& birds)
+void BirdsFactory::generateBirds(nlohmann::ordered_json& birds)
 {
     std::filesystem::remove_all(BASE_DIR / "Birds");
     std::filesystem::create_directory(BASE_DIR / "Birds");
@@ -22,7 +22,7 @@ void BirdsFactory::generateBirds(nlohmann::json& birds)
     // getting first entry just to fill the bird interface as it will just generate getters for all fields.
     auto it = birds.begin();
     std::string currentKey = it.key();
-    nlohmann::json& firstEntry = it.value();
+    nlohmann::ordered_json& firstEntry = it.value();
     generateBirdInterface(firstEntry);
 
     for (auto& [name, data] : birds.items())
@@ -47,7 +47,7 @@ std::string BirdsFactory::toMacro(const std::string& name)
     return macro;
 }
 
-void BirdsFactory::generateBirdInterface(nlohmann::json& json)
+void BirdsFactory::generateBirdInterface(nlohmann::ordered_json& json)
 {
     std::string className = "IBird";
     std::filesystem::path filePath = BASE_DIR / (className + ".h");
@@ -84,7 +84,7 @@ void BirdsFactory::generateBirdInterface(nlohmann::json& json)
         
 }
 
-void BirdsFactory::generateBirdClass(const std::string& name, nlohmann::json& json)
+void BirdsFactory::generateBirdClass(const std::string& name, nlohmann::ordered_json& json)
 {
     std::string className = StringUtils::toPascalCase(name);
     std::filesystem::path filePath = BASE_DIR / "Birds" / (className + ".h");
@@ -116,7 +116,7 @@ void BirdsFactory::generateBirdClass(const std::string& name, nlohmann::json& js
     file << "};";
 }
 
-void BirdsFactory::generateDefines(nlohmann::json& birds)
+void BirdsFactory::generateDefines(nlohmann::ordered_json& birds)
 {
     std::ofstream defines((BASE_DIR / "BirdDefines.h").string());
     defines << "#pragma once\n\n";
@@ -126,7 +126,7 @@ void BirdsFactory::generateDefines(nlohmann::json& birds)
     }
 }
 
-void BirdsFactory::generateRegisterIncludes(nlohmann::json& birds)
+void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
 {
     std::ofstream reg((BASE_DIR / "BirdRegistry.h").string());
 
@@ -191,7 +191,7 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::json& birds)
     reg << "};";
 }
 
-void BirdsFactory::generateRegistryAccessors(nlohmann::json& birds)
+void BirdsFactory::generateRegistryAccessors(nlohmann::ordered_json& birds)
 {
     std::ofstream reg("BirdsRegistry.h");
     reg << "#pragma once\n";

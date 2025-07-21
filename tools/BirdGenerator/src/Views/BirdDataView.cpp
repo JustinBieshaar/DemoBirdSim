@@ -1,14 +1,14 @@
 #include "BirdDataView.h"
 
 #include <imgui.h>
+#include <ImGuiJsonDrawer.h>
 
-BirdDataView::BirdDataView(std::shared_ptr<SignalHandler> signalHandler, nlohmann::json json) : IView(signalHandler), m_json(json)
+BirdDataView::BirdDataView(std::shared_ptr<SignalHandler> signalHandler, nlohmann::ordered_json json) : IView(signalHandler), m_json(json)
 {
 }
 
 void BirdDataView::render()
 {
-
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
     ImGui::SetNextWindowSize(ImVec2(300, ImGui::GetIO().DisplaySize.y), ImGuiCond_Always);
 
@@ -20,7 +20,7 @@ void BirdDataView::render()
         // Get first bird entry
         auto it = m_json.begin();
         std::string currentKey = it.key();
-        nlohmann::json& bird = it.value();
+        nlohmann::ordered_json& bird = it.value();
 
         // Initialize editable key once
         if (m_editingBirdKey.empty())
@@ -63,10 +63,10 @@ void BirdDataView::render()
 
 void BirdDataView::init()
 {
-	// subscribe signals
+	// subscribe signals (if needed)
 }
 
-void BirdDataView::renderJson(nlohmann::json& json, const std::string& path)
+void BirdDataView::renderJson(nlohmann::ordered_json& json, const std::string& path)
 {
     std::vector<std::string> priority = { "obj_name", "texture" };
 
@@ -76,7 +76,7 @@ void BirdDataView::renderJson(nlohmann::json& json, const std::string& path)
         if (json.contains(key))
         {
             std::string fullPath = path.empty() ? key : path + "." + key;
-            renderJsonField(key, json[key]);
+            ImGuiJsonDrawer::drawJsonValue(key, json[key]);
         }
     }
 
@@ -98,58 +98,7 @@ void BirdDataView::renderJson(nlohmann::json& json, const std::string& path)
         }
         else
         {
-            renderJsonField(key, value);
+            ImGuiJsonDrawer::drawJsonValue(key, value);
         }
     }
-}
-
-bool BirdDataView::renderJsonField(const std::string& fieldLabel, nlohmann::json& json)
-{
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("%s", fieldLabel.c_str());
-    ImGui::SameLine();
-
-    std::string inputId = "##" + fieldLabel;  // Unique but invisible label
-
-    if (json.is_string())
-    {
-        std::string val = json.get<std::string>();
-        char buffer[256];
-        std::strncpy(buffer, val.c_str(), sizeof(buffer));
-        buffer[sizeof(buffer) - 1] = '\0';
-        if (ImGui::InputText(inputId.c_str(), buffer, sizeof(buffer)))
-        {
-            json = std::string(buffer);
-            return true;
-        }
-    }
-    else if (json.is_number_float())
-    {
-        float val = json.get<float>();
-        if (ImGui::InputFloat(inputId.c_str(), &val))
-        {
-            json = val;
-            return true;
-        }
-    }
-    else if (json.is_number_integer())
-    {
-        int val = json.get<int>();
-        if (ImGui::InputInt(inputId.c_str(), &val))
-        {
-            json = val;
-            return true;
-        }
-    }
-    else if (json.is_boolean())
-    {
-        bool val = json.get<bool>();
-        if (ImGui::Checkbox(inputId.c_str(), &val))
-        {
-            json = val;
-            return true;
-        }
-    }
-
-    return false;
 }

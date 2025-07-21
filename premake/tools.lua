@@ -38,15 +38,17 @@ project "BirdGenerator"
         "../core/Utils/",
         "../core/Signals/",
 
-        "../core/ImGuiWindow", -- inspector
+        "../core/debug/ImGuiWindow", -- inspector
+        "../core/debug/ImGui-Utils/",
         "../external/imgui/", -- ^
+        "../core/debug/Console/",
 
         "../tools/BirdsFactory"
     }
 
     files { "../tools/BirdGenerator/src/**.cpp", "../tools/BirdGenerator/src/**.h" }
 
-    links { "GLFW", "GLM", "GLAD", "ImGui", "Shader", "Rendering", "ECS", "Utils", "Signals", "BirdsFactory" }
+    links { "GLFW", "GLM", "GLAD", "ImGui", "Shader", "Rendering", "ECS", "Utils", "Signals", "ImGui-Utils", "BirdsFactory" }
 
     filter "configurations:Debug"
         defines { "_DEBUG", '_SOLUTIONDIR=R"(%{os.getcwd()})"' }

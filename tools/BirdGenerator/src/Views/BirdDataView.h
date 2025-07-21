@@ -6,7 +6,7 @@
 class BirdDataView : public IView
 {
 public:
-	BirdDataView(std::shared_ptr<SignalHandler> signalHandler, nlohmann::json json);
+	BirdDataView(std::shared_ptr<SignalHandler> signalHandler, nlohmann::ordered_json json);
 	void render();
 
 	// Inherited via IView
@@ -14,9 +14,8 @@ public:
 
 private:
 
-	void renderJson(nlohmann::json& json, const std::string& path = "");
-	bool renderJsonField(const std::string& fieldLabel, nlohmann::json& json);
+	void renderJson(nlohmann::ordered_json& json, const std::string& path = "");
 
-	nlohmann::json m_json;
+	nlohmann::ordered_json m_json;
 	std::string m_editingBirdKey;
 };

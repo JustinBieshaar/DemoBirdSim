@@ -5,5 +5,5 @@
 struct ChangeBirdSignal
 {
 	std::string name;
-	nlohmann::json birdJson;
+	nlohmann::ordered_json birdJson;
 };

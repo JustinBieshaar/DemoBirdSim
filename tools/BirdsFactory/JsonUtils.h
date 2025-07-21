@@ -8,7 +8,7 @@
 
 namespace JsonUtils
 {
-	std::string getJsonFieldTypeToString(std::string key, nlohmann::json& json)
+	std::string getJsonFieldTypeToString(std::string key, nlohmann::ordered_json& json)
 	{
         std::string returnType;
 
@@ -23,7 +23,7 @@ namespace JsonUtils
         return returnType;
 	}
 
-    std::string getJsonFieldValueToString(nlohmann::json& json)
+    std::string getJsonFieldValueToString(nlohmann::ordered_json& json)
     {
         std::string returnValue;
 

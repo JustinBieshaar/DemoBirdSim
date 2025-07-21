@@ -34,6 +34,6 @@ private:
     std::shared_ptr<SignalHandler> m_signalHandler;
     std::unique_ptr<BirdPreviewer> m_previewer;
 
-    nlohmann::json m_json;
+    nlohmann::ordered_json m_json;
 };
 
