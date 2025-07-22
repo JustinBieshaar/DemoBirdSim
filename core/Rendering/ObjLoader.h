@@ -32,7 +32,8 @@ namespace ObjLoader
 		std::vector<float>& positions,
 		std::vector<float>& uvs,
 		std::vector<float>& normals,
-		std::vector<GLuint>& indices
+		std::vector<GLuint>& indices,
+		bool invertUvs = false
 	)
 	{
 		std::istringstream ss(line);
@@ -64,7 +65,7 @@ namespace ObjLoader
 			positions.push_back(pos.z);
 
 			uvs.push_back(uv.x);
-			uvs.push_back(uv.y);
+			uvs.push_back(invertUvs ? 1.0f - uv.y : uv.y);
 
 			normals.push_back(normal.x);
 			normals.push_back(normal.y);
@@ -79,7 +80,7 @@ namespace ObjLoader
 	/// Reads an obj file and parses it into a MeshComponent object.
 	/// This can then be used to render this mesh.
 	/// </summary>
-	inline std::tuple<GLuint, size_t> loadMeshFromObjFile(std::string fileName, std::shared_ptr<Loader> loader, bool withSuffix = true)
+	inline std::tuple<GLuint, size_t> loadMeshFromObjFile(std::string fileName, std::shared_ptr<Loader> loader, bool withSuffix = true, bool invertUvs = false)
 	{
 		std::string objPath = withSuffix ? PathManager::getObjPath(fileName + ".obj") : PathManager::getObjPath(fileName);
 		std::string fullPath = std::filesystem::current_path().string() + "/" + objPath;// std::filesystem::current_path().string() + "../../../resources/3d-obj/" + fileName + ".obj";
@@ -130,7 +131,7 @@ namespace ObjLoader
 			}
 			else if (prefix == "f")
 			{
-				parseFaceLine(line, tempPositions, tempUVs, tempNormals, positions, uvs, normals, indices);
+				parseFaceLine(line, tempPositions, tempUVs, tempNormals, positions, uvs, normals, indices, invertUvs);
 			}
 		}
 

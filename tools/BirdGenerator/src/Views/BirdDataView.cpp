@@ -85,12 +85,46 @@ void BirdDataView::render()
 
         if (ImGui::Button("Delete"))
         {
-            if (m_editingBirdKey != currentKey)
+            if (m_json.size() <= 1)
             {
-                // Rename key in json
-                m_json[m_editingBirdKey] = bird;
-                m_json.erase(currentKey);
+                DataLogChannel.logError("This is the last item, we can't delete it.");
+                return;
             }
+
+            int index = -1;
+            int counter = 0;
+            for (auto it = m_json.begin(); it != m_json.end(); ++it, ++counter)
+            {
+                if (it.key() == currentKey)
+                {
+                    index = counter;
+                    break;
+                }
+            }
+
+            // fix edge case if you delete the last one.
+            if (index > 0 && index == m_json.size() - 1)
+            {
+                index--;
+            }
+
+            // Rename key in json
+            m_json.erase(currentKey);
+
+            std::ofstream outFile(PathManager::getConfigPath("birds.json"));
+            if (!outFile)
+            {
+                DataLogChannel.logError("Failed to delete..!");
+                return;
+            }
+            outFile << m_json.dump(4);
+            DataLogChannel.log("Deleted " + m_editingBirdKey + " successfully!");
+
+            auto refreshSelectedBirdJsonKey = std::next(m_json.begin(), 0).key();
+            auto refreshSelectedBirdJsonValue = std::next(m_json.begin(), 0).value();
+
+            m_signalHandler->invokeEvent(JsonUpdatedSignal{ m_json });
+            m_signalHandler->invokeEvent(ChangeBirdSignal{ refreshSelectedBirdJsonKey, refreshSelectedBirdJsonValue }); // invoking change bird to same instance to refresh
         }
     }
 

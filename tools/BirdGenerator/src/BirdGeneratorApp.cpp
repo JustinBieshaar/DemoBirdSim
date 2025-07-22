@@ -43,6 +43,8 @@ bool BirdGeneratorApp::init()
         return false;
     }
 
+    glfwSetWindowAttrib(m_window, GLFW_RESIZABLE, false);
+
     glfwMakeContextCurrent(m_window);
     glfwSwapInterval(1); // Enable vsync
 

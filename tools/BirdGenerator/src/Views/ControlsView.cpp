@@ -1,5 +1,6 @@
 #include "ControlsView.h"
 #include <imgui.h>
+#include <ImGuiFileDialog.h>
 #include <PathManager.h>
 #include <BirdsFactory.h>
 #include <vector>
@@ -30,7 +31,8 @@ void ControlsView::render()
     ImGui::SetNextWindowPos(ImVec2(Window_Width - m_windowSize.x, Window_Height - m_windowSize.y), ImGuiCond_Always);
     ImGui::SetNextWindowSize(ImVec2(m_windowSize.x, m_windowSize.y), ImGuiCond_Always);
 
-    ImGui::Begin("Controls");
+    ImGui::Begin("Controls", nullptr,
+        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
     if (ImGui::Button("Generate"))
     {
         PathManager::setResourceRoot(_SOLUTIONDIR);
@@ -55,16 +57,47 @@ void ControlsView::render()
         addNewBird();
     }
 
+    ImGui::Spacing();
+
     if (ImGui::Button("Upload obj file"))
     {
-
+        ImGuiFileDialog::Instance()->OpenDialog("ChooseObjFile", "Select .obj File", ".obj");
     }
 
-    ImGui::SameLine();
+    ImGui::Spacing();
 
     if (ImGui::Button("Upload texture"))
     {
+        ImGuiFileDialog::Instance()->OpenDialog("ChooseTextureFile", "Select Texture", ".png,.jpeg,.jpg");
+    }
 
+    // Render dialog
+    if (ImGuiFileDialog::Instance()->Display("ChooseObjFile"))
+    {
+        if (ImGuiFileDialog::Instance()->IsOk())
+        {
+            std::string filePath = ImGuiFileDialog::Instance()->GetFilePathName();
+            std::string fileName = ImGuiFileDialog::Instance()->GetCurrentFileName();
+
+            auto objsPath = PathManager::getObjFolderPath();
+            std::filesystem::copy(filePath, objsPath + "/" + fileName, std::filesystem::copy_options::overwrite_existing);
+            ControlsLogChannel.log("Uploaded OBJ: " + fileName);
+        }
+        ImGuiFileDialog::Instance()->Close();
+    }
+
+    if (ImGuiFileDialog::Instance()->Display("ChooseTextureFile"))
+    {
+        if (ImGuiFileDialog::Instance()->IsOk())
+        {
+            std::string filePath = ImGuiFileDialog::Instance()->GetFilePathName();
+            std::string fileName = ImGuiFileDialog::Instance()->GetCurrentFileName();
+
+            auto texturesPath = PathManager::getTexturesFolderPath();
+            std::filesystem::copy(filePath, texturesPath + "/" + fileName, std::filesystem::copy_options::overwrite_existing);
+            ControlsLogChannel.log("Uploaded Texture: " + fileName);
+        }
+        ImGuiFileDialog::Instance()->Close();
     }
 
     ImGui::End();

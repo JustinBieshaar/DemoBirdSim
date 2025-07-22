@@ -26,5 +26,5 @@ private:
 	// Inherited via IView
 	void init() override;
 
-	glm::vec2 m_windowSize = glm::vec2{ 200, 100 };
+	glm::vec2 m_windowSize = glm::vec2{ 200, 160 };
 };

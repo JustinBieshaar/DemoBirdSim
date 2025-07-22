@@ -54,4 +54,9 @@ public:
 
 	void RenderImGui() override;
 	void update(float deltaTime) override;
+
+	void setScale(float scale)
+	{
+		m_scale = glm::vec3(scale);
+	}
 };

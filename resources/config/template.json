@@ -2,6 +2,8 @@
   "new": {
     "obj_name": "none",
     "texture": "none",
+    "scale": 1.0,
+    "invert_uvs": false,
     "core": {
       "mass": 1.0,
       "wingspan": 1.0

@@ -49,10 +49,15 @@ void Bird::onBirdChanged(Event<ChangeBirdSignal>& signal)
 	std::string texture = birdJson["texture"];
 	std::string objname = birdJson["obj_name"];
 
+	float scale = birdJson["scale"].get<float>();
+	m_transform->setScale(scale);
+
+	bool invertUvs = birdJson["invert_uvs"].get<bool>();
+
 	bool hasTexture = texture != "none";
 
 	PathManager::setResourceRoot(_SOLUTIONDIR);
-	auto [vao, vertexCount] = ObjLoader::loadMeshFromObjFile(objname, m_loader, false);
+	auto [vao, vertexCount] = ObjLoader::loadMeshFromObjFile(objname, m_loader, false, invertUvs);
 	auto mesh = addComponent<MeshComponent>(vao, vertexCount);
 
 	if (hasTexture)
