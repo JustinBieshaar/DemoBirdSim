@@ -2,9 +2,12 @@
 #include <imgui.h>
 #include <PathManager.h>
 #include <BirdsFactory.h>
+#include <vector>
+#include <fstream>
 
 #include "../Signals/ChangeBirdSignal.h"
 #include "../Global/Globals.h"
+#include "../Debug/LogChannels.h"
 
 #include <iostream>
 
@@ -16,6 +19,9 @@ void ControlsView::init()
 {
     m_signalHandler->observeEvent<JsonUpdatedSignal>(
         [this](Event<JsonUpdatedSignal>& event) { onJsonUpdated(event); }
+    );
+    m_signalHandler->observeEvent<ChangeBirdSignal>(
+        [this](Event<ChangeBirdSignal>& event) { m_currentActiveBird = event.data.name; }
     );
 }
 
@@ -33,17 +39,102 @@ void ControlsView::render()
         BirdsFactory::generateBirds(m_json);
     }
 
-    if (ImGui::Button("Next"))
+    if (ImGui::Button("< Previous"))
     {
-        m_signalHandler->invokeEvent(ChangeBirdSignal{ "robin", m_json["robin"] });
+        selectBird(-1);
+    }
+    ImGui::SameLine();
+
+    if (ImGui::Button("Next >"))
+    {
+        selectBird(1);
     }
 
     if (ImGui::Button("Add new bird"))
     {
-        // add logic
+        addNewBird();
+    }
+
+    if (ImGui::Button("Upload obj file"))
+    {
+
+    }
+
+    ImGui::SameLine();
+
+    if (ImGui::Button("Upload texture"))
+    {
+
     }
 
     ImGui::End();
+}
+
+void ControlsView::selectBird(int direction)
+{
+    if (m_json.empty()) return;
+
+    std::vector<std::string> keys;
+    for (auto& [key, _] : m_json.items())
+        keys.push_back(key);
+
+    // Find current index
+    auto it = std::find(keys.begin(), keys.end(), m_currentActiveBird);
+    size_t index = (it != keys.end()) ? std::distance(keys.begin(), it) : 0;
+
+    // Compute new index with wrap-around
+    int newIndex = static_cast<int>(index) + direction;
+    if (newIndex < 0)
+        newIndex = static_cast<int>(keys.size()) - 1;
+    else if (newIndex >= static_cast<int>(keys.size()))
+        newIndex = 0;
+
+    const std::string& nextBirdName = keys[newIndex];
+    m_currentActiveBird = nextBirdName;
+    m_signalHandler->invokeEvent(ChangeBirdSignal{ nextBirdName, m_json[nextBirdName] });
+}
+
+void ControlsView::addNewBird()
+{
+    // Load the template entry
+    const std::string baseName = "new";
+    int index = 0;
+    std::string newName = baseName;
+
+    std::ifstream templateInput(PathManager::getConfigPath("template.json"));
+    nlohmann::ordered_json templateJson;
+    templateInput >> templateJson;
+
+    // Ensure a unique name
+    while (m_json.contains(newName))
+    {
+        newName = baseName + std::to_string(index++);
+    }
+
+    // Add a new entry based on the template
+    if (templateJson.contains("new"))
+    {
+        m_json[newName] = templateJson["new"];
+        m_currentActiveBird = newName;
+
+        std::ofstream outFile(PathManager::getConfigPath("birds.json"));
+        if (!outFile)
+        {
+            ControlsLogChannel.logError("Failed to write birds.json");
+            return;
+        }
+
+        outFile << m_json.dump(4);
+
+        m_signalHandler->invokeEvent(JsonUpdatedSignal{ m_json });
+        m_signalHandler->invokeEvent(ChangeBirdSignal{ newName, m_json[newName] });
+
+        ControlsLogChannel.log("new bird (" + newName + ") has been added!");
+    }
+    else
+    {
+        ControlsLogChannel.logError("Template missing 'default' key");
+    }
 }
 
 void ControlsView::onJsonUpdated(Event<JsonUpdatedSignal>& signal)

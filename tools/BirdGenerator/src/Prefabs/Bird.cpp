@@ -52,7 +52,7 @@ void Bird::onBirdChanged(Event<ChangeBirdSignal>& signal)
 	bool hasTexture = texture != "none";
 
 	PathManager::setResourceRoot(_SOLUTIONDIR);
-	auto [vao, vertexCount] = ObjLoader::loadMeshFromObjFile(objname, m_loader);
+	auto [vao, vertexCount] = ObjLoader::loadMeshFromObjFile(objname, m_loader, false);
 	auto mesh = addComponent<MeshComponent>(vao, vertexCount);
 
 	if (hasTexture)
@@ -64,6 +64,4 @@ void Bird::onBirdChanged(Event<ChangeBirdSignal>& signal)
 	{
 		mesh->setShader(m_colorShader);
 	}
-
-	DefaultChannel.log("Bird updated to: " + m_name);
 }

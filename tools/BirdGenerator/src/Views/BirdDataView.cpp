@@ -3,9 +3,12 @@
 #include <imgui.h>
 #include <ImGuiJsonDrawer.h>
 #include <PathManager.h>
+#include <fstream>
 
 #include "../Global/Globals.h"
 #include "../Signals/ChangeBirdSignal.h"
+#include "../Debug/LogChannels.h"
+#include "../Signals/JsonUpdatedSignal.h"
 
 BirdDataView::BirdDataView(std::shared_ptr<SignalHandler> signalHandler, nlohmann::ordered_json json) : IView(signalHandler), m_json(json), m_editingBirdKey(DefaultBird)
 {
@@ -59,7 +62,35 @@ void BirdDataView::render()
                 m_json.erase(currentKey);
             }
 
-            std::cout << m_json.dump(4) << std::endl;
+            try
+            {
+                std::ofstream outFile(PathManager::getConfigPath("birds.json"));
+                if (!outFile)
+                {
+                    throw;
+                }
+                outFile << m_json.dump(4);
+                DataLogChannel.log("Saved successfully!");
+
+                m_signalHandler->invokeEvent(JsonUpdatedSignal{ m_json });
+                m_signalHandler->invokeEvent(ChangeBirdSignal{ m_editingBirdKey, m_json[m_editingBirdKey]}); // invoking change bird to same instance to refresh
+            }
+            catch (const std::exception& e)
+            {
+                DataLogChannel.logError("Failed to save... Exception (" + std::string(e.what()) + ")");
+            }
+        }
+
+        ImGui::SameLine();
+
+        if (ImGui::Button("Delete"))
+        {
+            if (m_editingBirdKey != currentKey)
+            {
+                // Rename key in json
+                m_json[m_editingBirdKey] = bird;
+                m_json.erase(currentKey);
+            }
         }
     }
 
@@ -72,13 +103,17 @@ void BirdDataView::init()
     m_signalHandler->observeEvent<ChangeBirdSignal>(
         [this](Event<ChangeBirdSignal>& event) { m_editingBirdKey = event.data.name; }
     );
+
+    m_signalHandler->observeEvent<JsonUpdatedSignal>(
+        [this](Event<JsonUpdatedSignal>& event) { m_json = event.data.json; }
+    );
 }
 
 void BirdDataView::renderJson(nlohmann::ordered_json& json, const std::string& path)
 {
     std::vector<std::string> priority = { "obj_name", "texture" };
     std::map<std::string, std::string> dropDowns = {
-        { "obj_name", PathManager::getObjFolderPath()},
+        { "obj_name", PathManager::getObjFolderPath() },
         { "texture", PathManager::getTexturesFolderPath()},
     };
 
@@ -87,7 +122,6 @@ void BirdDataView::renderJson(nlohmann::ordered_json& json, const std::string& p
     {
         if (json.contains(key))
         {
-            std::string fullPath = path.empty() ? key : path + "." + key;
             ImGuiJsonDrawer::drawJsonDropdownBasedOnFolderPath(key, json[key], path);
         }
     }
@@ -102,6 +136,7 @@ void BirdDataView::renderJson(nlohmann::ordered_json& json, const std::string& p
 
         if (value.is_object())
         {
+            ImGui::SetNextItemOpen(true, ImGuiCond_Once); // only opens it once at the start so it can be closed. 
             if (ImGui::TreeNode(key.c_str()))
             {
                 renderJson(value, fullPath);

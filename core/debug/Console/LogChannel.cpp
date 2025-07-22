@@ -11,3 +11,13 @@ void LogChannel::log(const std::string& message) const
 {
     Console::log(m_name, message, m_color);
 }
+
+void LogChannel::logWarning(const std::string& message) const
+{
+    Console::logWarning(m_name, message, m_color);
+}
+
+void LogChannel::logError(const std::string& message) const
+{
+    Console::logError(m_name, message, m_color);
+}

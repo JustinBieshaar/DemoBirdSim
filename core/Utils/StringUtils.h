@@ -138,4 +138,13 @@ namespace StringUtils
 
         return result;
     }
+
+    inline void trimSuffix(std::string& str, const std::string& suffix)
+    {
+        if (str.length() >= suffix.length() &&
+            str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0)
+        {
+            str.erase(str.length() - suffix.length());
+        }
+    }
 }

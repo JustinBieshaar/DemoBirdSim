@@ -15,6 +15,9 @@ public:
 	void render() override;
 
 private:
+	void selectBird(int direction);
+	void addNewBird();
+
 	void onJsonUpdated(Event<JsonUpdatedSignal>& signal);
 
 	nlohmann::ordered_json m_json;

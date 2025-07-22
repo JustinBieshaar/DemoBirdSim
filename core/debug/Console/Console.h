@@ -18,7 +18,7 @@ class Console
 {
 public:
     static void log(const std::string& channel, const std::string& message, const Color& color);
-    static void logErr(const std::string& channel, const std::string& message, const Color& color);
+    static void logError(const std::string& channel, const std::string& message, const Color& color);
     static void logWarning(const std::string& channel, const std::string& message, const Color& color);
 
     static const std::vector<LogEntry>& getLogEntries();

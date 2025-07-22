@@ -13,17 +13,6 @@ void Console::log(const std::string& channel, const std::string& message, const 
     s_logs.push_back(LogEntry{ InfoStatusStr, m_infoColor, channel, message, color });
 }
 
-void Console::logErr(const std::string& channel, const std::string& message, const Color& color)
-{
-    std::lock_guard<std::mutex> lock(s_mutex);
-
-    // Log to std::cout
-    std::cerr << "[" << channel << "] " << message << std::endl;
-
-    // Store for ImGui rendering
-    s_logs.push_back(LogEntry{ WarningStatusStr, m_warningColor, channel, message , color });
-}
-
 void Console::logWarning(const std::string& channel, const std::string& message, const Color& color)
 {
     std::lock_guard<std::mutex> lock(s_mutex);
@@ -32,7 +21,18 @@ void Console::logWarning(const std::string& channel, const std::string& message,
     std::cout << "[" << channel << "] " << message << std::endl;
 
     // Store for ImGui rendering
-    s_logs.push_back(LogEntry{ ErrorStatusStr, m_errorColor, channel, message, color });
+    s_logs.push_back(LogEntry{ WarningStatusStr, m_errorColor, channel, message, color });
+}
+
+void Console::logError(const std::string& channel, const std::string& message, const Color& color)
+{
+    std::lock_guard<std::mutex> lock(s_mutex);
+
+    // Log to std::cout
+    std::cerr << "[" << channel << "] " << message << std::endl;
+
+    // Store for ImGui rendering
+    s_logs.push_back(LogEntry{ ErrorStatusStr, m_warningColor, channel, message , color });
 }
 
 const std::vector<LogEntry>& Console::getLogEntries()

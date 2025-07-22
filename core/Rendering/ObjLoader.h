@@ -79,9 +79,10 @@ namespace ObjLoader
 	/// Reads an obj file and parses it into a MeshComponent object.
 	/// This can then be used to render this mesh.
 	/// </summary>
-	inline std::tuple<GLuint, size_t> loadMeshFromObjFile(std::string fileName, std::shared_ptr<Loader> loader)
+	inline std::tuple<GLuint, size_t> loadMeshFromObjFile(std::string fileName, std::shared_ptr<Loader> loader, bool withSuffix = true)
 	{
-		std::string fullPath = std::filesystem::current_path().string() + "/" + PathManager::getObjPath(fileName + ".obj");// std::filesystem::current_path().string() + "../../../resources/3d-obj/" + fileName + ".obj";
+		std::string objPath = withSuffix ? PathManager::getObjPath(fileName + ".obj") : PathManager::getObjPath(fileName);
+		std::string fullPath = std::filesystem::current_path().string() + "/" + objPath;// std::filesystem::current_path().string() + "../../../resources/3d-obj/" + fileName + ".obj";
 		std::ifstream file(fullPath);
 		if (!file.is_open())
 		{

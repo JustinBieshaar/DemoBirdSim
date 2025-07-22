@@ -3,6 +3,7 @@
 #include <imgui.h>
 #include <string>
 #include <filesystem>
+#include <StringUtils.h>
 
 namespace ImGuiJsonDrawer
 {
@@ -87,17 +88,29 @@ namespace ImGuiJsonDrawer
         return changed;
     }
 
-    bool drawJsonDropdownBasedOnFolderPath(const std::string& key, nlohmann::ordered_json& json, const std::string& folder)
+    bool drawJsonDropdownBasedOnFolderPath(const std::string& key, nlohmann::ordered_json& json, const std::string& folder, const std::string& trim = "", bool addNone = true)
     {
-        std::vector<std::string> objNames;
+        std::vector<std::string> fileNames;
         std::filesystem::path fullPath = std::filesystem::current_path() / folder;
+
+        if (addNone)
+        {
+            fileNames.push_back("none");
+        }
 
         if (std::filesystem::exists(fullPath) && std::filesystem::is_directory(fullPath))
         {
             for (const auto& entry : std::filesystem::directory_iterator(fullPath))
             {
                 if (entry.is_regular_file())
-                    objNames.push_back(entry.path().filename().string());
+                {
+                    auto fileName = entry.path().filename().string();
+
+                    if(trim != "")
+                        StringUtils::trimSuffix(fileName, trim);
+
+                    fileNames.push_back(fileName);
+                }
             }
         }
         else
@@ -105,6 +118,6 @@ namespace ImGuiJsonDrawer
             std::cerr << "Directory not found: " << fullPath << std::endl;
         }
 
-        return ImGuiJsonDrawer::drawJsonDropdown(key, json, objNames);
+        return ImGuiJsonDrawer::drawJsonDropdown(key, json, fileNames);
     }
 }

@@ -1,6 +1,48 @@
 {
     "default": {
-        "obj_name": "capsule",
+        "obj_name": "Capsule.obj",
+        "texture": "none",
+        "core": {
+            "mass": 3.0,
+            "wingspan": 1.0
+        },
+        "flight": {
+            "max_speed": 1.0,
+            "acceleration": 1.0,
+            "ltd_ratio": 1.0,
+            "flap_rate": 1.0
+        }
+    },
+    "robin": {
+        "obj_name": "Robin-bird.obj",
+        "texture": "robin-texture.png",
+        "core": {
+            "mass": 1.0,
+            "wingspan": 1.0
+        },
+        "flight": {
+            "max_speed": 1.0,
+            "acceleration": 1.0,
+            "ltd_ratio": 1.0,
+            "flap_rate": 1.0
+        }
+    },
+    "robin_blue": {
+        "obj_name": "Robin-bird.obj",
+        "texture": "robin-texture-blue.png",
+        "core": {
+            "mass": 1.0,
+            "wingspan": 1.0
+        },
+        "flight": {
+            "max_speed": 1.0,
+            "acceleration": 1.0,
+            "ltd_ratio": 1.0,
+            "flap_rate": 1.0
+        }
+    },
+    "new": {
+        "obj_name": "Capsule.obj",
         "texture": "none",
         "core": {
             "mass": 1.0,
@@ -11,11 +53,38 @@
             "acceleration": 1.0,
             "ltd_ratio": 1.0,
             "flap_rate": 1.0
-        },
-        "newValue": 0.0
+        }
     },
-    "robin": {
-        "obj_name": "Robin-bird",
+    "new0": {
+        "obj_name": "none",
+        "texture": "none",
+        "core": {
+            "mass": 1.0,
+            "wingspan": 1.0
+        },
+        "flight": {
+            "max_speed": 1.0,
+            "acceleration": 1.0,
+            "ltd_ratio": 1.0,
+            "flap_rate": 1.0
+        }
+    },
+    "new1": {
+        "obj_name": "Capsule.obj",
+        "texture": "robin-texture-blue.png",
+        "core": {
+            "mass": 1.0,
+            "wingspan": 1.0
+        },
+        "flight": {
+            "max_speed": 1.0,
+            "acceleration": 1.0,
+            "ltd_ratio": 1.0,
+            "flap_rate": 1.0
+        }
+    },
+    "new2": {
+        "obj_name": "Robin-bird.obj",
         "texture": "robin-texture.png",
         "core": {
             "mass": 1.0,
@@ -26,22 +95,6 @@
             "acceleration": 1.0,
             "ltd_ratio": 1.0,
             "flap_rate": 1.0
-        },
-        "newValue": 0.0
-    },
-    "bodine": {
-        "obj_name": "Robin-bird",
-        "texture": "robin-texture.png",
-        "core": {
-            "mass": 1.0,
-            "wingspan": 1.0
-        },
-        "flight": {
-            "max_speed": 1.0,
-            "acceleration": 1.0,
-            "ltd_ratio": 1.0,
-            "flap_rate": 1.0
-        },
-        "newValue": 0.0
+        }
     }
 }

@@ -19,13 +19,12 @@ static void mergeWithTemplate(nlohmann::ordered_json& target, const nlohmann::or
 
 void JsonValidator::validate(nlohmann::ordered_json& json, nlohmann::ordered_json& templateJson)
 {
-    if (!templateJson.contains("default"))
-        return;
-
-    const auto& defaultTemplate = templateJson.at("default");
+    auto defaultTemplateIt = templateJson.begin();
+    const std::string& templateKey = defaultTemplateIt.key();
+    const nlohmann::ordered_json& templateValue = defaultTemplateIt.value();
 
     for (auto& [birdName, birdData] : json.items())
     {
-        mergeWithTemplate(birdData, defaultTemplate);
+        mergeWithTemplate(birdData, templateValue);
     }
 }
