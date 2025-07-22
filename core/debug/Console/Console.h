@@ -2,6 +2,8 @@
 #include <vector>
 #include <string>
 #include <mutex>
+#include <queue>
+
 #include "Color.h"
 
 struct LogEntry
@@ -27,8 +29,12 @@ public:
     static void drawImGui();
 
 private:
+    static void logInternal(const std::string& statusMessage, const Color& statusColor, const std::string& channel, const std::string& message, const Color& color);
+    static void flushPendingLogs();
+
+    static inline std::mutex s_logMutex;
     static inline std::vector<LogEntry> s_logs;
-    static inline std::mutex s_mutex;
+    static inline std::queue<LogEntry> s_pendingLogs;
 
     static inline Color m_infoColor = Color(100, 100, 255); // Blue-ish
     static inline Color m_errorColor = Color(255, 0, 0); // red
@@ -37,4 +43,7 @@ private:
     static inline std::string InfoStatusStr = "INFO";
     static inline  std::string WarningStatusStr = "WARNING";
     static inline  std::string ErrorStatusStr = "ERROR";
+
+    static inline bool m_scrollDown = true;
+    static inline bool m_autoScrollEnabled = true;
 };

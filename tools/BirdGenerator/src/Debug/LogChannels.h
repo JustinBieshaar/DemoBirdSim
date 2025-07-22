@@ -6,3 +6,4 @@
 // declarations
 extern LogChannel DataLogChannel;
 extern LogChannel ControlsLogChannel;
+extern LogChannel BirdLogChannel;

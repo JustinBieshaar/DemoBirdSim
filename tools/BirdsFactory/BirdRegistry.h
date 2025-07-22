@@ -3,27 +3,28 @@
 #include <memory>
 
 #include "IBird.h"
-#include "Birds/Bodine.h"
-#include "Birds/Default.h"
+#include "Birds/Goose.h"
+#include "Birds/RobinBlue.h"
 #include "Birds/Robin.h"
+#include "Birds/Capsule.h"
 
 class BirdRegistry
 {
-    static std::shared_ptr<Bodine> get_BODINE()
+    static std::shared_ptr<Goose> get_GOOSE()
     {
         ensureInitialized();
 
-        auto it = m_list.find("bodine");
-        if (it != m_list.end()) return std::dynamic_pointer_cast<Bodine>(it->second);
+        auto it = m_list.find("Goose");
+        if (it != m_list.end()) return std::dynamic_pointer_cast<Goose>(it->second);
         return nullptr;
     }
 
-    static std::shared_ptr<Default> get_DEFAULT()
+    static std::shared_ptr<RobinBlue> get_ROBIN_BLUE()
     {
         ensureInitialized();
 
-        auto it = m_list.find("default");
-        if (it != m_list.end()) return std::dynamic_pointer_cast<Default>(it->second);
+        auto it = m_list.find("RobinBlue");
+        if (it != m_list.end()) return std::dynamic_pointer_cast<RobinBlue>(it->second);
         return nullptr;
     }
 
@@ -31,8 +32,17 @@ class BirdRegistry
     {
         ensureInitialized();
 
-        auto it = m_list.find("robin");
+        auto it = m_list.find("Robin");
         if (it != m_list.end()) return std::dynamic_pointer_cast<Robin>(it->second);
+        return nullptr;
+    }
+
+    static std::shared_ptr<Capsule> get_CAPSULE()
+    {
+        ensureInitialized();
+
+        auto it = m_list.find("Capsule");
+        if (it != m_list.end()) return std::dynamic_pointer_cast<Capsule>(it->second);
         return nullptr;
     }
 
@@ -48,9 +58,10 @@ private:
     static void ensureInitialized()
     {
         if(m_isInitialized) return;
-        m_list["bodine"] = std::make_shared<Bodine>();
-        m_list["default"] = std::make_shared<Default>();
-        m_list["robin"] = std::make_shared<Robin>();
+        m_list["Goose"] = std::make_shared<Goose>();
+        m_list["RobinBlue"] = std::make_shared<RobinBlue>();
+        m_list["Robin"] = std::make_shared<Robin>();
+        m_list["Capsule"] = std::make_shared<Capsule>();
 
         m_isInitialized = true;
     };

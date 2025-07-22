@@ -5,11 +5,12 @@
 #include <TexturedShader.h>
 #include <ObjLoader.h>
 #include <PathManager.h>
-#include <LogChannels.h>
 
 #include <iostream>
 
 #include "../Global/Globals.h"
+#include "../Debug/LogChannels.h"
+#include "../Debug/LoadingScreen.h"
 
 Bird::Bird(std::shared_ptr<Loader> loader,
 	const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject(position, rotation, scale), m_loader(loader)
@@ -36,14 +37,6 @@ void Bird::onBirdChanged(Event<ChangeBirdSignal>& signal)
 {
 	m_name = signal.data.name;
 
-	m_loader->unloadMesh(getComponent<MeshComponent>()->m_vertexArrayObject);
-	destroyComponent<MeshComponent>();
-	if (hasComponent<TextureComponent>())
-	{
-		m_loader->unloadTexture(getComponent<TextureComponent>()->m_textureID);
-		destroyComponent<TextureComponent>();
-	}
-
 	auto birdJson = signal.data.birdJson;
 
 	std::string texture = birdJson["texture"];
@@ -57,16 +50,48 @@ void Bird::onBirdChanged(Event<ChangeBirdSignal>& signal)
 	bool hasTexture = texture != "none";
 
 	PathManager::setResourceRoot(_SOLUTIONDIR);
-	auto [vao, vertexCount] = ObjLoader::loadMeshFromObjFile(objname, m_loader, false, invertUvs);
-	auto mesh = addComponent<MeshComponent>(vao, vertexCount);
 
-	if (hasTexture)
-	{
-		mesh->setShader(m_texturedShader);
-		addComponent<TextureComponent>(m_loader, texture);
-	}
-	else
-	{
-		mesh->setShader(m_colorShader);
-	}
+    BirdLogChannel.log("Loading bird (" + m_name + ")");
+
+    LoadingScreen::start("Loading bird (" + m_name + ")");
+
+	// runs async and uses event to apply changes.
+	ObjLoader::loadMeshFromObjFileAsync(objname, m_loader,
+		[texture, hasTexture, this](std::tuple<GLuint, size_t> result)
+		{
+            MeshComponent* oldMesh = nullptr;
+            TextureComponent* oldTexture = nullptr;
+
+            tryGetComponent(oldMesh);
+            tryGetComponent(oldTexture);
+
+            if (oldMesh)
+            {
+                m_loader->unloadMesh(oldMesh->m_vertexArrayObject);
+                destroyComponent<MeshComponent>();
+            }
+
+            if (oldTexture)
+            {
+                m_loader->unloadTexture(oldTexture->m_textureID);
+                destroyComponent<TextureComponent>();
+            }
+
+            auto [vao, vertexCount] = result;
+            auto newMesh = addComponent<MeshComponent>(vao, vertexCount);
+
+            if (hasTexture)
+            {
+                newMesh->setShader(m_texturedShader);
+                addComponent<TextureComponent>(m_loader, texture);
+            }
+            else
+            {
+                newMesh->setShader(m_colorShader);
+            }
+            BirdLogChannel.log("(" + m_name + ") loaded succesfully!\nProcessed " + std::to_string(vertexCount) + " vertices ;-).");
+            LoadingScreen::stop();
+		},
+		false, invertUvs
+	);
 }

@@ -48,18 +48,19 @@ void BirdDataView::render()
 
         if (ImGui::InputText(inputId.c_str(), buffer, sizeof(buffer)))
         {
-            m_editingBirdKey = std::string(buffer);
+            m_name = std::string(buffer);
         }
 
         renderJson(bird);
 
         if (ImGui::Button("Save"))
         {
-            if (m_editingBirdKey != currentKey)
+            if (m_name != currentKey)
             {
                 // Rename key in json
-                m_json[m_editingBirdKey] = bird;
-                m_json.erase(currentKey);
+                m_json[m_name] = bird;
+                m_json.erase(currentKey); // todo: try and find a way without erasing or reordering to remain the original order.
+                m_editingBirdKey = m_name;
             }
 
             try
@@ -88,6 +89,7 @@ void BirdDataView::render()
             if (m_json.size() <= 1)
             {
                 DataLogChannel.logError("This is the last item, we can't delete it.");
+                ImGui::End();
                 return;
             }
 

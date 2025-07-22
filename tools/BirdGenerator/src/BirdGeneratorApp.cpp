@@ -25,8 +25,10 @@
 #include <iostream>
 #include "Views/BirdDataView.h"
 #include "Validation/JsonValidator.h"
+#include "Debug/LoadingScreen.h"
 
 #include <Console.h>
+#include <ThreadUtils.h>
 
 bool BirdGeneratorApp::init()
 {
@@ -94,6 +96,8 @@ void BirdGeneratorApp::renderUI()
 
     Console::drawImGui();
 
+    LoadingScreen::render();
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -115,7 +119,11 @@ void BirdGeneratorApp::run()
         view->init();
     }
 
-    m_signalHandler->invokeEvent(ChangeBirdSignal{ DefaultBird, m_json[DefaultBird]}); // select first default bird.
+    auto firstIt = m_json.begin();
+    if (firstIt != m_json.end())
+    {
+        m_signalHandler->invokeEvent(ChangeBirdSignal{ firstIt.key(), firstIt.value() });
+    }
 
     m_lastTime = glfwGetTime(); // otherwise we get extreme first value
     while (!glfwWindowShouldClose(m_window))
@@ -127,6 +135,8 @@ void BirdGeneratorApp::run()
         glfwPollEvents();
 
         m_previewer->update(deltaTime);
+
+        ThreadUtils::processMainThreadTasks(); // important to keep running the main thread tasks for async operations.
 
         render3D();
         renderUI();

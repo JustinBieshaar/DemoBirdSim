@@ -17,5 +17,6 @@ private:
 	void renderJson(nlohmann::ordered_json& json, const std::string& path = "");
 
 	nlohmann::ordered_json m_json;
+	std::string m_name;
 	std::string m_editingBirdKey;
 };

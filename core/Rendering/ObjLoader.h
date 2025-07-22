@@ -8,12 +8,15 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <future>
+#include <functional>
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
 #include <filesystem>
 #include <PathManager.h>
+#include <ThreadUtils.h>
 
 namespace ObjLoader
 {
@@ -80,7 +83,7 @@ namespace ObjLoader
 	/// Reads an obj file and parses it into a MeshComponent object.
 	/// This can then be used to render this mesh.
 	/// </summary>
-	inline std::tuple<GLuint, size_t> loadMeshFromObjFile(std::string fileName, std::shared_ptr<Loader> loader, bool withSuffix = true, bool invertUvs = false)
+	inline std::tuple<std::vector<float>, std::vector<float>, std::vector<float>, std::vector<GLuint>> readMeshFile(std::string fileName, bool withSuffix = true, bool invertUvs = false)
 	{
 		std::string objPath = withSuffix ? PathManager::getObjPath(fileName + ".obj") : PathManager::getObjPath(fileName);
 		std::string fullPath = std::filesystem::current_path().string() + "/" + objPath;// std::filesystem::current_path().string() + "../../../resources/3d-obj/" + fileName + ".obj";
@@ -88,7 +91,7 @@ namespace ObjLoader
 		if (!file.is_open())
 		{
 			std::cerr << "Failed to open OBJ file: " << fullPath << std::endl;
-			return {0, 0};
+			return { std::vector<float>(), std::vector<float>(), std::vector<float>(), std::vector<GLuint>() }; // return empty instance
 		}
 
 		// storing temporary data to link them later when reaching f lines
@@ -135,9 +138,41 @@ namespace ObjLoader
 			}
 		}
 
+		return { positions, uvs, normals, indices };
+	}
+
+	/// <summary>
+	/// Reads an obj file and parses it into a MeshComponent object.
+	/// This can then be used to render this mesh.
+	/// </summary>
+	inline std::tuple<GLuint, size_t> loadMeshFromObjFile(std::string fileName, std::shared_ptr<Loader> loader, bool withSuffix = true, bool invertUvs = false)
+	{
+		auto [positions, uvs, normals, indices] = readMeshFile(fileName, withSuffix, invertUvs);
 		auto mesh = loader->loadToMeshComponent(positions, uvs, normals, indices);
 
 		return mesh;
+	}
+
+	inline void loadMeshFromObjFileAsync(
+		const std::string& fileName,
+		std::shared_ptr<Loader> loader,
+		std::function<void(std::tuple<GLuint, size_t>)> onLoaded,
+		bool withSuffix = true,
+		bool invertUvs = false)
+	{
+		std::thread([=]() mutable
+			{
+				// Background thread: load and parse mesh data
+				auto [positions, uvs, normals, indices] = readMeshFile(fileName, withSuffix, invertUvs);
+
+				// Dispatch only the raw data to the main thread
+				ThreadUtils::enqueueToMainThread([=]() mutable
+					{
+						// Main thread: OpenGL-safe upload to GPU
+						auto mesh = loader->loadToMeshComponent(positions, uvs, normals, indices);
+						onLoaded(mesh);
+					});
+			}).detach();
 	}
 }
 

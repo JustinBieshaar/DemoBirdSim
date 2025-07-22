@@ -1,5 +1,6 @@
 #pragma once
 
-#define BIRD_BODINE "bodine"
-#define BIRD_DEFAULT "default"
-#define BIRD_ROBIN "robin"
+#define BIRD_GOOSE "Goose"
+#define BIRD_ROBINBLUE "RobinBlue"
+#define BIRD_ROBIN "Robin"
+#define BIRD_CAPSULE "Capsule"

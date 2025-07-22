@@ -1,7 +1,25 @@
 {
-    "default": {
-        "obj_name": "Capsule.obj",
-        "texture": "none",
+    "Goose": {
+        "obj_name": "Goose.obj",
+        "texture": "Goose_Quad_Diffuse.png",
+        "scale": 1.0,
+        "invert_uvs": true,
+        "core": {
+            "mass": 1.0,
+            "wingspan": 1.0
+        },
+        "flight": {
+            "max_speed": 1.0,
+            "acceleration": 1.0,
+            "ltd_ratio": 1.0,
+            "flap_rate": 1.0
+        }
+    },
+    "RobinBlue": {
+        "obj_name": "Robin-bird.obj",
+        "texture": "robin-texture-blue.png",
+        "scale": 1.0,
+        "invert_uvs": false,
         "core": {
             "mass": 3.0,
             "wingspan": 1.0
@@ -11,13 +29,13 @@
             "acceleration": 1.0,
             "ltd_ratio": 1.0,
             "flap_rate": 1.0
-        },
-        "scale": 1.0,
-        "invert_uvs": false
+        }
     },
-    "robin": {
+    "Robin": {
         "obj_name": "Robin-bird.obj",
         "texture": "robin-texture.png",
+        "scale": 1.0,
+        "invert_uvs": false,
         "core": {
             "mass": 1.0,
             "wingspan": 1.0
@@ -27,29 +45,11 @@
             "acceleration": 1.0,
             "ltd_ratio": 1.0,
             "flap_rate": 1.0
-        },
-        "scale": 1.0,
-        "invert_uvs": false
+        }
     },
-    "robin_blue": {
-        "obj_name": "Robin-bird.obj",
-        "texture": "robin-texture-blue.png",
-        "core": {
-            "mass": 1.0,
-            "wingspan": 1.0
-        },
-        "flight": {
-            "max_speed": 1.0,
-            "acceleration": 1.0,
-            "ltd_ratio": 1.0,
-            "flap_rate": 1.0
-        },
-        "scale": 1.0,
-        "invert_uvs": false
-    },
-    "new": {
-        "obj_name": "Robin-bird.obj",
-        "texture": "terrain.png",
+    "Capsule": {
+        "obj_name": "Capsule.obj",
+        "texture": "none",
         "scale": 1.0,
         "invert_uvs": false,
         "core": {

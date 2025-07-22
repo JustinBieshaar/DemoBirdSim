@@ -1,13 +1,13 @@
 #pragma once
 #include "../IBird.h"
 
-class Robin : public IBird {
+class Goose : public IBird {
 public:
-    Robin() {}
-    std::string getObj_name() const override { return "Robin-bird.obj"; }
-    std::string getTexture() const override { return "robin-texture.png"; }
+    Goose() {}
+    std::string getObj_name() const override { return "Goose.obj"; }
+    std::string getTexture() const override { return "Goose_Quad_Diffuse.png"; }
     float getScale() const override { return 1.0; }
-    bool getInvert_uvs() const override { return false; }
+    bool getInvert_uvs() const override { return true; }
     float getMass() const override { return 1.0; }
     float getWingspan() const override { return 1.0; }
     float getMax_speed() const override { return 1.0; }

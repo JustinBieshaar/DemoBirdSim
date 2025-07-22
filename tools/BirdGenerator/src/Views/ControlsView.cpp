@@ -41,16 +41,20 @@ void ControlsView::render()
         BirdsFactory::generateBirds(m_json);
     }
 
-    if (ImGui::Button("< Previous"))
+    ImGui::Text("Select bird");
+
+    if (ImGui::ArrowButton("Previous", ImGuiDir_Left))
     {
         selectBird(-1);
     }
+
     ImGui::SameLine();
 
-    if (ImGui::Button("Next >"))
+    if (ImGui::ArrowButton("Next", ImGuiDir_Right))
     {
         selectBird(1);
     }
+
 
     if (ImGui::Button("Add new bird"))
     {
