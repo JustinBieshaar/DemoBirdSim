@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "Debug/SceneLogChannels.h"
 
 /// <summary>
 /// Adds a new scene to the scene registry. (surprise ;P)
@@ -18,6 +19,8 @@ void SceneManager::loadScene(const std::string& sceneName)
 	if (target == m_scenes.end()) return;
 
 	auto sceneToAdd = target->second;
+
+	SceneLogChannel.log("Loading scene: " + sceneName);
 
 	if (!sceneToAdd->isLoaded())
 	{
@@ -57,5 +60,13 @@ void SceneManager::render()
 	for (std::shared_ptr<Scene> scene : m_activeScenes)
 	{
 		scene->render();
+	}
+}
+
+void SceneManager::renderImGui()
+{
+	for (std::shared_ptr<Scene> scene : m_activeScenes)
+	{
+		scene->renderImGui();
 	}
 }

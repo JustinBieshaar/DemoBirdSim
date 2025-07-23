@@ -10,7 +10,8 @@
 
 class BirdRegistry
 {
-    static std::shared_ptr<Goose> getGoose()
+public:
+    inline static std::shared_ptr<Goose> getGoose()
     {
         ensureInitialized();
 
@@ -19,7 +20,7 @@ class BirdRegistry
         return nullptr;
     }
 
-    static std::shared_ptr<RobinBlue> getRobinBlue()
+    inline static std::shared_ptr<RobinBlue> getRobinBlue()
     {
         ensureInitialized();
 
@@ -28,7 +29,7 @@ class BirdRegistry
         return nullptr;
     }
 
-    static std::shared_ptr<Robin> getRobin()
+    inline static std::shared_ptr<Robin> getRobin()
     {
         ensureInitialized();
 
@@ -37,7 +38,7 @@ class BirdRegistry
         return nullptr;
     }
 
-    static std::shared_ptr<Capsule> getCapsule()
+    inline static std::shared_ptr<Capsule> getCapsule()
     {
         ensureInitialized();
 
@@ -46,7 +47,7 @@ class BirdRegistry
         return nullptr;
     }
 
-    static std::shared_ptr<IBird> getInstance(const std::string& name)
+    inline static std::shared_ptr<IBird> getInstance(const std::string& name)
     {
         ensureInitialized();
 
@@ -55,11 +56,15 @@ class BirdRegistry
         return nullptr;
     }
 
-    static std::vector<std::string> getAllEntries()
+    inline static std::vector<std::string> getAllEntries()
     {
-        return m_entries;    }
+        ensureInitialized();
+
+        return m_entries;
+    }
+
 private:
-    static void ensureInitialized()
+    inline static void ensureInitialized()
     {
         if(m_isInitialized) return;
         m_list["Goose"] = std::make_shared<Goose>();
@@ -74,7 +79,7 @@ private:
         m_isInitialized = true;
     };
 
-    static inline bool m_isInitialized = false;
-    static std::unordered_map<std::string, std::shared_ptr<IBird>> m_list;
-    static std::vector<std::string> m_entries;
+    inline static inline bool m_isInitialized = false;
+    inline static std::unordered_map<std::string, std::shared_ptr<IBird>> m_list;
+    inline static std::vector<std::string> m_entries;
 };

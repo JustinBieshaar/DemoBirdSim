@@ -2,7 +2,7 @@
 #include <imgui.h>
 #include <string>
 
-void Transform::RenderImGui()
+void Transform::renderInspectorImGui()
 {
 	// todo: implement changeable values toggle option
 	std::string baseID = std::to_string(reinterpret_cast<uintptr_t>(this));

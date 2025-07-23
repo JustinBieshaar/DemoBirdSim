@@ -7,7 +7,7 @@
 
 #include "../Global/Globals.h"
 #include "../Signals/ChangeBirdSignal.h"
-#include "../Debug/LogChannels.h"
+#include "../Debug/BirdGenLogChannels.h"
 #include "../Signals/JsonUpdatedSignal.h"
 
 BirdDataView::BirdDataView(std::shared_ptr<SignalHandler> signalHandler, nlohmann::ordered_json json) : IView(signalHandler), m_json(json), m_editingBirdKey(DefaultBird)

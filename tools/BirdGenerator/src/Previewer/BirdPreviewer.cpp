@@ -1,4 +1,5 @@
 #include "BirdPreviewer.h"
+#include "BirdPreviewer.h"
 
 #include <ObjLoader.h>
 #include "../Global/Globals.h"

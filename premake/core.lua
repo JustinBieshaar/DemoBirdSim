@@ -109,9 +109,11 @@ group "Core"
                 "../core/Rendering", -- rendering for the loader
                 "../core/Utils", -- TODO: add utils to imgui window to add a method to get the name of the object for fields.
                 "../core/debug/ImGuiWindow", -- inspector
-                "../external/imgui/" -- ^
+                "../external/imgui/", -- ^
+
+                "../core/debug/Console", -- inspector
             }, 
-        links = { "GLFW", "GLM", "GLAD", "ECS", "Shader", "Rendering", "ImGuiWindow", "ImGui", "Utils" }
+        links = { "GLFW", "GLM", "GLAD", "ECS", "Shader", "Rendering", "ImGuiWindow", "Console", "ImGui", "Utils" }
     }
 
 group ""

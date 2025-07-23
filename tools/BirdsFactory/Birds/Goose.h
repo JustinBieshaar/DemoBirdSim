@@ -4,6 +4,8 @@
 class Goose : public IBird {
 public:
     Goose() {}
+   std::string getName() { return "Goose"; };
+
     std::string getObj_name() const override { return "Goose.obj"; }
     std::string getTexture() const override { return "Goose_Quad_Diffuse.png"; }
     float getScale() const override { return 1.0; }

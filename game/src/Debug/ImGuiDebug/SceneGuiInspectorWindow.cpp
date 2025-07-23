@@ -5,7 +5,7 @@
 
 void SceneGuiInspectorWindow::renderInspectables()
 {
-    m_scene->RenderImGui();
+    m_scene->renderInspectorImGui();
 
     if (ImGui::CollapsingHeader("Entities"))
     {
@@ -22,7 +22,7 @@ void SceneGuiInspectorWindow::renderInspectables()
                         "##" + std::to_string(reinterpret_cast<uintptr_t>(inspectableComponent.get()));
                     if (ImGui::CollapsingHeader(inspectableComponentLabel.c_str()))
                     {
-                        inspectableComponent->RenderImGui();
+                        inspectableComponent->renderInspectorImGui();
                     }
                 }
 

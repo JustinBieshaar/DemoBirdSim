@@ -26,7 +26,7 @@ public:
 	void SetFOV(float fov);
 	void Zoom(float delta);
 
-	void RenderImGui() override;
+	void renderInspectorImGui() override;
 	void update(float deltaTime) override;
 
 private:

@@ -105,5 +105,5 @@ public:
 
 
     // Inherited via IInspectable
-    void RenderImGui() override;
+    void renderInspectorImGui() override;
 };

@@ -34,8 +34,6 @@ public:
     {
         std::type_index index = typeid(T);
 
-        std::cout << "Creating event for type: " << index.name() << std::endl;
-
         try
         {
             eventCache[index] = std::make_shared<Event<T>>(data); // crash likely here

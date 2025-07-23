@@ -6,7 +6,7 @@
 struct IInspectable
 {
 public:
-	virtual void RenderImGui() = 0;
+	virtual void renderInspectorImGui() = 0;
 
 protected:
 	bool m_valuesChangableByDebug = true;

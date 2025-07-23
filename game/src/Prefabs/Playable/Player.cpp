@@ -24,12 +24,12 @@ void Player::update(float deltaTime)
     // quick implementation todo: add events to input manager
     if (m_inputManager->isKeyPressed(GLFW_KEY_A))
     {
-        m_transform->m_rotation.y -= m_rotationSpeed * deltaTime;
+        m_transform->m_rotation.y += m_rotationSpeed * deltaTime;
     }
 
     if (m_inputManager->isKeyPressed(GLFW_KEY_D))
     {
-        m_transform->m_rotation.y += m_rotationSpeed * deltaTime;
+        m_transform->m_rotation.y -= m_rotationSpeed * deltaTime;
     }
 
     if (m_inputManager->isKeyPressed(GLFW_KEY_S))

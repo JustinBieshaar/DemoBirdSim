@@ -13,6 +13,9 @@ public:
     virtual void loadScene(const std::string& sceneName) = 0;
     virtual void unloadScene(const std::string& sceneName) = 0;
 
+    virtual std::vector<std::shared_ptr<Scene>> getActiveScenes() = 0;
+
     virtual void update(float deltaTime) = 0;
     virtual void render() = 0;
+    virtual void renderImGui() = 0;
 };

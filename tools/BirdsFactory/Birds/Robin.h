@@ -4,6 +4,8 @@
 class Robin : public IBird {
 public:
     Robin() {}
+   std::string getName() { return "Robin"; };
+
     std::string getObj_name() const override { return "Robin-bird.obj"; }
     std::string getTexture() const override { return "robin-texture.png"; }
     float getScale() const override { return 1.0; }

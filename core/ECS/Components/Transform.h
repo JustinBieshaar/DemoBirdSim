@@ -52,7 +52,7 @@ public:
 		return forward;
 	}
 
-	void RenderImGui() override;
+	void renderInspectorImGui() override;
 	void update(float deltaTime) override;
 
 	void setScale(float scale)

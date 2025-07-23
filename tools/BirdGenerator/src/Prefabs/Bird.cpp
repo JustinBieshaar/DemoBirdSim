@@ -9,7 +9,7 @@
 #include <iostream>
 
 #include "../Global/Globals.h"
-#include "../Debug/LogChannels.h"
+#include "../Debug/BirdGenLogChannels.h"
 #include "../Debug/LoadingScreen.h"
 
 Bird::Bird(std::shared_ptr<Loader> loader,

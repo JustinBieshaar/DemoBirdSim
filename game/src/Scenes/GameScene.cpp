@@ -5,15 +5,16 @@
 #include <iostream>
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
+
 #include "../Prefabs/Terrain/Terrain.h"
 #include "../Prefabs/Playable/Player.h"
 #include "../Prefabs/Lighting/Light.h"
 #include "../Components/FollowTargetComponent.h"
 
-GameScene::GameScene(MainBootstrapper* mainBootstrapper) : Scene(), m_mainBootstrapper(mainBootstrapper)
+GameScene::GameScene(std::shared_ptr<MainBootstrapper> mainBootstrapper) : Scene(), m_mainBootstrapper(mainBootstrapper)
 {
-	m_renderer = new RenderSystem(*this, new Light({100,10,5}));
-    m_debugWindow = new SceneGuiInspectorWindow("Game Scene", this);
+    m_renderer = std::make_unique<RenderSystem>(*this, new Light({ 100,10,5 }));
+    m_debugWindow = std::make_unique<SceneGuiInspectorWindow>("Game Scene", this);
 }
 
 /// <summary>
@@ -22,7 +23,6 @@ GameScene::GameScene(MainBootstrapper* mainBootstrapper) : Scene(), m_mainBootst
 void GameScene::load()
 {
 	Scene::load();
-	std::cout << "load game scene \n";
     auto cam = createEntity<Camera>(m_mainBootstrapper->getInputManager(), glm::vec3{ 0,10, 30 }, 20, 0);
     auto inputManager = m_mainBootstrapper->getInputManager();
 
@@ -62,15 +62,23 @@ void GameScene::update(float deltaTime)
 
 void GameScene::render()
 {
-	//TEMPORARY rendering of a back button
 	m_renderer->render();
+}
 
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+void GameScene::renderImGui()
+{
     ImGui::SetNextWindowSize(ImVec2(80, 80));
 
-    ImGui::Begin(" ");
+    // Window flags to hide title bar, make non-resizable, non-movable, etc.
+    ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoTitleBar |
+        ImGuiWindowFlags_NoResize |
+        ImGuiWindowFlags_NoMove |
+        ImGuiWindowFlags_NoCollapse |
+        ImGuiWindowFlags_NoBackground |
+        ImGuiWindowFlags_NoBringToFrontOnFocus |
+        ImGuiWindowFlags_NoNav;
+
+    ImGui::Begin(" ", nullptr, windowFlags);
 
     ImGui::SetWindowSize(ImVec2(80, 80));
     ImGui::SetWindowPos(ImVec2(10, 10));
@@ -86,8 +94,4 @@ void GameScene::render()
 #ifdef _DEBUG
     m_debugWindow->render();
 #endif
-
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
 }

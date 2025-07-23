@@ -1,13 +1,14 @@
 #pragma once
 #include <Scene.h>
+#include <memory>
 #include "../Bootstrappers/MainBootstrapper.h"
 #include "../Systems/RenderSystem.h"
-#include "../Tools/ImGuiDebug/SceneGuiInspectorWindow.h"
+#include "../Debug/ImGuiDebug/SceneGuiInspectorWindow.h"
 
 class GameScene : public Scene
 {
 public:
-	GameScene(MainBootstrapper* mainBootstrapper);
+	GameScene(std::shared_ptr<MainBootstrapper> mainBootstrapper);
 
 	// Inherited via Scene
 	void load() override;
@@ -15,12 +16,11 @@ public:
 	bool isLoaded() override;
 	void update(float deltaTime) override;
 	void render() override;
+	void renderImGui() override;
 
 private:
-	MainBootstrapper* m_mainBootstrapper;
-
-	SceneGuiInspectorWindow* m_debugWindow;
-
-	RenderSystem* m_renderer;
+	std::shared_ptr<MainBootstrapper> m_mainBootstrapper;
+	std::unique_ptr<SceneGuiInspectorWindow> m_debugWindow;
+	std::unique_ptr<RenderSystem> m_renderer;
 };
 

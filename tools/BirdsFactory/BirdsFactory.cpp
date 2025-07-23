@@ -32,7 +32,6 @@ void BirdsFactory::generateBirds(nlohmann::ordered_json& birds)
 
     generateDefines(birds);
     generateRegisterIncludes(birds);
-    generateRegistryAccessors(birds);
     std::cout << "Birds generated.\n";
     runPremake();
 }
@@ -59,6 +58,8 @@ void BirdsFactory::generateBirdInterface(nlohmann::ordered_json& json)
         << "{\n"
         << "public:\n"
         << "    " << className << "() {}\n";
+
+    file << "   virtual std::string getName() = 0;\n";
 
     for (auto& [key, value] : json.items())
     {
@@ -95,6 +96,8 @@ void BirdsFactory::generateBirdClass(const std::string& name, nlohmann::ordered_
         << "class " << className << " : public IBird {\n"
         << "public:\n"
         << "    " << className << "() {}\n";
+
+    file << "   std::string getName() { return \"" << name << "\"; };\n\n";
 
     for (auto& [key, value] : json.items())
     {
@@ -146,11 +149,12 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
     // base of class
     reg << "\n"
         << "class BirdRegistry\n"
-        << "{\n";
+        << "{\n"
+        << "public:\n";
 
     for (auto& [name, _] : birds.items())
     {
-        reg << "    static std::shared_ptr<" << StringUtils::toPascalCase(name) << "> get" << StringUtils::toPascalCase(name) << "()\n"
+        reg << "    inline static std::shared_ptr<" << StringUtils::toPascalCase(name) << "> get" << StringUtils::toPascalCase(name) << "()\n"
             << "    {\n"
             << "        ensureInitialized();\n\n"
             << "        auto it = m_list.find(\"" << name << "\");\n"
@@ -159,7 +163,7 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
             << "    }\n\n";
     }
 
-    reg << "    static std::shared_ptr<IBird> getInstance(const std::string& name)\n"
+    reg << "    inline static std::shared_ptr<IBird> getInstance(const std::string& name)\n"
         << "    {\n"
         << "        ensureInitialized();\n\n"
 
@@ -168,16 +172,17 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
         << "        return nullptr;\n"
         << "    }\n\n";
 
-    reg << "    static std::vector<std::string> getAllEntries()\n"
+    reg << "    inline static std::vector<std::string> getAllEntries()\n"
         << "    {\n"
-        << "        return m_entries;"
-        << "    }\n";
+        << "        ensureInitialized();\n\n"
+        << "        return m_entries;\n"
+        << "    }\n\n";
 
 
     reg << "private:\n";
 
 
-    reg << "    static void ensureInitialized()\n"
+    reg << "    inline static void ensureInitialized()\n"
         << "    {\n"
         << "        if(m_isInitialized) return;\n";
 
@@ -192,31 +197,11 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
         << "    };\n\n";
 
 
-    reg << "    static inline bool m_isInitialized = false;\n"
-        << "    static std::unordered_map<std::string, std::shared_ptr<IBird>> m_list;\n"
-        << "    static std::vector<std::string> m_entries;\n";
+    reg << "    inline static inline bool m_isInitialized = false;\n"
+        << "    inline static std::unordered_map<std::string, std::shared_ptr<IBird>> m_list;\n"
+        << "    inline static std::vector<std::string> m_entries;\n";
 
     reg << "};";
-}
-
-void BirdsFactory::generateRegistryAccessors(nlohmann::ordered_json& birds)
-{
-    std::ofstream reg("BirdsRegistry.h");
-    reg << "#pragma once\n";
-    reg << "#include \"BirdFactory.h\"\n";
-    reg << "#include \"BirdDefines.h\"\n\n";
-    reg << "namespace BirdsRegistry {\n";
-
-    for (auto& [name, _] : birds.items())
-    {
-        std::string className = StringUtils::toPascalCase(name);
-        std::string macro = toMacro(name);
-        reg << "    inline std::shared_ptr<Bird> " << className << "() {\n";
-        reg << "        return BirdFactory::getInstance().getBird(" << macro << ");\n";
-        reg << "    }\n";
-    }
-
-    reg << "}\n";
 }
 
 void BirdsFactory::runPremake()

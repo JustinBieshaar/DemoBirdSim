@@ -48,7 +48,7 @@ void FollowTargetComponent::update(float deltaTime)
     m_transform->m_rotation.z = 0; // force roll to 0
 }
 
-void FollowTargetComponent::RenderImGui()
+void FollowTargetComponent::renderInspectorImGui()
 {
     ImGui::DragFloat3("offset", &m_offset.x);
     auto targetPosition = m_target->m_position + m_offset;

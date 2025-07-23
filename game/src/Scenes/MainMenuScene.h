@@ -1,12 +1,16 @@
 #pragma once
 #include <Scene.h>
 #include <Loader.h>
+#include <memory>
 #include "../Bootstrappers/MainBootstrapper.h"
+#include "../UI/CharacterSelectionView.h"
+#include "../Systems/RenderSystem.h"
+#include "../Debug/ImGuiDebug/SceneGuiInspectorWindow.h"
 
 class MainMenuScene : public Scene
 {
 public:
-	MainMenuScene(MainBootstrapper* mainBootstrapper);
+	MainMenuScene(std::shared_ptr<MainBootstrapper> mainBootstrapper);
 
 	// Inherited via Scene
 	void load() override;
@@ -14,9 +18,12 @@ public:
 	bool isLoaded() override;
 	void update(float deltaTime) override;
 	void render() override;
+	void renderImGui() override;
 
 private:
-	MainBootstrapper* m_mainBootstrapper;
-	Loader* m_loader;
+	std::shared_ptr<MainBootstrapper> m_mainBootstrapper;
+	std::unique_ptr<CharacterSelectionView> m_characterSelection;
+	std::unique_ptr<SceneGuiInspectorWindow> m_debugWindow;
+	std::unique_ptr<RenderSystem> m_renderer;
 };
 

@@ -8,7 +8,7 @@
 
 #include "../Signals/ChangeBirdSignal.h"
 #include "../Global/Globals.h"
-#include "../Debug/LogChannels.h"
+#include "../Debug/BirdGenLogChannels.h"
 
 #include <iostream>
 

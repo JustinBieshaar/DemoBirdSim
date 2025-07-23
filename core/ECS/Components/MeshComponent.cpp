@@ -6,7 +6,7 @@ void MeshComponent::update(float deltaTime)
 {
 }
 
-void MeshComponent::RenderImGui()
+void MeshComponent::renderInspectorImGui()
 {
 	ImGui::Text("vao: %u", m_vertexArrayObject);
 	ImGui::Text("vertex count: %d", m_vertexCount);

@@ -35,7 +35,9 @@ project "Demo-Bird-Simulator"
         "core/SimpleDI/",
         "core/Scenes/",
         "core/Rendering/",
+        "core/Signals/",
         "core/Utils/",
+        "core/debug/Console/",
 
         -- Debug
         "core/debug/ImGuiWindow/",
@@ -51,7 +53,7 @@ project "Demo-Bird-Simulator"
         "game/src/**.h",
     }
 
-    links { "GLFW", "GLM", "GLAD", "ImGui", "Shader", "ECS", "SimpleDI", "Scenes", "Rendering", "ImGuiWindow", "Utils" }
+    links { "GLFW", "GLM", "GLAD", "ImGui", "Shader", "ECS", "SimpleDI", "Scenes", "Rendering", "Signals", "ImGuiWindow", "Utils", "Console" }
 
     filter "configurations:Debug"
         defines { "_DEBUG" }

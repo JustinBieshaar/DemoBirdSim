@@ -3,7 +3,7 @@
 #include <imgui.h>
 #include <Components/MeshComponent.h>
 
-void Scene::RenderImGui()
+void Scene::renderInspectorImGui()
 {
 	int totalVertexCount = 0;
 	auto meshEntities = getEntitiesWith<MeshComponent>();

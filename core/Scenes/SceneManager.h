@@ -7,7 +7,7 @@
 #include "Scene.h"
 #include "ISceneManager.h"
 
-class SceneManager : ISceneManager
+class SceneManager : public ISceneManager
 {
 public:
 	void addScene(const std::string& sceneName, std::shared_ptr<Scene> scene);
@@ -15,8 +15,12 @@ public:
 	void loadScene(const std::string& sceneName);
 	void unloadScene(const std::string& sceneName);
 
+
+	std::vector<std::shared_ptr<Scene>> getActiveScenes() { return m_activeScenes; }
+
 	void update(float deltaTime);
 	void render();
+	void renderImGui();
 
 private:
 	std::unordered_map <std::string, std::shared_ptr<Scene>> m_scenes;

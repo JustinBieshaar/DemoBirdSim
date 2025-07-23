@@ -40,7 +40,7 @@ void CameraComponent::Zoom(float delta)
 	SetFOV(m_fov - delta);
 }
 
-void CameraComponent::RenderImGui()
+void CameraComponent::renderInspectorImGui()
 {
 	ImGui::Text("View setting:");
 	ImGui::SliderFloat("Pitch", &m_pitch, -89.0f, 89.0f);

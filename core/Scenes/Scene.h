@@ -6,13 +6,12 @@
 #include <Registry.h>
 #include <Loader.h>
 
-
 /// <summary>
 /// Base class representing a scene in the application or game.
 /// Inherits from ECS::Registry for managing entities in systems.
 /// Using ECS::Registry allows us to do operations like getEntitiesWith<A,B,C...> etc
 /// </summary>
-class Scene : public ECS::Registry, public IInspectable
+class Scene : public ECS::Registry, public IInspectable, public std::enable_shared_from_this<Scene>
 {
 public:
 	virtual ~Scene() = default;
@@ -42,6 +41,7 @@ public:
 	{
 		for (auto entity : m_entities)
 		{
+			if (entity == nullptr) continue;
 			// update entity first
 			entity->update(deltaTime);
 			entity->updateAllComponents(deltaTime);
@@ -49,8 +49,9 @@ public:
 	}
 
 	virtual void render() = 0;
+	virtual void renderImGui() = 0;
 
-	void RenderImGui() override;
+	void renderInspectorImGui() override;
 
 protected:
 	std::shared_ptr<Loader> m_loader;

@@ -17,10 +17,14 @@
 #include <iostream>
 #include <Components/TextureComponent.h>
 #include <Components/Transform.h>
+#include <Console.h>
+
 #include "Prefabs/Camera/Camera.h"
 #include "Prefabs/Meshes/Capsule.h"
 #include "Scenes/MainMenuScene.h"
 #include "Scenes/GameScene.h"
+
+#include <ThreadUtils.h>
 
 bool Application::init()
 {
@@ -56,7 +60,7 @@ bool Application::init()
 
     glEnable(GL_DEPTH_TEST);
 
-    m_mainBootstrapper = new MainBootstrapper(m_window);
+    m_mainBootstrapper = std::make_shared<MainBootstrapper>(m_window);
     m_mainBootstrapper->configureBindings();
     m_mainBootstrapper->initialize();
 
@@ -74,6 +78,26 @@ void Application::render()
     m_mainBootstrapper->getSceneManager()->render();
 }
 
+// We only need one frame instance for this entire demo. So we generate one here in application
+// and just structure who to render when they are active. With console always rendering last.
+void Application::renderImGui()
+{
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    m_mainBootstrapper->getSceneManager()->renderImGui();
+
+#if _DEBUG
+    m_globalInspectorWindow->render();
+    Console::drawImGui();
+#endif
+
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+}
+
 void Application::run()
 {
     auto sceneManager = m_mainBootstrapper->getSceneManager();
@@ -81,6 +105,8 @@ void Application::run()
     sceneManager->addScene("Game", std::make_shared<GameScene>(m_mainBootstrapper));
 
     sceneManager->loadScene("Menu");
+
+    m_globalInspectorWindow = std::make_unique<GlobalInspectorWindow>(sceneManager);
 
     m_lastTime = glfwGetTime(); // otherwise we get extreme first value
     while (!glfwWindowShouldClose(m_window))
@@ -95,10 +121,13 @@ void Application::run()
         m_mainBootstrapper->getInputManager()->update(deltaTime);
         m_mainBootstrapper->getSceneManager()->update(deltaTime);
 
+        ThreadUtils::processMainThreadTasks(); // important to call main thread tasks
+
         // late update all
         m_mainBootstrapper->getInputManager()->lateUpdate(deltaTime);
 
         render();
+        renderImGui();
 
         glfwSwapBuffers(m_window);
     }
