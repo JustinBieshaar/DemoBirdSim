@@ -1,9 +1,8 @@
 #pragma once
-#include <memory>
 #include <IBird.h>
 
 class IPlayerManager
 {
 public:
-	virtual std::shared_ptr<IBird> getBird() = 0;
+	virtual const IBird* getBird() = 0;
 };

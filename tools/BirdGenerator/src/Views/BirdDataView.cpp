@@ -57,9 +57,22 @@ void BirdDataView::render()
         {
             if (m_name != currentKey)
             {
-                // Rename key in json
-                m_json[m_name] = bird;
-                m_json.erase(currentKey); // todo: try and find a way without erasing or reordering to remain the original order.
+                if (m_json.contains(m_name))
+                {
+                    DataLogChannel.logError("A bird with the name '" + m_name + "' already exists. Please choose a different name.");
+                    ImGui::End();
+                    return;
+                }
+                nlohmann::ordered_json newJson;
+                for (auto it = m_json.begin(); it != m_json.end(); ++it)
+                {
+                    if (it.key() == currentKey)
+                        newJson[m_name] = it.value();
+                    else
+                        newJson[it.key()] = it.value();
+                }
+
+                m_json = std::move(newJson);
                 m_editingBirdKey = m_name;
             }
 
@@ -68,7 +81,9 @@ void BirdDataView::render()
                 std::ofstream outFile(PathManager::getConfigPath("birds.json"));
                 if (!outFile)
                 {
-                    throw;
+                    DataLogChannel.logError("Can't read birds.json file.");
+                    ImGui::End();
+                    return;
                 }
                 outFile << m_json.dump(4);
                 DataLogChannel.log("Saved successfully!");
@@ -137,7 +152,11 @@ void BirdDataView::init()
 {
 	// subscribe signals (if needed)
     m_signalHandler->observeEvent<ChangeBirdSignal>(
-        [this](Event<ChangeBirdSignal>& event) { m_editingBirdKey = event.data.name; }
+        [this](Event<ChangeBirdSignal>& event) 
+        {
+            m_name = event.data.name; // this just so we can change it, but remain the editingBirdKey in tact.
+            m_editingBirdKey = event.data.name; 
+        }
     );
 
     m_signalHandler->observeEvent<JsonUpdatedSignal>(

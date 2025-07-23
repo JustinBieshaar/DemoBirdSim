@@ -27,7 +27,7 @@ void GameScene::load()
     auto inputManager = m_mainBootstrapper->getInputManager();
 
     // Create various entities: player capsules and terrain chunks
-	auto player = createEntity<Player>(m_loader, inputManager, glm::vec3{ 0,0,-5});
+    auto player = createEntity<Player>(m_loader, inputManager, m_mainBootstrapper->getPlayerManager()->getBird() , glm::vec3{ 0,0,-5 });
     createEntity<Capsule>(m_loader, glm::vec3(5, 0, -8));
     createEntity<Terrain>(m_loader, glm::vec3(0, 0, -1));
     createEntity<Terrain>(m_loader, glm::vec3(-1, 0, -1));

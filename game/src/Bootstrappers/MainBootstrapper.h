@@ -7,6 +7,9 @@
 
 #include "../Managers/InputManager.h"
 
+#include "../Managers/IPlayerManager.h"
+#include "../Managers/PlayerManager.h"
+
 class MainBootstrapper : public BaseBootstrapper
 {
 public:
@@ -18,17 +21,22 @@ public:
         m_container->bind<IInputManager, InputManager>(DI::Lifetime::Singleton, m_window);
         
         m_container->bind<SignalHandler, SignalHandler>(DI::Lifetime::Singleton);
+
+        //todo: make auto inject
+        m_signalHandler = m_container->resolve<SignalHandler>();
+        m_container->bind<IPlayerManager, PlayerManager>(DI::Lifetime::Singleton, m_signalHandler);
     }
 
     void initialize() override
     {
         m_sceneManager = m_container->resolve<ISceneManager>();
         m_inputManager = m_container->resolve<IInputManager>();
-        m_signalHandler = m_container->resolve<SignalHandler>();
+        m_playerManager = m_container->resolve<IPlayerManager>();
     }
 
     std::shared_ptr<ISceneManager> getSceneManager() const { return m_sceneManager; }
     std::shared_ptr<IInputManager> getInputManager() const { return m_inputManager; }
+    std::shared_ptr<IPlayerManager> getPlayerManager() const { return m_playerManager; }
 
     std::shared_ptr<SignalHandler> getSignalHandler() const { return m_signalHandler; }
 
@@ -36,6 +44,7 @@ private:
     std::shared_ptr<ISceneManager> m_sceneManager;
     std::shared_ptr<IInputManager> m_inputManager;
     std::shared_ptr<SignalHandler> m_signalHandler;
+    std::shared_ptr<IPlayerManager> m_playerManager;
 
     GLFWwindow* m_window;
 };

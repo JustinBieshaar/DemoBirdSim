@@ -60,7 +60,7 @@ void BirdsFactory::generateBirdInterface(nlohmann::ordered_json& json)
         << "    " << className << "() {}\n"
         << "    virtual ~" << className << "() = default;\n\n";
 
-    file << "   virtual std::string getName() = 0;\n";
+    file << "   virtual std::string getName() const = 0;\n";
 
     for (auto& [key, value] : json.items())
     {
@@ -94,11 +94,13 @@ void BirdsFactory::generateBirdClass(const std::string& name, nlohmann::ordered_
     std::ofstream file(filePath);
     file << "#pragma once\n"
         << "#include \"../IBird.h\"\n\n"
-        << "class " << className << " : public IBird {\n"
-        << "public:\n"
-        << "    " << className << "() {}\n";
+        << "namespace Birds {\n"
+        << "    class " << className << " : public IBird {\n"
+        << "    public:\n"
+        << "        " << className << "() {}\n"
+        << "        ~" << className << "() {}\n\n";
 
-    file << "    std::string getName() { return \"" << name << "\"; };\n\n";
+    file << "       std::string getName() const override { return \"" << name << "\"; };\n\n";
 
     for (auto& [key, value] : json.items())
     {
@@ -107,17 +109,18 @@ void BirdsFactory::generateBirdClass(const std::string& name, nlohmann::ordered_
         {
             for (auto& [key2, value2] : value.items())
             {
-                file << "    " << JsonUtils::getJsonFieldTypeToString(key2, value2) << " get" << StringUtils::toPascalCase(key2) << "() const override { return " << JsonUtils::getJsonFieldValueToString(value2) << "; }\n";
+                file << "       " << JsonUtils::getJsonFieldTypeToString(key2, value2) << " get" << StringUtils::toPascalCase(key2) << "() const override { return " << JsonUtils::getJsonFieldValueToString(value2) << "; }\n";
             }
         }
         else
         {
-            file << "    " << JsonUtils::getJsonFieldTypeToString(key, value) << " get" << StringUtils::toPascalCase(key) << "() const override { return " << JsonUtils::getJsonFieldValueToString(value) << "; }\n";
+            file << "       " << JsonUtils::getJsonFieldTypeToString(key, value) << " get" << StringUtils::toPascalCase(key) << "() const override { return " << JsonUtils::getJsonFieldValueToString(value) << "; }\n";
         }
     }
 
 
-    file << "};";
+    file << "   };"
+        << "}";
 }
 
 void BirdsFactory::generateDefines(nlohmann::ordered_json& birds)
@@ -151,9 +154,12 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
     reg << "\n"
         << "class BirdRegistry\n"
         << "{\n"
-        << "public:\n";
+        << "public:\n"
+        << "    BirdRegistry() = delete;\n"
+        << "    BirdRegistry(const BirdRegistry&) = delete;\n"
+        << "    BirdRegistry& operator=(const BirdRegistry&) = delete;\n";
 
-    for (auto& [name, _] : birds.items())
+    /*for (auto& [name, _] : birds.items())
     {
         reg << "    inline static std::shared_ptr<" << StringUtils::toPascalCase(name) << "> get" << StringUtils::toPascalCase(name) << "()\n"
             << "    {\n"
@@ -162,14 +168,14 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
             << "        if (it != m_list.end()) return std::dynamic_pointer_cast<" << StringUtils::toPascalCase(name) << ">(it->second);\n"
             << "        return nullptr;\n"
             << "    }\n\n";
-    }
+    }*/
 
-    reg << "    inline static std::shared_ptr<IBird> getInstance(const std::string& name)\n"
+    reg << "    inline static const IBird* getInstance(const std::string& name)\n"
         << "    {\n"
         << "        ensureInitialized();\n\n"
 
         << "        auto it = m_list.find(name);\n"
-        << "        if (it != m_list.end()) return it->second;\n"
+        << "        if (it != m_list.end()) return it->second.get();\n"
         << "        return nullptr;\n"
         << "    }\n\n";
 
@@ -189,7 +195,7 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
 
     for (auto& [name, _] : birds.items())
     {
-        reg << "        m_list[\"" << name << "\"] = std::make_shared<" << StringUtils::toPascalCase(name) << ">();\n";
+        reg << "        m_list[\"" << name << "\"] = std::make_shared<Birds::" << StringUtils::toPascalCase(name) << ">();\n";
         reg << "        m_entries.push_back(\"" << name << "\");\n";
     }
 

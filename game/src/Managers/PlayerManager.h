@@ -9,8 +9,10 @@ public:
 	PlayerManager(std::shared_ptr<SignalHandler> signalHandler);
 
 	// Inherited via IPlayerManager
-	std::shared_ptr<IBird> getBird() override;
+	const IBird* getBird() override;
 
 private:
 	std::shared_ptr<SignalHandler> m_signalHandler;
+
+	const IBird* m_bird;
 };

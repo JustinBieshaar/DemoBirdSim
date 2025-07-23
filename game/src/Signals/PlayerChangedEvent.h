@@ -5,6 +5,6 @@
 
 struct PlayerChangedEvent
 {
-	std::shared_ptr<IBird> previousBird;
-	std::shared_ptr<IBird> currentBird;
+	const IBird* previousBird;
+	const IBird* currentBird;
 };

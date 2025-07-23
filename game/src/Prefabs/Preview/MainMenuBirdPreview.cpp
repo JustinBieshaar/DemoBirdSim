@@ -28,7 +28,7 @@ void MainMenuBirdPreview::update(float deltaTime)
 	m_transform->m_rotation.y += m_rotationSpeed * deltaTime;
 }
 
-void MainMenuBirdPreview::onBirdChange(std::shared_ptr<IBird> bird)
+void MainMenuBirdPreview::onBirdChange(const IBird* bird)
 {
     std::string texture = bird->getTexture();
     std::string objname = bird->getObj_name();

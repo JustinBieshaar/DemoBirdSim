@@ -1,10 +1,15 @@
 #include "PlayerManager.h"
+#include "../Signals/PlayerChangedEvent.h"
 
-PlayerManager::PlayerManager(std::shared_ptr<SignalHandler> signalHandler)
+PlayerManager::PlayerManager(std::shared_ptr<SignalHandler> signalHandler) : m_bird(nullptr)
 {
+	signalHandler->observeEvent<PlayerChangedEvent>([this](Event<PlayerChangedEvent>& event)
+		{
+			m_bird = event.data.currentBird;
+		});
 }
 
-std::shared_ptr<IBird> PlayerManager::getBird()
+const IBird* PlayerManager::getBird()
 {
-    return nullptr;
+    return m_bird;
 }

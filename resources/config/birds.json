@@ -1,20 +1,4 @@
 {
-    "Goose": {
-        "obj_name": "Goose.obj",
-        "texture": "Goose_Quad_Diffuse.png",
-        "scale": 1.0,
-        "invert_uvs": true,
-        "core": {
-            "mass": 1.0,
-            "wingspan": 1.0
-        },
-        "flight": {
-            "max_speed": 1.0,
-            "acceleration": 1.0,
-            "ltd_ratio": 1.0,
-            "flap_rate": 1.0
-        }
-    },
     "RobinBlue": {
         "obj_name": "Robin-bird.obj",
         "texture": "robin-texture-blue.png",
@@ -26,7 +10,7 @@
         },
         "flight": {
             "max_speed": 1.0,
-            "acceleration": 1.0,
+            "acceleration": 100.0,
             "ltd_ratio": 1.0,
             "flap_rate": 1.0
         }
@@ -42,7 +26,7 @@
         },
         "flight": {
             "max_speed": 1.0,
-            "acceleration": 1.0,
+            "acceleration": 150.0,
             "ltd_ratio": 1.0,
             "flap_rate": 1.0
         }
@@ -58,7 +42,23 @@
         },
         "flight": {
             "max_speed": 1.0,
-            "acceleration": 1.0,
+            "acceleration": 1000.0,
+            "ltd_ratio": 1.0,
+            "flap_rate": 1.0
+        }
+    },
+    "Goose": {
+        "obj_name": "Goose-2.obj",
+        "texture": "Goose_Quad_Diffuse.png",
+        "scale": 1.0,
+        "invert_uvs": true,
+        "core": {
+            "mass": 1.0,
+            "wingspan": 1.0
+        },
+        "flight": {
+            "max_speed": 1.0,
+            "acceleration": 10.0,
             "ltd_ratio": 1.0,
             "flap_rate": 1.0
         }

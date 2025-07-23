@@ -15,7 +15,7 @@ public:
 
 	void update(float deltaTime) override;
 private:
-	void onBirdChange(std::shared_ptr<IBird> bird);
+	void onBirdChange(const IBird* bird);
 
 	std::shared_ptr<Loader> m_loader;
 	std::shared_ptr<SignalHandler> m_signalHandler;

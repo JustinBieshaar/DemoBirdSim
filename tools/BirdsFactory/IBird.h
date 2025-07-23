@@ -7,7 +7,7 @@ public:
     IBird() {}
     virtual ~IBird() = default;
 
-   virtual std::string getName() = 0;
+   virtual std::string getName() const = 0;
    virtual std::string getObj_name() const = 0;
    virtual std::string getTexture() const = 0;
    virtual float getScale() const = 0;

@@ -5,6 +5,7 @@
 #include "../Scenes/ISceneManager.h"
 #include "../Scenes/SceneManager.h"
 
+// Add game specific services here.
 class GameBootstrapper : public BaseBootstrapper
 {
 	void configureBindings() override
