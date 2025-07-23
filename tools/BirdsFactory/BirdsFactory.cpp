@@ -150,7 +150,7 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
 
     for (auto& [name, _] : birds.items())
     {
-        reg << "    static std::shared_ptr<" << StringUtils::toPascalCase(name) << "> get_" << StringUtils::toUpperSnakeCase(name) << "()\n"
+        reg << "    static std::shared_ptr<" << StringUtils::toPascalCase(name) << "> get" << StringUtils::toPascalCase(name) << "()\n"
             << "    {\n"
             << "        ensureInitialized();\n\n"
             << "        auto it = m_list.find(\"" << name << "\");\n"
@@ -166,7 +166,13 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
         << "        auto it = m_list.find(name);\n"
         << "        if (it != m_list.end()) return it->second;\n"
         << "        return nullptr;\n"
+        << "    }\n\n";
+
+    reg << "    static std::vector<std::string> getAllEntries()\n"
+        << "    {\n"
+        << "        return m_entries;"
         << "    }\n";
+
 
     reg << "private:\n";
 
@@ -178,6 +184,7 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
     for (auto& [name, _] : birds.items())
     {
         reg << "        m_list[\"" << name << "\"] = std::make_shared<" << StringUtils::toPascalCase(name) << ">();\n";
+        reg << "        m_entries.push_back(\"" << name << "\");\n";
     }
 
     reg << "\n"
@@ -186,7 +193,8 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
 
 
     reg << "    static inline bool m_isInitialized = false;\n"
-        << "    static std::unordered_map<std::string, std::shared_ptr<IBird>> m_list;\n";
+        << "    static std::unordered_map<std::string, std::shared_ptr<IBird>> m_list;\n"
+        << "    static std::vector<std::string> m_entries;\n";
 
     reg << "};";
 }

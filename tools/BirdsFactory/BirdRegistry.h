@@ -10,7 +10,7 @@
 
 class BirdRegistry
 {
-    static std::shared_ptr<Goose> get_GOOSE()
+    static std::shared_ptr<Goose> getGoose()
     {
         ensureInitialized();
 
@@ -19,7 +19,7 @@ class BirdRegistry
         return nullptr;
     }
 
-    static std::shared_ptr<RobinBlue> get_ROBIN_BLUE()
+    static std::shared_ptr<RobinBlue> getRobinBlue()
     {
         ensureInitialized();
 
@@ -28,7 +28,7 @@ class BirdRegistry
         return nullptr;
     }
 
-    static std::shared_ptr<Robin> get_ROBIN()
+    static std::shared_ptr<Robin> getRobin()
     {
         ensureInitialized();
 
@@ -37,7 +37,7 @@ class BirdRegistry
         return nullptr;
     }
 
-    static std::shared_ptr<Capsule> get_CAPSULE()
+    static std::shared_ptr<Capsule> getCapsule()
     {
         ensureInitialized();
 
@@ -54,18 +54,27 @@ class BirdRegistry
         if (it != m_list.end()) return it->second;
         return nullptr;
     }
+
+    static std::vector<std::string> getAllEntries()
+    {
+        return m_entries;    }
 private:
     static void ensureInitialized()
     {
         if(m_isInitialized) return;
         m_list["Goose"] = std::make_shared<Goose>();
+        m_entries.push_back("Goose");
         m_list["RobinBlue"] = std::make_shared<RobinBlue>();
+        m_entries.push_back("RobinBlue");
         m_list["Robin"] = std::make_shared<Robin>();
+        m_entries.push_back("Robin");
         m_list["Capsule"] = std::make_shared<Capsule>();
+        m_entries.push_back("Capsule");
 
         m_isInitialized = true;
     };
 
     static inline bool m_isInitialized = false;
     static std::unordered_map<std::string, std::shared_ptr<IBird>> m_list;
+    static std::vector<std::string> m_entries;
 };
