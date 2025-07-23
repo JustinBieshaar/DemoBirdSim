@@ -10,7 +10,7 @@
 class CharacterSelectionView
 {
 public:
-	CharacterSelectionView(std::shared_ptr<SignalHandler> signalHandler);
+	CharacterSelectionView(std::shared_ptr<Signals::SignalHandler> signalHandler);
 	void init();
 
 	void renderImGui();
@@ -18,7 +18,7 @@ public:
 private:
 	void select(int direction);
 
-	std::shared_ptr<SignalHandler> m_signalHandler;
+	std::shared_ptr<Signals::SignalHandler> m_signalHandler;
 	std::vector<std::string> m_characters;
 
 	int m_selectedIndex = 0;

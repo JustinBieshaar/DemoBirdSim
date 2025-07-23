@@ -8,55 +8,61 @@
 
 #include <iostream>
 
-class SignalHandler
+namespace Signals
 {
-public:
-    // Observers: map from event type -> list of callbacks
-    std::unordered_map<std::type_index, std::vector<std::function<void(ISignal&)>>> observers;
-
-    // Event cache (for reusing/reconstructing)
-    std::unordered_map<std::type_index, std::shared_ptr<ISignal>> eventCache;
-
-    template<typename T>
-    void observeEvent(std::function<void(Event<T>&)> callback)
+    class SignalHandler
     {
-        std::type_index index = typeid(T);
-        observers[index].emplace_back(
-            [callback](ISignal& evt)
+    public:
+        SignalHandler() {}
+        ~SignalHandler() {}
+
+        // Observers: map from event type -> list of callbacks
+        std::unordered_map<std::type_index, std::vector<std::function<void(ISignal&)>>> observers;
+
+        // Event cache (for reusing/reconstructing)
+        std::unordered_map<std::type_index, std::shared_ptr<ISignal>> eventCache;
+
+        template<typename T>
+        void observeEvent(std::function<void(Event<T>&)> callback)
+        {
+            std::type_index index = typeid(T);
+            observers[index].emplace_back(
+                [callback](ISignal& evt)
+                {
+                    callback(static_cast<Event<T>&>(evt));
+                }
+            );
+        }
+
+        template<typename T>
+        void invokeEvent(const T& data)
+        {
+            std::type_index index = typeid(T);
+
+            try
             {
-                callback(static_cast<Event<T>&>(evt));
+                eventCache[index] = std::make_shared<Event<T>>(data); // crash likely here
             }
-        );
-    }
-
-    template<typename T>
-    void invokeEvent(const T& data)
-    {
-        std::type_index index = typeid(T);
-
-        try
-        {
-            eventCache[index] = std::make_shared<Event<T>>(data); // crash likely here
-        }
-        catch (const std::exception& e)
-        {
-            std::cerr << "Exception during event creation: " << e.what() << std::endl;
-        }
-
-        if (!eventCache[index])
-        {
-            std::cerr << "eventCache[index] is nullptr!\n";
-            return;
-        }
-
-        auto& event = *eventCache[index];
-
-        if (observers.count(index))
-        {
-            for (auto& callback : observers[index])
+            catch (const std::exception& e)
             {
-                callback(*eventCache[index]);
+                std::cerr << "Exception during event creation: " << e.what() << std::endl;
+            }
+
+            if (!eventCache[index])
+            {
+                std::cerr << "eventCache[index] is nullptr!\n";
+                return;
+            }
+
+            auto& event = *eventCache[index];
+
+            if (observers.count(index))
+            {
+                for (auto& callback : observers[index])
+                {
+                    callback(*eventCache[index]);
+                }
             }
         }
-    }
-};
+    };
+}

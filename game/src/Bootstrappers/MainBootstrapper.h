@@ -1,14 +1,13 @@
 #pragma once
+#include "../Managers/IPlayerManager.h"
+#include "../Managers/PlayerManager.h"
+
+#include "../Managers/InputManager.h"
 
 #include <BaseBootstrapper.h>
 #include <ISceneManager.h>
 #include <SceneManager.h>
 #include <SignalHandler.h>
-
-#include "../Managers/InputManager.h"
-
-#include "../Managers/IPlayerManager.h"
-#include "../Managers/PlayerManager.h"
 
 class MainBootstrapper : public BaseBootstrapper
 {
@@ -20,10 +19,10 @@ public:
         m_container->bind<ISceneManager, SceneManager>(DI::Lifetime::Singleton);
         m_container->bind<IInputManager, InputManager>(DI::Lifetime::Singleton, m_window);
         
-        m_container->bind<SignalHandler, SignalHandler>(DI::Lifetime::Singleton);
+        m_container->bind<Signals::SignalHandler, Signals::SignalHandler>(DI::Lifetime::Singleton);
 
         //todo: make auto inject
-        m_signalHandler = m_container->resolve<SignalHandler>();
+        m_signalHandler = m_container->resolve<Signals::SignalHandler>();
         m_container->bind<IPlayerManager, PlayerManager>(DI::Lifetime::Singleton, m_signalHandler);
     }
 
@@ -31,6 +30,7 @@ public:
     {
         m_sceneManager = m_container->resolve<ISceneManager>();
         m_inputManager = m_container->resolve<IInputManager>();
+        m_signalHandler = m_container->resolve<Signals::SignalHandler>();
         m_playerManager = m_container->resolve<IPlayerManager>();
     }
 
@@ -38,12 +38,12 @@ public:
     std::shared_ptr<IInputManager> getInputManager() const { return m_inputManager; }
     std::shared_ptr<IPlayerManager> getPlayerManager() const { return m_playerManager; }
 
-    std::shared_ptr<SignalHandler> getSignalHandler() const { return m_signalHandler; }
+    std::shared_ptr<Signals::SignalHandler> getSignalHandler() const { return m_signalHandler; }
 
 private:
     std::shared_ptr<ISceneManager> m_sceneManager;
     std::shared_ptr<IInputManager> m_inputManager;
-    std::shared_ptr<SignalHandler> m_signalHandler;
+    std::shared_ptr<Signals::SignalHandler> m_signalHandler;
     std::shared_ptr<IPlayerManager> m_playerManager;
 
     GLFWwindow* m_window;

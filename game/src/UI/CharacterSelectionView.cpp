@@ -5,7 +5,7 @@
 #include <BirdRegistry.h>
 #include "../Signals/PlayerChangedEvent.h"
 
-CharacterSelectionView::CharacterSelectionView(std::shared_ptr<SignalHandler> signalHandler) : m_signalHandler(signalHandler), m_characters(BirdRegistry::getAllEntries())
+CharacterSelectionView::CharacterSelectionView(std::shared_ptr<Signals::SignalHandler> signalHandler) : m_signalHandler(signalHandler), m_characters(BirdRegistry::getAllEntries())
 {
 }
 

@@ -1,6 +1,10 @@
 #pragma once
-class ISignal
+
+namespace Signals
 {
-public:
-    virtual ~ISignal() = default;
-};
+    class ISignal
+    {
+    public:
+        virtual ~ISignal() = default;
+    };
+}
