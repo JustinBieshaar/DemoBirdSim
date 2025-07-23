@@ -5,6 +5,8 @@ class IBird
 {
 public:
     IBird() {}
+    virtual ~IBird() = default;
+
    virtual std::string getName() = 0;
    virtual std::string getObj_name() const = 0;
    virtual std::string getTexture() const = 0;

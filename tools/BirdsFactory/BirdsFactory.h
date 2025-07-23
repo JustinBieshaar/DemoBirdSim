@@ -14,6 +14,5 @@ private:
     static void generateBirdClass(const std::string& name, nlohmann::ordered_json& json);
     static void generateDefines(nlohmann::ordered_json& birds);
     static void generateRegisterIncludes(nlohmann::ordered_json& birds);
-    static void generateRegistryAccessors(nlohmann::ordered_json& birds);
     static void runPremake();
 };

@@ -57,7 +57,8 @@ void BirdsFactory::generateBirdInterface(nlohmann::ordered_json& json)
         << "class " << className << "\n"
         << "{\n"
         << "public:\n"
-        << "    " << className << "() {}\n";
+        << "    " << className << "() {}\n"
+        << "    virtual ~" << className << "() = default;\n\n";
 
     file << "   virtual std::string getName() = 0;\n";
 
@@ -97,7 +98,7 @@ void BirdsFactory::generateBirdClass(const std::string& name, nlohmann::ordered_
         << "public:\n"
         << "    " << className << "() {}\n";
 
-    file << "   std::string getName() { return \"" << name << "\"; };\n\n";
+    file << "    std::string getName() { return \"" << name << "\"; };\n\n";
 
     for (auto& [key, value] : json.items())
     {
