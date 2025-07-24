@@ -22,4 +22,9 @@ private:
 	std::vector<std::string> m_characters;
 
 	int m_selectedIndex = 0;
+
+	float m_arrowButtonSize = 30.0f;
+	float m_spacing = 125.0f;
+	float m_totalArrowWidth;
+	float m_arrowX;
 };

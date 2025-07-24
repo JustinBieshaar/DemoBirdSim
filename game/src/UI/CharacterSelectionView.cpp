@@ -7,6 +7,9 @@
 
 CharacterSelectionView::CharacterSelectionView(std::shared_ptr<Signals::SignalHandler> signalHandler) : m_signalHandler(signalHandler), m_characters(BirdRegistry::getAllEntries())
 {
+    // calculating values in constructor so it's only calculated once.
+    m_totalArrowWidth = m_arrowButtonSize * 2 + m_spacing;
+    m_arrowX = (Window_Width - m_totalArrowWidth) * 0.5f;
 }
 
 void CharacterSelectionView::init()
@@ -19,15 +22,9 @@ void CharacterSelectionView::init()
 
 void CharacterSelectionView::renderImGui()
 {
-
-    // === Centered Arrows Group ===
-    float arrowButtonSize = 30.0f;
-    float spacing = 125.0f;
-    float totalArrowWidth = arrowButtonSize * 2 + spacing;
-    float arrowX = (Window_Width - totalArrowWidth) * 0.5f;
-
+    // ---------- Centered arrow group with name in between
     // Position arrows and text as a group
-    ImGui::SetCursorPos(ImVec2(arrowX, Window_Height - 260.0f));
+    ImGui::SetCursorPos(ImVec2(m_arrowX, Window_Height - 260.0f));
 
     // Left arrow
     if (ImGui::ArrowButton("##left", ImGuiDir_Left))
@@ -43,7 +40,7 @@ void CharacterSelectionView::renderImGui()
     float textWidth = ImGui::CalcTextSize(characterName).x;
 
     // Compute space left for text between arrows
-    float availableSpace = spacing;
+    float availableSpace = m_spacing;
     float textX = (availableSpace - textWidth) * 0.5f;
 
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + textX);
@@ -51,7 +48,7 @@ void CharacterSelectionView::renderImGui()
 
     // Right arrow
     ImGui::SameLine();
-    ImGui::SetCursorPosX(arrowX + arrowButtonSize + spacing); // after left arrow + spacing
+    ImGui::SetCursorPosX(m_arrowX + m_arrowButtonSize + m_spacing); // after left arrow + spacing
     if (ImGui::ArrowButton("##right", ImGuiDir_Right))
     {
         select(1);
