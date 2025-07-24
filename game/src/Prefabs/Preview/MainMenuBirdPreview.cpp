@@ -15,12 +15,17 @@ MainMenuBirdPreview::MainMenuBirdPreview(std::shared_ptr<Loader> loader, std::sh
     m_colorShader = std::make_unique<ColorShader>();
     m_texturedShader = std::make_unique<TexturedShader>();
 
-	m_signalHandler->observeEvent<PlayerChangedEvent>([this](Signals::Event<PlayerChangedEvent>& event)
+    m_onBirdChangedHandler = m_signalHandler->observeEvent<PlayerChangedEvent>([this](Signals::Event<PlayerChangedEvent>& event)
 		{
 			BirdLogChannel.log("Bird changed from: " + (event.data.previousBird != nullptr ? event.data.previousBird->getName() : "undefined") +
 				" to: " + event.data.currentBird->getName());
 			onBirdChange(event.data.currentBird);
 		});
+}
+
+MainMenuBirdPreview::~MainMenuBirdPreview()
+{
+    m_signalHandler->removeObserver(*m_onBirdChangedHandler);
 }
 
 void MainMenuBirdPreview::update(float deltaTime)

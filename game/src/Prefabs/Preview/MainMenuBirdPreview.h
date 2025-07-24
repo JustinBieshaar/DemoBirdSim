@@ -6,12 +6,16 @@
 #include <IBird.h>
 #include <TexturedShader.h>
 #include <ColorShader.h>
+#include <ObserverHandler.h>
+#include <optional>
 
 class MainMenuBirdPreview : public GameObject
 {
 public:
 	MainMenuBirdPreview(std::shared_ptr<Loader> loader, std::shared_ptr<Signals::SignalHandler> signalHandler,
 		const glm::vec3& position = {}, const glm::vec3& rotation = {}, const glm::vec3& scale = glm::vec3(1.0f));
+
+	~MainMenuBirdPreview();
 
 	void update(float deltaTime) override;
 private:
@@ -24,4 +28,5 @@ private:
 	std::unique_ptr<ColorShader> m_colorShader;
 
 	float m_rotationSpeed = 0.5f;
+	std::optional<Signals::ObserverHandle> m_onBirdChangedHandler;
 };
