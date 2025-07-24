@@ -11,7 +11,7 @@
 #include <TexturedShader.h>
 #include <ColorShader.h>
 
-class Player : public GameObject
+class Player : public ECS::GameObject
 {
 public:
 	Player(std::shared_ptr<Loader> loader, std::shared_ptr<IInputManager> inputManager, const IBird* birdData, const glm::vec3& position = {}, const glm::vec3& rotation = {}, const glm::vec3& scale = glm::vec3(1.0f));

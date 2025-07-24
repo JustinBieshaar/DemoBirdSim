@@ -34,7 +34,7 @@ void GameScene::load()
     createEntity<Terrain>(m_loader, glm::vec3(0, 0, 0));
     createEntity<Terrain>(m_loader, glm::vec3(-1, 0, 0));
 
-    cam->addComponent<FollowTargetComponent>(player->getComponent<Transform>(), glm::vec3(0 , 10.0f, 30.0f));
+    cam->addComponent<FollowTargetComponent>(player->getComponent<ECS::Transform>(), glm::vec3(0 , 10.0f, 30.0f));
 
 	m_renderer->setCamera(cam);
     m_debugWindow->setEntities(m_entities);

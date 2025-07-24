@@ -8,7 +8,7 @@
 Terrain::Terrain(std::shared_ptr<Loader> loader, const glm::vec3& position) : GameObject(glm::vec3(position.x * Terrain_Size, 0, position.z * Terrain_Size))
 {
 	generate(loader);
-    addComponent<TextureComponent>(loader, "terrain.png");
+    addComponent<ECS::TextureComponent>(loader, "terrain.png");
 }
 
 void Terrain::generate(std::shared_ptr<Loader> loader)
@@ -59,7 +59,7 @@ void Terrain::generate(std::shared_ptr<Loader> loader)
     }
 
     auto [vao, vertexCount] = loader->loadToMeshComponent(vertices, textureCoordinates, normals, indices);
-    auto meshComp = addComponent<MeshComponent>(vao, vertexCount);
+    auto meshComp = addComponent<ECS::MeshComponent>(vao, vertexCount);
     meshComp->setShader(new TexturedShader());
     meshComp->setRepeat(40);
 }

@@ -3,8 +3,6 @@
 #include <memory>
 #include "Entity.h"
 
-// I like to use ECS for this as System is quite a generic name.
-// so something like ECS::System shows it's related to ECS
 namespace ECS
 {
 	/// <summary>
@@ -25,9 +23,9 @@ namespace ECS
 		}
 
 		template<typename... Components>
-		std::vector<Entity*> getEntitiesWith()
+		std::vector<ECS::Entity*> getEntitiesWith()
 		{
-			std::vector<Entity*> result;
+			std::vector<ECS::Entity*> result;
 			for (auto& entity : m_entities)
 			{
 				// Learned about this cool fold expression that's been introduced in C++ 17
@@ -41,6 +39,6 @@ namespace ECS
 		}
 		
 	protected:
-		std::vector<std::shared_ptr<Entity>> m_entities;
+		std::vector<std::shared_ptr<ECS::Entity>> m_entities;
 	};
 }

@@ -2,11 +2,11 @@
 #include <imgui.h>
 #include <StringUtils.h>
 
-void MeshComponent::update(float deltaTime)
+void ECS::MeshComponent::update(float deltaTime)
 {
 }
 
-void MeshComponent::renderInspectorImGui()
+void ECS::MeshComponent::renderInspectorImGui()
 {
 	ImGui::Text("vao: %u", m_vertexArrayObject);
 	ImGui::Text("vertex count: %d", m_vertexCount);

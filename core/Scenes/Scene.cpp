@@ -6,11 +6,11 @@
 void Scene::renderInspectorImGui()
 {
 	int totalVertexCount = 0;
-	auto meshEntities = getEntitiesWith<MeshComponent>();
+	auto meshEntities = getEntitiesWith<ECS::MeshComponent>();
 
 	for (auto meshEntity : meshEntities)
 	{
-		totalVertexCount += meshEntity->getComponent<MeshComponent>()->m_vertexCount;
+		totalVertexCount += meshEntity->getComponent<ECS::MeshComponent>()->m_vertexCount;
 	}
 
 	ImGui::Text("Total vertex count: %d", totalVertexCount);

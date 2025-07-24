@@ -1,22 +1,25 @@
 #pragma once
 
-class Entity; // forward decleration for owner usage
-
-class Component
+namespace ECS
 {
-public:
-    virtual ~Component() = default;
-    
-    void setOwner(Entity* owner) 
-    { 
-        m_owner = owner; 
-        start();
-    }
+    class Entity; // forward decleration for owner usage
 
-    virtual void start() {}
+    class Component
+    {
+    public:
+        virtual ~Component() = default;
 
-    virtual void update(float deltaTime) = 0;
+        void setOwner(Entity* owner)
+        {
+            m_owner = owner;
+            start();
+        }
 
-protected:
-    Entity* m_owner = nullptr;
-};
+        virtual void start() {}
+
+        virtual void update(float deltaTime) = 0;
+
+    protected:
+        Entity* m_owner = nullptr;
+    };
+}

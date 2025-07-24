@@ -4,15 +4,18 @@
 #include "Loader.h"
 #include "Component.h"
 
-class TextureComponent : public Component
+namespace ECS
 {
-public:
-	GLuint m_textureID;
-
-	TextureComponent(std::shared_ptr<Loader> loader, const std::string& fileName = "default.png")
+	class TextureComponent : public Component
 	{
-		m_textureID = loader->loadTexture(fileName);
-	}
+	public:
+		GLuint m_textureID;
 
-	void update(float deltaTime) override;
-};
+		TextureComponent(std::shared_ptr<Loader> loader, const std::string& fileName = "default.png")
+		{
+			m_textureID = loader->loadTexture(fileName);
+		}
+
+		void update(float deltaTime) override;
+	};
+}

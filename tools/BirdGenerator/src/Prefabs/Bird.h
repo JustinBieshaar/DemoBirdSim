@@ -11,7 +11,7 @@
 
 #include "../Signals/ChangeBirdSignal.h"
 
-class Bird : public GameObject
+class Bird : public ECS::GameObject
 {
 public:
 	Bird(std::shared_ptr<Loader> loader, 

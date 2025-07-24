@@ -56,8 +56,8 @@ void Player::construct(const IBird* birdData)
     ObjLoader::loadMeshFromObjFileAsync(objname, m_loader,
         [texture, hasTexture, this, objname](std::tuple<GLuint, size_t> result)
         {
-            MeshComponent* oldMesh = nullptr;
-            TextureComponent* oldTexture = nullptr;
+            ECS::MeshComponent* oldMesh = nullptr;
+            ECS::TextureComponent* oldTexture = nullptr;
 
             tryGetComponent(oldMesh);
             tryGetComponent(oldTexture);
@@ -65,22 +65,22 @@ void Player::construct(const IBird* birdData)
             if (oldMesh)
             {
                 m_loader->unloadMesh(oldMesh->m_vertexArrayObject);
-                destroyComponent<MeshComponent>();
+                destroyComponent<ECS::MeshComponent>();
             }
 
             if (oldTexture)
             {
                 m_loader->unloadTexture(oldTexture->m_textureID);
-                destroyComponent<TextureComponent>();
+                destroyComponent<ECS::TextureComponent>();
             }
 
             auto [vao, vertexCount] = result;
-            auto newMesh = addComponent<MeshComponent>(vao, vertexCount);
+            auto newMesh = addComponent<ECS::MeshComponent>(vao, vertexCount);
 
             if (hasTexture)
             {
                 newMesh->setShader(m_texturedShader.get());
-                addComponent<TextureComponent>(m_loader, texture);
+                addComponent<ECS::TextureComponent>(m_loader, texture);
             }
             else
             {

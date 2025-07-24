@@ -1,18 +1,18 @@
+/*
+* Just a little heads up. What you are about to see in this factory is some code generation.
+*/
+
 #include "BirdsFactory.h"
+
 #include <fstream>
 #include <filesystem>
 #include <cctype>
 #include <iostream>
-#include <StringUtils.h>
 
+#include <StringUtils.h>
 #include "JsonUtils.h"
 
 const std::filesystem::path BASE_DIR = std::filesystem::path(__FILE__).parent_path();
-
-/*
-* Just a little heads up. What you are about to see in this factory is some code generation.
-* This may be overwhelming to look at. But it's working completely fine. ;P
-*/
 
 void BirdsFactory::generateBirds(nlohmann::ordered_json& birds)
 {
@@ -20,9 +20,12 @@ void BirdsFactory::generateBirds(nlohmann::ordered_json& birds)
     std::filesystem::create_directory(BASE_DIR / "Birds");
 
     // getting first entry just to fill the bird interface as it will just generate getters for all fields.
+    // as we ensure each entry is sharing the same template, there's no risk in using the first entry as it's
+    // just a reference. Potentially could also have used the template input here, but it's not a necessity.
     auto it = birds.begin();
     std::string currentKey = it.key();
     nlohmann::ordered_json& firstEntry = it.value();
+
     generateBirdInterface(firstEntry);
 
     for (auto& [name, data] : birds.items())
@@ -52,26 +55,29 @@ void BirdsFactory::generateBirdInterface(nlohmann::ordered_json& json)
     std::filesystem::path filePath = BASE_DIR / (className + ".h");
 
     std::ofstream file(filePath);
-    file << "#pragma once\n"
+    file << "// Auto-generated: Base interface of all birds.\n"
+        << "// DO NOT ADJUST MANUALLY!\n\n"
+
+        << "#pragma once\n"
         << "#include <string>\n\n"
         << "class " << className << "\n"
         << "{\n"
         << "public:\n"
         << "    " << className << "() {}\n"
-        << "    virtual ~" << className << "() = default;\n\n";
-
-    file << "   virtual std::string getName() const = 0;\n";
+        << "    virtual ~" << className << "() = default;\n\n" 
+        
+        << "    virtual std::string getName() const = 0;\n";
 
     for (auto& [key, value] : json.items())
     {
-        // when value is an object it's designed to be a layer of values. We can ignore this layer
-        // here and loop through all values.
-        // todo, support multi layer
+        // objects are only used to structure the bird generation view so they
+        // act as foldable headers. Thereby we only render all the items of an object.
+        // This has a flaw when there's another object inside an object. So this must be
+        // refactored to a recursive solution if that needs to be supported.
         if (value.is_object())
         {
             for (auto& [key2, value2] : value.items())
             {
-
                 file << "   virtual " << JsonUtils::getJsonFieldTypeToString(key2, value2) << " get" << StringUtils::toPascalCase(key2) << "() const = 0;\n";
             }
         }
@@ -80,7 +86,6 @@ void BirdsFactory::generateBirdInterface(nlohmann::ordered_json& json)
             file << "   virtual " << JsonUtils::getJsonFieldTypeToString(key, value) << " get" << StringUtils::toPascalCase(key) << "() const = 0;\n";
         }
     }
-
 
     file << "};";
         
@@ -92,7 +97,10 @@ void BirdsFactory::generateBirdClass(const std::string& name, nlohmann::ordered_
     std::filesystem::path filePath = BASE_DIR / "Birds" / (className + ".h");
 
     std::ofstream file(filePath);
-    file << "#pragma once\n"
+    file << "// Auto-generated: bird instance.\n"
+        << "// DO NOT ADJUST MANUALLY!\n\n"
+
+        << "#pragma once\n"
         << "#include \"../IBird.h\"\n\n"
         << "namespace Birds {\n"
         << "    class " << className << " : public IBird {\n"
@@ -102,9 +110,13 @@ void BirdsFactory::generateBirdClass(const std::string& name, nlohmann::ordered_
 
     file << "       std::string getName() const override { return \"" << name << "\"; };\n\n";
 
+    // all getters
     for (auto& [key, value] : json.items())
     {
-
+        // objects are only used to structure the bird generation view so they
+        // act as foldable headers. Thereby we only render all the items of an object.
+        // This has a flaw when there's another object inside an object. So this must be
+        // refactored to a recursive solution if that needs to be supported.
         if (value.is_object())
         {
             for (auto& [key2, value2] : value.items())
@@ -119,14 +131,19 @@ void BirdsFactory::generateBirdClass(const std::string& name, nlohmann::ordered_
     }
 
 
-    file << "   };"
+    file << "   };\n"
         << "}";
 }
 
 void BirdsFactory::generateDefines(nlohmann::ordered_json& birds)
 {
     std::ofstream defines((BASE_DIR / "BirdDefines.h").string());
-    defines << "#pragma once\n\n";
+    defines << "// Auto-generated: defines of all generated birds.\n"
+        << "// DO NOT ADJUST MANUALLY!\n\n"
+
+        << "#pragma once\n\n";
+
+    // create defines
     for (auto& [name, _] : birds.items())
     {
         defines << "#define " << toMacro(name) << " \"" << name << "\"\n";
@@ -139,6 +156,8 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
 
     // includes
     reg << "// Auto-generated: includes all birds\n"
+        << "// DO NOT ADJUST MANUALLY!\n\n"
+
         << "#include <unordered_map>\n"
         << "#include <memory>\n\n";
 
@@ -158,17 +177,6 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
         << "    BirdRegistry() = delete;\n"
         << "    BirdRegistry(const BirdRegistry&) = delete;\n"
         << "    BirdRegistry& operator=(const BirdRegistry&) = delete;\n";
-
-    /*for (auto& [name, _] : birds.items())
-    {
-        reg << "    inline static std::shared_ptr<" << StringUtils::toPascalCase(name) << "> get" << StringUtils::toPascalCase(name) << "()\n"
-            << "    {\n"
-            << "        ensureInitialized();\n\n"
-            << "        auto it = m_list.find(\"" << name << "\");\n"
-            << "        if (it != m_list.end()) return std::dynamic_pointer_cast<" << StringUtils::toPascalCase(name) << ">(it->second);\n"
-            << "        return nullptr;\n"
-            << "    }\n\n";
-    }*/
 
     reg << "    inline static const IBird* getInstance(const std::string& name)\n"
         << "    {\n"

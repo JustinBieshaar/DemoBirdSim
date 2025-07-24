@@ -9,7 +9,7 @@
 #include <ObserverHandler.h>
 #include <optional>
 
-class MainMenuBirdPreview : public GameObject
+class MainMenuBirdPreview : public ECS::GameObject
 {
 public:
 	MainMenuBirdPreview(std::shared_ptr<Loader> loader, std::shared_ptr<Signals::SignalHandler> signalHandler,

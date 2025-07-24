@@ -17,7 +17,7 @@ void RenderSystem::update(float deltaTime)
 void RenderSystem::render()
 {
     // todo: update this list only when entities update.
-    auto renderableEntities = m_registry.getEntitiesWith<Transform, MeshComponent>();
+    auto renderableEntities = m_registry.getEntitiesWith<ECS::Transform, ECS::MeshComponent>();
 
 #ifdef _DEBUG
     if (EnableWireframeMode)
@@ -28,17 +28,17 @@ void RenderSystem::render()
 
     for (auto entity : renderableEntities)
     {
-        Transform* transform = nullptr;
+        ECS::Transform* transform = nullptr;
         if (!entity->tryGetComponent(transform))
             continue;
 
-        MeshComponent* mesh = nullptr;
+        ECS::MeshComponent* mesh = nullptr;
         if (!entity->tryGetComponent(mesh))
             continue;
 
         mesh->render();
 
-        auto cameraPosition = m_camera->getComponent<Transform>();
+        auto cameraPosition = m_camera->getComponent<ECS::Transform>();
 
         // Use shader
         mesh->useShader();
@@ -49,9 +49,9 @@ void RenderSystem::render()
         glBindVertexArray(mesh->m_vertexArrayObject);
         mesh->enableShaderAttributes();
 
-        if (entity->hasComponent<TextureComponent>())
+        if (entity->hasComponent<ECS::TextureComponent>())
         {
-            auto texture = entity->getComponent<TextureComponent>();
+            auto texture = entity->getComponent<ECS::TextureComponent>();
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, texture->m_textureID);
         }

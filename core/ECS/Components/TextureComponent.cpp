@@ -1,5 +1,5 @@
 #include "TextureComponent.h"
 
-void TextureComponent::update(float deltaTime)
+void ECS::TextureComponent::update(float deltaTime)
 {
 }

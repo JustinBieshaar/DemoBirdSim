@@ -1,5 +1,5 @@
 {
-    "Capsule": {
+    "GhostBird": {
         "core": {
             "mass": 1.0,
             "wingspan": 1.0
@@ -11,7 +11,7 @@
             "max_speed": 1.0
         },
         "invert_uvs": false,
-        "obj_name": "Capsule.obj",
+        "obj_name": "Robin-bird.obj",
         "scale": 1.0,
         "texture": "none"
     },

@@ -4,7 +4,7 @@
 #include <Loader.h>
 #include <GameObject.h>
 
-class Terrain : public GameObject
+class Terrain : public ECS::GameObject
 {
 public:
 	Terrain(std::shared_ptr<Loader> loader, const glm::vec3& position);

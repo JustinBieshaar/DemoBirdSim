@@ -30,7 +30,7 @@ void MainMenuScene::load()
     auto player = createEntity<MainMenuBirdPreview>(m_loader, signalHandler);
 
     // just so it's at right location
-    cam->addComponent<FollowTargetComponent>(player->getComponent<Transform>(), glm::vec3(0, 4.0f, 10.0f));
+    cam->addComponent<FollowTargetComponent>(player->getComponent<ECS::Transform>(), glm::vec3(0, 4.0f, 10.0f));
 
     m_characterSelection->init();
 

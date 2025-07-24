@@ -35,8 +35,9 @@ void ControlsView::render()
         PathManager::setResourceRoot(_SOLUTIONDIR);
 
         auto json = m_jsonManager->getBirdsJson();
-        std::cout << "generating with json: " << json.dump(4) << "\n";
         BirdsFactory::generateBirds(json);
+
+        BirdLogChannel.log("Generated successfully! W0000t");
     }
 
     ImGui::Text("Select bird");

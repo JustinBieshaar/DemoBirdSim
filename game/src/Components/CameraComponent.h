@@ -11,10 +11,10 @@
 #include <GLFW/glfw3.h>
 #include <Components/Transform.h>
 
-class CameraComponent : public Component, public IInspectable
+class CameraComponent : public ECS::Component, public IInspectable
 {
 public:
-	CameraComponent(std::shared_ptr<Transform> transform = {}, float pitch = 0.0f, float yaw = 0.0f, float roll = 0.0f) : m_transform(transform), m_pitch(pitch), m_yaw(yaw), m_roll(roll)
+	CameraComponent(std::shared_ptr<ECS::Transform> transform = {}, float pitch = 0.0f, float yaw = 0.0f, float roll = 0.0f) : m_transform(transform), m_pitch(pitch), m_yaw(yaw), m_roll(roll)
 	{ 
 		m_aspectRatio = Window_Width / Window_Height;
 	}
@@ -30,7 +30,7 @@ public:
 	void update(float deltaTime) override;
 
 private:
-	std::shared_ptr<Transform> m_transform;
+	std::shared_ptr<ECS::Transform> m_transform;
 
 	// view properties
 	float m_pitch;

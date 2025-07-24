@@ -6,19 +6,19 @@
 #include <Entity.h>
 #include <IInspectable.h>
 
-class FollowTargetComponent : public Component, public IInspectable
+class FollowTargetComponent : public ECS::Component, public IInspectable
 {
 public:
-	FollowTargetComponent(std::shared_ptr<Transform> target, glm::vec3 offset) : m_target(target), m_offset(offset) {	}
+	FollowTargetComponent(std::shared_ptr<ECS::Transform> target, glm::vec3 offset) : m_target(target), m_offset(offset) {	}
 
-	void start() override { m_transform = m_owner->getComponent<Transform>(); }
+	void start() override { m_transform = m_owner->getComponent<ECS::Transform>(); }
 
 	// Inherited via Component
 	void update(float deltaTime) override;
 
 private:
-	std::shared_ptr<Transform> m_transform;
-	std::shared_ptr<Transform> m_target;
+	std::shared_ptr<ECS::Transform> m_transform;
+	std::shared_ptr<ECS::Transform> m_target;
 	glm::vec3 m_offset;
 	float m_distanceClamp = 0.5f;
 

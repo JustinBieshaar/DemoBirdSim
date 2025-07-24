@@ -19,21 +19,39 @@ void CharacterSelectionView::init()
 
 void CharacterSelectionView::renderImGui()
 {
+
     // === Centered Arrows Group ===
     float arrowButtonSize = 30.0f;
-    float spacing = 50.0f;
+    float spacing = 125.0f;
     float totalArrowWidth = arrowButtonSize * 2 + spacing;
     float arrowX = (Window_Width - totalArrowWidth) * 0.5f;
 
+    // Position arrows and text as a group
     ImGui::SetCursorPos(ImVec2(arrowX, Window_Height - 260.0f));
+
+    // Left arrow
     if (ImGui::ArrowButton("##left", ImGuiDir_Left))
     {
         select(-1);
     }
 
+    // Text centered between arrows
     ImGui::SameLine();
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + spacing);
 
+    // Measure text width
+    const char* characterName = m_characters[m_selectedIndex].c_str();
+    float textWidth = ImGui::CalcTextSize(characterName).x;
+
+    // Compute space left for text between arrows
+    float availableSpace = spacing;
+    float textX = (availableSpace - textWidth) * 0.5f;
+
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + textX);
+    ImGui::Text("%s", characterName);
+
+    // Right arrow
+    ImGui::SameLine();
+    ImGui::SetCursorPosX(arrowX + arrowButtonSize + spacing); // after left arrow + spacing
     if (ImGui::ArrowButton("##right", ImGuiDir_Right))
     {
         select(1);

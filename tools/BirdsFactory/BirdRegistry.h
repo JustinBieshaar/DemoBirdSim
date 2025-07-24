@@ -1,12 +1,14 @@
 // Auto-generated: includes all birds
+// DO NOT ADJUST MANUALLY!
+
 #include <unordered_map>
 #include <memory>
 
 #include "IBird.h"
-#include "Birds/RobinBlue.h"
-#include "Birds/Robin.h"
-#include "Birds/Capsule.h"
+#include "Birds/GhostBird.h"
 #include "Birds/Goose.h"
+#include "Birds/Robin.h"
+#include "Birds/RobinBlue.h"
 
 class BirdRegistry
 {
@@ -34,14 +36,14 @@ private:
     inline static void ensureInitialized()
     {
         if(m_isInitialized) return;
-        m_list["RobinBlue"] = std::make_shared<Birds::RobinBlue>();
-        m_entries.push_back("RobinBlue");
-        m_list["Robin"] = std::make_shared<Birds::Robin>();
-        m_entries.push_back("Robin");
-        m_list["Capsule"] = std::make_shared<Birds::Capsule>();
-        m_entries.push_back("Capsule");
+        m_list["GhostBird"] = std::make_shared<Birds::GhostBird>();
+        m_entries.push_back("GhostBird");
         m_list["Goose"] = std::make_shared<Birds::Goose>();
         m_entries.push_back("Goose");
+        m_list["Robin"] = std::make_shared<Birds::Robin>();
+        m_entries.push_back("Robin");
+        m_list["RobinBlue"] = std::make_shared<Birds::RobinBlue>();
+        m_entries.push_back("RobinBlue");
 
         m_isInitialized = true;
     };

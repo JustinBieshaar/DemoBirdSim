@@ -3,7 +3,7 @@
 #include <glm/vec3.hpp>
 #include <Entity.h>
 
-class Light : public Entity
+class Light : public ECS::Entity
 {
 public:
 	Light(glm::vec3 position, glm::vec3 color = {1,1,1}) : m_position(position), m_color(color) {}

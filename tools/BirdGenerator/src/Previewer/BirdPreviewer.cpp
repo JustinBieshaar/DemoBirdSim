@@ -29,11 +29,11 @@ void BirdPreviewer::render()
     if (!m_bird)
         return;
 
-    Transform* transform = nullptr;
+    ECS::Transform* transform = nullptr;
     if (!m_bird->tryGetComponent(transform))
         return;
 
-    MeshComponent* mesh = nullptr;
+    ECS::MeshComponent* mesh = nullptr;
     if (!m_bird->tryGetComponent(mesh))
         return;
 
@@ -56,9 +56,9 @@ void BirdPreviewer::render()
     glBindVertexArray(mesh->m_vertexArrayObject);
     mesh->enableShaderAttributes();
 
-    if (m_bird->hasComponent<TextureComponent>())
+    if (m_bird->hasComponent<ECS::TextureComponent>())
     {
-        auto texture = m_bird->getComponent<TextureComponent>();
+        auto texture = m_bird->getComponent<ECS::TextureComponent>();
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture->m_textureID);
     }
