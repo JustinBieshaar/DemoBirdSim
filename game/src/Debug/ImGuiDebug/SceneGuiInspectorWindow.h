@@ -13,6 +13,7 @@ public:
 
 	void renderInspectables() override;
 	void setEntities(const std::vector<std::shared_ptr<Entity>>& entities) { m_entities = entities; }
+	void clear() override { m_entities.clear(); } // kills ownership of entities.
 
 private:
 	Scene* m_scene;

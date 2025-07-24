@@ -11,6 +11,7 @@ class GameObject : public Entity
 {
 public:
 	GameObject(const glm::vec3& position = {}, const glm::vec3& rotation = {}, const glm::vec3& scale = glm::vec3(1.0f)) : m_transform(addComponent<Transform>(position, rotation, scale)) {}
+	~GameObject() = default;
 
 	void update(float deltaTime) override;
 

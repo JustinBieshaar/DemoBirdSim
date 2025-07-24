@@ -16,6 +16,7 @@ public:
 	void render();
 
 	void setCamera(std::shared_ptr<Camera> camera) { m_camera = camera; }
+	void clear() override { m_camera = nullptr; }
 
 private:
 	ECS::Registry& m_registry;

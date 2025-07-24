@@ -41,6 +41,9 @@ void MainMenuScene::load()
 void MainMenuScene::unload()
 {
     Scene::unload();
+    m_entities.clear();
+    m_renderer->clear();
+    m_debugWindow->clear();
 }
 
 bool MainMenuScene::isLoaded()
@@ -86,8 +89,8 @@ void MainMenuScene::renderImGui()
     {
         MainMenuSceneLogChannel.log("Start loading game scene!");
 
-        m_mainBootstrapper->getSceneManager()->unloadScene("Menu");
         m_mainBootstrapper->getSceneManager()->loadScene("Game");
+        m_mainBootstrapper->getSceneManager()->unloadScene("Menu");
     }
 
     m_debugWindow->render();

@@ -10,5 +10,6 @@ namespace ECS
 		virtual ~System() = default;
 
 		virtual void update(float deltaTime) = 0;
+		virtual void clear() {} // can be overriden
 	};
 }
