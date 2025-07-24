@@ -13,13 +13,13 @@ function createUnitTestProject(params)
         files { params.path .. "/**.h", params.path .. "/**.cpp" }
 
 	    includedirs {
-	        "../external/googletests/include",
-	        "../external/googletests/",
+	        "../external/googletest/googletest/include",
+	        "../external/googletest/googletest/",
 
 	        params.includes
 	    }
 
-	    links { "GoogleTests", params.links }
+	    links { "GoogleTest", params.links }
 
 	    filter "configurations:Debug"
 	        defines { "_DEBUG" }

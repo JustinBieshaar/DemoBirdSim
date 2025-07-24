@@ -1,4 +1,4 @@
-project "GoogleTests"
+project "GoogleTest"
 	kind "StaticLib"
     language "C++"
     cppdialect "C++20"
@@ -9,13 +9,13 @@ project "GoogleTests"
 	objdir "../obj/%{cfg.buildcfg}"
     
     includedirs {
-        "googletests/include",
-        "googletests/"
+        "googletest/googletest/include",
+        "googletest/googletest/"
     }
 
     files {
-	    "googletests/src/gtest-all.cc",
-	    "googletests/src/gtest_main.cc"
+	    "googletest/googletest/src/gtest-all.cc",
+	    "googletest/googletest/src/gtest_main.cc"
 	}
 
     filter "system:linux"
