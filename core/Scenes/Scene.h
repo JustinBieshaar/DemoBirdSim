@@ -39,7 +39,7 @@ public:
 
 	virtual void update(float deltaTime)
 	{
-		for (auto entity : m_entities)
+		for (auto& entity : m_entities)
 		{
 			if (entity == nullptr) continue;
 			// update entity first
