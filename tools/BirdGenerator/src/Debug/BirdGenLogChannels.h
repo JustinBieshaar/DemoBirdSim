@@ -7,3 +7,4 @@
 extern LogChannel DataLogChannel;
 extern LogChannel ControlsLogChannel;
 extern LogChannel BirdLogChannel;
+extern LogChannel JsonLogChannel;

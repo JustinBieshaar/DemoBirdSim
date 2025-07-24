@@ -105,13 +105,13 @@ void BirdGeneratorApp::renderUI()
 void BirdGeneratorApp::run()
 {
     m_loader = std::make_shared<Loader>();
-    m_signalHandler = std::make_shared<SignalHandler>();
+    m_signalHandler = std::make_shared<Signals::SignalHandler>();
 
-    fetchAndValidateJson();
+    m_jsonManager = std::make_unique<JsonManager>(m_signalHandler);
 
     m_previewer = std::make_unique<BirdPreviewer>(m_loader);
-    m_views.push_back(std::make_unique<BirdDataView>(m_signalHandler, m_json));
-    m_views.push_back(std::make_unique<ControlsView>(m_signalHandler, m_json));
+    m_views.push_back(std::make_unique<BirdDataView>(m_signalHandler, m_jsonManager.get()));
+    m_views.push_back(std::make_unique<ControlsView>(m_signalHandler, m_jsonManager.get()));
 
     m_previewer->subscribeSignals(m_signalHandler);
     for (auto& view : m_views)
@@ -119,8 +119,9 @@ void BirdGeneratorApp::run()
         view->init();
     }
 
-    auto firstIt = m_json.begin();
-    if (firstIt != m_json.end())
+    auto json = m_jsonManager->getBirdsJson();
+    auto firstIt = json.begin();
+    if (firstIt != json.end())
     {
         m_signalHandler->invokeEvent(ChangeBirdSignal{ firstIt.key(), firstIt.value() });
     }
@@ -155,45 +156,4 @@ void BirdGeneratorApp::cleanup()
 
     glfwDestroyWindow(m_window);
     glfwTerminate();
-}
-
-void BirdGeneratorApp::fetchAndValidateJson()
-{
-    // Load birds.json
-    std::ifstream input(PathManager::getConfigPath("birds.json"));
-    if (!input)
-    {
-        std::cerr << "Failed to open birds.json\n";
-        return;
-    }
-
-    nlohmann::ordered_json birdsJson;
-    input >> birdsJson;
-
-    // Load template.json
-    std::ifstream templateInput(PathManager::getConfigPath("template.json"));
-    if (!templateInput)
-    {
-        std::cerr << "Failed to open template.json\n";
-        return;
-    }
-
-    nlohmann::ordered_json templateJson;
-    templateInput >> templateJson;
-
-    // Validate and update birds json
-    JsonValidator::validate(birdsJson, templateJson);
-
-    // Save updated birds.json back to file
-    std::ofstream outFile(PathManager::getConfigPath("birds.json"));
-    if (!outFile)
-    {
-        std::cerr << "Failed to write birds.json\n";
-        return;
-    }
-    outFile << birdsJson.dump(4);
-
-    // Update internal state and notify listeners
-    m_json = birdsJson;
-    m_signalHandler->invokeEvent(JsonUpdatedSignal{ m_json });
 }

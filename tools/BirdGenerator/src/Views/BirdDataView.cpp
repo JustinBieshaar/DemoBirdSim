@@ -10,7 +10,7 @@
 #include "../Debug/BirdGenLogChannels.h"
 #include "../Signals/JsonUpdatedSignal.h"
 
-BirdDataView::BirdDataView(std::shared_ptr<SignalHandler> signalHandler, nlohmann::ordered_json json) : IView(signalHandler), m_json(json), m_editingBirdKey(DefaultBird)
+BirdDataView::BirdDataView(std::shared_ptr<Signals::SignalHandler> signalHandler, JsonManager* jsonManager) : IView(signalHandler), m_jsonManager(jsonManager), m_editingBirdKey(DefaultBird)
 {
 }
 
@@ -21,13 +21,14 @@ void BirdDataView::render()
 
     ImGui::Begin("BirdData", nullptr,
         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |  ImGuiWindowFlags_NoCollapse);
-
-    if (!m_json.empty())
+    
+    auto& json = m_jsonManager->getBirdsJson();
+    if (!json.empty())
     {
         // Get first bird entry
 
-        auto it = m_json.find(m_editingBirdKey);
-        if (it == m_json.end())
+        auto it = json.find(m_editingBirdKey);
+        if (it == json.end())
         {
             ImGui::End();
             return;
@@ -43,7 +44,7 @@ void BirdDataView::render()
         std::string inputId = "##name";  // Unique but invisible label
 
         char buffer[256];
-        std::strncpy(buffer, m_editingBirdKey.c_str(), sizeof(buffer));
+        std::strncpy(buffer, m_name.c_str(), sizeof(buffer));
         buffer[sizeof(buffer) - 1] = '\0';
 
         if (ImGui::InputText(inputId.c_str(), buffer, sizeof(buffer)))
@@ -57,14 +58,14 @@ void BirdDataView::render()
         {
             if (m_name != currentKey)
             {
-                if (m_json.contains(m_name))
+                if (json.contains(m_name))
                 {
                     DataLogChannel.logError("A bird with the name '" + m_name + "' already exists. Please choose a different name.");
                     ImGui::End();
                     return;
                 }
                 nlohmann::ordered_json newJson;
-                for (auto it = m_json.begin(); it != m_json.end(); ++it)
+                for (auto it = json.begin(); it != json.end(); ++it)
                 {
                     if (it.key() == currentKey)
                         newJson[m_name] = it.value();
@@ -72,24 +73,15 @@ void BirdDataView::render()
                         newJson[it.key()] = it.value();
                 }
 
-                m_json = std::move(newJson);
+                json = std::move(newJson);
                 m_editingBirdKey = m_name;
             }
 
             try
             {
-                std::ofstream outFile(PathManager::getConfigPath("birds.json"));
-                if (!outFile)
-                {
-                    DataLogChannel.logError("Can't read birds.json file.");
-                    ImGui::End();
-                    return;
-                }
-                outFile << m_json.dump(4);
-                DataLogChannel.log("Saved successfully!");
+                m_jsonManager->modifyBirdsJson(json);
 
-                m_signalHandler->invokeEvent(JsonUpdatedSignal{ m_json });
-                m_signalHandler->invokeEvent(ChangeBirdSignal{ m_editingBirdKey, m_json[m_editingBirdKey]}); // invoking change bird to same instance to refresh
+                m_signalHandler->invokeEvent(ChangeBirdSignal{ m_editingBirdKey, json[m_editingBirdKey]}); // invoking change bird to same instance to refresh
             }
             catch (const std::exception& e)
             {
@@ -101,7 +93,7 @@ void BirdDataView::render()
 
         if (ImGui::Button("Delete"))
         {
-            if (m_json.size() <= 1)
+            if (json.size() <= 1)
             {
                 DataLogChannel.logError("This is the last item, we can't delete it.");
                 ImGui::End();
@@ -110,7 +102,7 @@ void BirdDataView::render()
 
             int index = -1;
             int counter = 0;
-            for (auto it = m_json.begin(); it != m_json.end(); ++it, ++counter)
+            for (auto it = json.begin(); it != json.end(); ++it, ++counter)
             {
                 if (it.key() == currentKey)
                 {
@@ -120,28 +112,30 @@ void BirdDataView::render()
             }
 
             // fix edge case if you delete the last one.
-            if (index > 0 && index == m_json.size() - 1)
+            if (index > 0 && index == json.size() - 1)
             {
                 index--;
             }
 
             // Rename key in json
-            m_json.erase(currentKey);
+            json.erase(currentKey);
 
-            std::ofstream outFile(PathManager::getConfigPath("birds.json"));
-            if (!outFile)
-            {
-                DataLogChannel.logError("Failed to delete..!");
-                return;
-            }
-            outFile << m_json.dump(4);
+            m_jsonManager->modifyBirdsJson(json);
             DataLogChannel.log("Deleted " + m_editingBirdKey + " successfully!");
 
-            auto refreshSelectedBirdJsonKey = std::next(m_json.begin(), 0).key();
-            auto refreshSelectedBirdJsonValue = std::next(m_json.begin(), 0).value();
+            auto refreshSelectedBirdJsonKey = std::next(json.begin(), 0).key();
+            auto refreshSelectedBirdJsonValue = std::next(json.begin(), 0).value();
 
-            m_signalHandler->invokeEvent(JsonUpdatedSignal{ m_json });
             m_signalHandler->invokeEvent(ChangeBirdSignal{ refreshSelectedBirdJsonKey, refreshSelectedBirdJsonValue }); // invoking change bird to same instance to refresh
+        }
+
+        ImGui::SameLine();
+        ImGui::Spacing();
+        ImGui::SameLine();
+
+        if (ImGui::Button("Reset"))
+        {
+            m_jsonManager->reset();
         }
     }
 
@@ -152,15 +146,11 @@ void BirdDataView::init()
 {
 	// subscribe signals (if needed)
     m_signalHandler->observeEvent<ChangeBirdSignal>(
-        [this](Event<ChangeBirdSignal>& event) 
+        [this](Signals::Event<ChangeBirdSignal>& event)
         {
             m_name = event.data.name; // this just so we can change it, but remain the editingBirdKey in tact.
             m_editingBirdKey = event.data.name; 
         }
-    );
-
-    m_signalHandler->observeEvent<JsonUpdatedSignal>(
-        [this](Event<JsonUpdatedSignal>& event) { m_json = event.data.json; }
     );
 }
 

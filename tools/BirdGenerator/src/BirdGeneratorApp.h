@@ -10,6 +10,7 @@
 
 #include "Previewer/BirdPreviewer.h"
 #include "Views/IView.h"
+#include "Managers/JsonManager.h"
 
 class BirdGeneratorApp
 {
@@ -23,7 +24,6 @@ public:
 
 private:
     void cleanup();
-    void fetchAndValidateJson();
 
     GLFWwindow* m_window;
     float m_lastTime;
@@ -31,9 +31,8 @@ private:
     std::vector<std::unique_ptr<IView>> m_views;
 
     std::shared_ptr<Loader> m_loader;
-    std::shared_ptr<SignalHandler> m_signalHandler;
+    std::shared_ptr<Signals::SignalHandler> m_signalHandler;
     std::unique_ptr<BirdPreviewer> m_previewer;
-
-    nlohmann::ordered_json m_json;
+    std::unique_ptr<JsonManager> m_jsonManager;
 };
 

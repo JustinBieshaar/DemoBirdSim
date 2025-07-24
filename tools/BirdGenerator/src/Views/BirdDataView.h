@@ -2,11 +2,12 @@
 #include "IView.h"
 #include <json.hpp>
 #include <string>
+#include "../Managers/JsonManager.h"
 
 class BirdDataView : public IView
 {
 public:
-	BirdDataView(std::shared_ptr<SignalHandler> signalHandler, nlohmann::ordered_json json);
+	BirdDataView(std::shared_ptr<Signals::SignalHandler> signalHandler, JsonManager* jsonManager);
 	void render();
 
 	// Inherited via IView
@@ -16,7 +17,7 @@ private:
 
 	void renderJson(nlohmann::ordered_json& json, const std::string& path = "");
 
-	nlohmann::ordered_json m_json;
+	JsonManager* m_jsonManager;
 	std::string m_name;
 	std::string m_editingBirdKey;
 };

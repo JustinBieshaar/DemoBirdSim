@@ -11,7 +11,7 @@ BirdPreviewer::BirdPreviewer(std::shared_ptr<Loader> loader) : m_loader(loader),
 {
 }
 
-void BirdPreviewer::subscribeSignals(std::shared_ptr<SignalHandler> signalHandler)
+void BirdPreviewer::subscribeSignals(std::shared_ptr<Signals::SignalHandler> signalHandler)
 {
     m_bird->subscribeSignals(signalHandler);
 }

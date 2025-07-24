@@ -7,5 +7,5 @@
 class JsonValidator
 {
 public:
-	static void validate(nlohmann::ordered_json& json, nlohmann::ordered_json& templateJson);
+	static bool validate(nlohmann::ordered_json& json, nlohmann::ordered_json& templateJson);
 };

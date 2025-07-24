@@ -19,10 +19,10 @@ Bird::Bird(std::shared_ptr<Loader> loader,
 	m_texturedShader = new TexturedShader();
 }
 
-void Bird::subscribeSignals(std::shared_ptr<SignalHandler> signalHandler)
+void Bird::subscribeSignals(std::shared_ptr<Signals::SignalHandler> signalHandler)
 {
 	signalHandler->observeEvent<ChangeBirdSignal>(
-		[this](Event<ChangeBirdSignal>& event) { onBirdChanged(event); }
+		[this](Signals::Event<ChangeBirdSignal>& event) { onBirdChanged(event); }
 	);
 }
 
@@ -33,7 +33,7 @@ void Bird::update(float deltaTime)
 	m_test += deltaTime;
 }
 
-void Bird::onBirdChanged(Event<ChangeBirdSignal>& signal)
+void Bird::onBirdChanged(Signals::Event<ChangeBirdSignal>& signal)
 {
 	m_name = signal.data.name;
 
@@ -50,8 +50,6 @@ void Bird::onBirdChanged(Event<ChangeBirdSignal>& signal)
 	bool hasTexture = texture != "none";
 
 	PathManager::setResourceRoot(_SOLUTIONDIR);
-
-    BirdLogChannel.log("Loading bird (" + m_name + ")");
 
     LoadingScreen::start("Loading bird (" + m_name + ")");
 
@@ -89,7 +87,6 @@ void Bird::onBirdChanged(Event<ChangeBirdSignal>& signal)
             {
                 newMesh->setShader(m_colorShader);
             }
-            BirdLogChannel.log("(" + m_name + ") loaded succesfully!\nProcessed " + std::to_string(vertexCount) + " vertices ;-).");
             LoadingScreen::stop();
 		},
 		false, invertUvs

@@ -5,11 +5,12 @@
 #include "../Signals/JsonUpdatedSignal.h"
 #include <Event.h>
 #include <glm/vec2.hpp>
+#include "../Managers/JsonManager.h"
 
 class ControlsView : public IView
 {
 public:
-	ControlsView(std::shared_ptr<SignalHandler> signalHander, nlohmann::ordered_json json);
+	ControlsView(std::shared_ptr<Signals::SignalHandler> signalHander, JsonManager* jsonManager);
 
 	// Inherited via IView
 	void render() override;
@@ -18,13 +19,11 @@ private:
 	void selectBird(int direction);
 	void addNewBird();
 
-	void onJsonUpdated(Event<JsonUpdatedSignal>& signal);
-
-	nlohmann::ordered_json m_json;
+	JsonManager* m_jsonManager;
 	std::string m_currentActiveBird;
 
 	// Inherited via IView
 	void init() override;
 
-	glm::vec2 m_windowSize = glm::vec2{ 200, 160 };
+	glm::vec2 m_windowSize = glm::vec2{ 200, 200 };
 };

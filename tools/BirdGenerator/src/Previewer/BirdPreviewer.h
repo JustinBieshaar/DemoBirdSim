@@ -11,7 +11,7 @@ class BirdPreviewer
 public:
 	BirdPreviewer(std::shared_ptr<Loader> loader);
 
-	void subscribeSignals(std::shared_ptr<SignalHandler> signalHandler);
+	void subscribeSignals(std::shared_ptr<Signals::SignalHandler> signalHandler);
 
 	void update(float deltaTime);
 	void render();
