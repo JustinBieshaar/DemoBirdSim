@@ -21,8 +21,8 @@ Bird::Bird(std::shared_ptr<Loader> loader,
 
 void Bird::subscribeSignals(std::shared_ptr<Signals::SignalHandler> signalHandler)
 {
-	signalHandler->observeEvent<ChangeBirdSignal>(
-		[this](Signals::Event<ChangeBirdSignal>& event) { onBirdChanged(event); }
+	signalHandler->observeSignal<ChangeBirdSignal>(
+		[this](Signals::Signal<ChangeBirdSignal>& event) { onBirdChanged(event); }
 	);
 }
 
@@ -33,7 +33,7 @@ void Bird::update(float deltaTime)
 	m_test += deltaTime;
 }
 
-void Bird::onBirdChanged(Signals::Event<ChangeBirdSignal>& signal)
+void Bird::onBirdChanged(Signals::Signal<ChangeBirdSignal>& signal)
 {
 	m_name = signal.data.name;
 

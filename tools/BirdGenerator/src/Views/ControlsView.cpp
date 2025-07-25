@@ -18,8 +18,8 @@ ControlsView::ControlsView(std::shared_ptr<Signals::SignalHandler> signalHander,
 
 void ControlsView::init()
 {
-    m_signalHandler->observeEvent<ChangeBirdSignal>(
-        [this](Signals::Event<ChangeBirdSignal>& event) { m_currentActiveBird = event.data.name; }
+    m_signalHandler->observeSignal<ChangeBirdSignal>(
+        [this](Signals::Signal<ChangeBirdSignal>& event) { m_currentActiveBird = event.data.name; }
     );
 }
 
@@ -128,7 +128,7 @@ void ControlsView::selectBird(int direction)
 
     const std::string& nextBirdName = keys[newIndex];
     m_currentActiveBird = nextBirdName;
-    m_signalHandler->invokeEvent(ChangeBirdSignal{ nextBirdName, json[nextBirdName] });
+    m_signalHandler->invokeSignal(ChangeBirdSignal{ nextBirdName, json[nextBirdName] });
 }
 
 void ControlsView::addNewBird()
@@ -154,7 +154,7 @@ void ControlsView::addNewBird()
         m_currentActiveBird = newName;
 
         m_jsonManager->modifyBirdsJson(json);
-        m_signalHandler->invokeEvent(ChangeBirdSignal{ newName, json[newName] });
+        m_signalHandler->invokeSignal(ChangeBirdSignal{ newName, json[newName] });
 
         ControlsLogChannel.log("new bird (" + newName + ") has been added!");
     }

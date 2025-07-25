@@ -2,7 +2,6 @@
 That way each method can be understood without diving into the code. I know some like and other dislike this.
 So hence the heads up. ;) */
 
-
 #pragma once
 
 #include <functional>

@@ -25,7 +25,7 @@ void JsonManager::modifyBirdsJson(const nlohmann::json& json, bool log)
     }
 
     // Update internal state and notify listeners
-    m_signalHandler->invokeEvent(JsonUpdatedSignal{ json });
+    m_signalHandler->invokeSignal(JsonUpdatedSignal{ json });
 }
 
 void JsonManager::reset()

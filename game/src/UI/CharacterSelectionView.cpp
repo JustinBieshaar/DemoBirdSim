@@ -3,7 +3,7 @@
 #include "../Global/Globals.h"
 
 #include <BirdRegistry.h>
-#include "../Signals/PlayerChangedEvent.h"
+#include "../Signals/PlayerChangedSignal.h"
 
 CharacterSelectionView::CharacterSelectionView(std::shared_ptr<Signals::SignalHandler> signalHandler) : m_signalHandler(signalHandler), m_characters(BirdRegistry::getAllEntries())
 {
@@ -14,7 +14,7 @@ CharacterSelectionView::CharacterSelectionView(std::shared_ptr<Signals::SignalHa
 
 void CharacterSelectionView::init()
 {
-    m_signalHandler->invokeEvent(PlayerChangedEvent
+    m_signalHandler->invokeSignal(PlayerChangedSignal
         {
             nullptr, BirdRegistry::getInstance(m_characters[m_selectedIndex])
         });
@@ -71,7 +71,7 @@ void CharacterSelectionView::select(int direction)
     }
 
     // invoke newly selected character
-    m_signalHandler->invokeEvent(PlayerChangedEvent
+    m_signalHandler->invokeSignal(PlayerChangedSignal
         {
             BirdRegistry::getInstance(m_characters[previousSelected]), BirdRegistry::getInstance(m_characters[m_selectedIndex])
         });

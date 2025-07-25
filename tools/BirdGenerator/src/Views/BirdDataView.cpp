@@ -81,7 +81,7 @@ void BirdDataView::render()
             {
                 m_jsonManager->modifyBirdsJson(json);
 
-                m_signalHandler->invokeEvent(ChangeBirdSignal{ m_editingBirdKey, json[m_editingBirdKey]}); // invoking change bird to same instance to refresh
+                m_signalHandler->invokeSignal(ChangeBirdSignal{ m_editingBirdKey, json[m_editingBirdKey]}); // invoking change bird to same instance to refresh
             }
             catch (const std::exception& e)
             {
@@ -126,7 +126,7 @@ void BirdDataView::render()
             auto refreshSelectedBirdJsonKey = std::next(json.begin(), 0).key();
             auto refreshSelectedBirdJsonValue = std::next(json.begin(), 0).value();
 
-            m_signalHandler->invokeEvent(ChangeBirdSignal{ refreshSelectedBirdJsonKey, refreshSelectedBirdJsonValue }); // invoking change bird to same instance to refresh
+            m_signalHandler->invokeSignal(ChangeBirdSignal{ refreshSelectedBirdJsonKey, refreshSelectedBirdJsonValue }); // invoking change bird to same instance to refresh
         }
 
         ImGui::SameLine();
@@ -145,8 +145,8 @@ void BirdDataView::render()
 void BirdDataView::init()
 {
 	// subscribe signals (if needed)
-    m_signalHandler->observeEvent<ChangeBirdSignal>(
-        [this](Signals::Event<ChangeBirdSignal>& event)
+    m_signalHandler->observeSignal<ChangeBirdSignal>(
+        [this](Signals::Signal<ChangeBirdSignal>& event)
         {
             m_name = event.data.name; // this just so we can change it, but remain the editingBirdKey in tact.
             m_editingBirdKey = event.data.name; 

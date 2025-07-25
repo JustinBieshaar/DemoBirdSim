@@ -2,6 +2,11 @@
 #include <string>
 #include <filesystem>
 
+/// <summary>
+/// This is a manager which controls where and how to find paths.
+/// This is only tested on windows and I must admit it may not be the best and/or most ideal
+/// implementations. But it did the trick for me. :)
+/// </summary>
 class PathManager
 {
 public:

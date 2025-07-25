@@ -3,6 +3,10 @@
 
 namespace Signals
 {
+    /// <summary>
+    /// This handle is used as a unique key for caching what's registered as observer.
+    /// This key can then be used to remove the observation.
+    /// </summary>
     struct ObserverHandle
     {
         std::type_index type;

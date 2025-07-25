@@ -3,7 +3,7 @@
 #include <memory>
 #include <IBird.h>
 
-struct PlayerChangedEvent
+struct PlayerChangedSignal
 {
 	const IBird* previousBird;
 	const IBird* currentBird;

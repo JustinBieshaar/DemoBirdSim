@@ -22,6 +22,7 @@ void MainMenuScene::load()
 
     m_renderer = m_systemManager->addSystem<RenderSystem>(*this, glm::vec3{ 0, 10, 10 });
 
+    // resolve bind dependencies
     auto inputManager = m_mainBootstrapper->resolve<IInputManager>();
     auto signalHandler = m_mainBootstrapper->resolve<Signals::SignalHandler>();
 

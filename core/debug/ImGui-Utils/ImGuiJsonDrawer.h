@@ -7,6 +7,13 @@
 
 namespace ImGuiJsonDrawer
 {
+	/// <summary>
+	/// Draws json value with it's type.
+    /// It uses format of [ label: {type value} ]
+    /// 
+    /// It's possible some types are not supported. Please contact @justinbieshaar if that's the case
+    /// to assist if needed. ;)
+	/// </summary>
 	bool drawJsonValue(const std::string& key, nlohmann::ordered_json& json)
 	{
         ImGui::AlignTextToFramePadding();
@@ -88,6 +95,14 @@ namespace ImGuiJsonDrawer
         return changed;
     }
 
+    /// <summary>
+    /// Draws a drop down of all files in a specified folder.
+    /// It does not have any filters at this point. So by now it's by design that a folder should
+    /// not have any files you would not like to include in the drop down. ;)
+    /// 
+    /// </summary>
+    /// <param name="trim">Removes trim from files. So e.g. you want the file type to be removed. Just add trim .png for example.</param>
+    /// <param name="addNone">Adds 'none' as the first entry. </param>
     bool drawJsonDropdownBasedOnFolderPath(const std::string& key, nlohmann::ordered_json& json, const std::string& folder, const std::string& trim = "", bool addNone = true)
     {
         std::vector<std::string> fileNames;

@@ -3,7 +3,7 @@
 #include <json.hpp>
 #include <SignalHandler.h>
 #include "../Signals/JsonUpdatedSignal.h"
-#include <Event.h>
+#include <Signal.h>
 #include <glm/vec2.hpp>
 #include "../Managers/JsonManager.h"
 

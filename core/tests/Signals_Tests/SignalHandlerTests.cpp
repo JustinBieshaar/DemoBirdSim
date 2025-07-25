@@ -12,13 +12,13 @@ TEST(SignalHandlerTests, CallsObserver)
     Signals::SignalHandler handler;
     bool triggered = false;
 
-    handler.observeEvent<TestEvent>([&](Signals::Event<TestEvent>& e)
+    handler.observeSignal<TestEvent>([&](Signals::Signal<TestEvent>& e)
         {
             EXPECT_EQ(e.data.val, 100);
             triggered = true;
         });
 
-    handler.invokeEvent(TestEvent{ 100 });
+    handler.invokeSignal(TestEvent{ 100 });
     EXPECT_TRUE(triggered);
 }
 
@@ -28,7 +28,7 @@ TEST(SignalHandlerTests, RemovesObserver)
     bool triggered = false;
 
     // Register an observer and store the handle
-    auto handle = handler.observeEvent<TestEvent>([&](Signals::Event<TestEvent>& e)
+    auto handle = handler.observeSignal<TestEvent>([&](Signals::Signal<TestEvent>& e)
         {
             triggered = true;
         });
@@ -37,7 +37,7 @@ TEST(SignalHandlerTests, RemovesObserver)
     handler.removeObserver(handle);
 
     // Trigger the event
-    handler.invokeEvent(TestEvent{ 42 });
+    handler.invokeSignal(TestEvent{ 42 });
 
     // It should NOT be triggered
     EXPECT_FALSE(triggered);
@@ -50,13 +50,13 @@ TEST(SignalHandlerTests, OnlyRemovesSpecifiedObserver)
     bool observer2Triggered = false;
 
     // First observer
-    auto handle1 = handler.observeEvent<TestEvent>([&](Signals::Event<TestEvent>&)
+    auto handle1 = handler.observeSignal<TestEvent>([&](Signals::Signal<TestEvent>&)
         {
             observer1Triggered = true;
         });
 
     // Second observer
-    handler.observeEvent<TestEvent>([&](Signals::Event<TestEvent>&)
+    handler.observeSignal<TestEvent>([&](Signals::Signal<TestEvent>&)
         {
             observer2Triggered = true;
         });
@@ -65,7 +65,7 @@ TEST(SignalHandlerTests, OnlyRemovesSpecifiedObserver)
     handler.removeObserver(handle1);
 
     // Trigger the event
-    handler.invokeEvent(TestEvent{ 42 });
+    handler.invokeSignal(TestEvent{ 42 });
 
     // First should not trigger, second should
     EXPECT_FALSE(observer1Triggered);
@@ -78,7 +78,7 @@ TEST(SignalHandlerTests, RemoveObserverUsingStdOptional)
     bool triggered = false;
 
     // Register an observer and store the handle
-    std::optional<Signals::ObserverHandle> handle = handler.observeEvent<TestEvent>([&](Signals::Event<TestEvent>& e)
+    std::optional<Signals::ObserverHandle> handle = handler.observeSignal<TestEvent>([&](Signals::Signal<TestEvent>& e)
         {
             triggered = true;
         });
@@ -87,7 +87,7 @@ TEST(SignalHandlerTests, RemoveObserverUsingStdOptional)
     handler.removeObserver(*handle);
 
     // Trigger the event
-    handler.invokeEvent(TestEvent{ 42 });
+    handler.invokeSignal(TestEvent{ 42 });
 
     // It should NOT be triggered
     EXPECT_FALSE(triggered);

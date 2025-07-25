@@ -1,8 +1,8 @@
 #include "MainMenuBirdPreview.h"
-#include <Event.h>
+#include <Signal.h>
 
 #include "../../Debug/GameLogChannels.h"
-#include "../../Signals/PlayerChangedEvent.h"
+#include "../../Signals/PlayerChangedSignal.h"
 
 #include <PathManager.h>
 #include <ObjLoader.h>
@@ -15,7 +15,7 @@ MainMenuBirdPreview::MainMenuBirdPreview(std::shared_ptr<Loader> loader, std::sh
     m_colorShader = std::make_unique<ColorShader>();
     m_texturedShader = std::make_unique<TexturedShader>();
 
-    m_onBirdChangedHandler = m_signalHandler->observeEvent<PlayerChangedEvent>([this](Signals::Event<PlayerChangedEvent>& event)
+    m_onBirdChangedHandler = m_signalHandler->observeSignal<PlayerChangedSignal>([this](Signals::Signal<PlayerChangedSignal>& event)
 		{
 			BirdLogChannel.log("Bird changed from: " + (event.data.previousBird != nullptr ? event.data.previousBird->getName() : "undefined") +
 				" to: " + event.data.currentBird->getName());

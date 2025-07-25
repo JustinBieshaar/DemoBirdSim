@@ -21,7 +21,7 @@ public:
 	void update(float deltaTime) override;
 
 private:
-	void onBirdChanged(Signals::Event<ChangeBirdSignal>& signal);
+	void onBirdChanged(Signals::Signal<ChangeBirdSignal>& signal);
 	std::shared_ptr<Loader> m_loader;
 
 	TexturedShader* m_texturedShader;

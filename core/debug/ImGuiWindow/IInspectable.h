@@ -1,7 +1,7 @@
 #pragma once
 
 /// <summary>
-/// Interface to render imGui
+/// Interface to render imGui inspector windows
 /// </summary>
 struct IInspectable
 {

@@ -123,7 +123,7 @@ void BirdGeneratorApp::run()
     auto firstIt = json.begin();
     if (firstIt != json.end())
     {
-        m_signalHandler->invokeEvent(ChangeBirdSignal{ firstIt.key(), firstIt.value() });
+        m_signalHandler->invokeSignal(ChangeBirdSignal{ firstIt.key(), firstIt.value() });
     }
 
     m_lastTime = glfwGetTime(); // otherwise we get extreme first value

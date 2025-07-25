@@ -9,6 +9,8 @@ public:
 	virtual void clear() {} // can be overriden
 
 protected:
+	// This will be called within render so each inheritent
+	// can control how they are being inspected.
 	virtual void renderInspectables() = 0;
 
 private:
