@@ -1,3 +1,7 @@
+/* This file contains summaries for even the most obvious methods as it's acting as a library.
+That way each method can be understood without diving into the code. I know some like and other dislike this.
+So hence the heads up. ;) */
+
 #pragma once
 
 #include "Component.h"
@@ -22,11 +26,14 @@ namespace ECS
 		glm::vec3 m_scale = glm::vec3(1.0f);
 
 		Transform(const glm::vec3& position = {}, const glm::vec3& rotation = {}, const glm::vec3& scale = glm::vec3(1.0f), bool valuesChangableByDebug = true)
-			: m_position(position), m_rotation(rotation), m_scale(scale)
+			: IInspectable(valuesChangableByDebug), m_position(position), m_rotation(rotation), m_scale(scale)
 		{
-			m_valuesChangableByDebug = valuesChangableByDebug;
 		}
 
+		/// <summary>
+		/// Get transformation matrix of this transform. This is used to render the model location and orientation.
+		/// </summary>
+		/// <returns></returns>
 		glm::mat4 getTransformationMatrix()
 		{
 			glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), m_scale);
@@ -43,6 +50,11 @@ namespace ECS
 			return model;
 		}
 
+		/// <summary>
+		/// Find forward value of current transform.
+		/// Typically useful for moving object, or find their orientation what they are looking at.
+		/// </summary>
+		/// <returns></returns>
 		glm::vec3 getForward() const
 		{
 			glm::vec3 forward;
@@ -57,6 +69,9 @@ namespace ECS
 		void renderInspectorImGui() override;
 		void update(float deltaTime) override;
 
+		/// <summary>
+		/// Update scale with a factor. This will set the scale on all axis (x,y,z)
+		/// </summary>
 		void setScale(float scale)
 		{
 			m_scale = glm::vec3(scale);

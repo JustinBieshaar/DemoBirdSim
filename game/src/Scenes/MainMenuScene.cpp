@@ -7,8 +7,8 @@
 #include "../Global/Globals.h"
 #include "../Debug/GameLogChannels.h"
 #include "../Prefabs/Camera/Camera.h"
-#include <iostream>
 #include "../Components/FollowTargetComponent.h"
+#include <iostream>
 
 MainMenuScene::MainMenuScene(std::shared_ptr<MainBootstrapper> mainBootstrapper) :
     Scene(), m_mainBootstrapper(mainBootstrapper)
@@ -20,7 +20,7 @@ void MainMenuScene::load()
 {
     Scene::load();
 
-    m_renderer = m_systemManager->addSystem<RenderSystem>(*this, glm::vec3{ 100, 10, 5 });
+    m_renderer = m_systemManager->addSystem<RenderSystem>(*this, glm::vec3{ 0, 10, 10 });
 
     auto cam = createEntity<Camera>(m_mainBootstrapper->getInputManager(), glm::vec3{ 0,10, 30 }, 20, 0);
     auto inputManager = m_mainBootstrapper->getInputManager();

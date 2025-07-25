@@ -1,3 +1,10 @@
+/* This file contains summaries for even the most obvious methods as it's acting as a library.
+That way each method can be understood without diving into the code. I know some like and other dislike this.
+So hence the heads up. ;) 
+
+Unless some because they are dead obvious xD
+*/
+
 #pragma once
 
 #include "Component.h"
@@ -32,17 +39,23 @@ namespace ECS
         {
         }
 
+        /// <summary>
+        /// Update shader for this mesh.
+        /// </summary>
+        /// <param name="shader"></param>
         void setShader(Shader* shader)
         {
             m_shader = shader;
             setRepeat(1); // Default repeat
         }
 
+        /// <summary>
+        /// Sets cullface
+        /// </summary>
         void render()
         {
             glEnable(GL_CULL_FACE);
             glCullFace(GL_BACK);
-            // bind VAO + draw here
         }
 
         void useShader()
@@ -61,7 +74,10 @@ namespace ECS
             }
         }
 
-        void setModelViewProjection(glm::mat4 model, glm::mat4 view, glm::mat4 projection)
+        /// <summary>
+        /// Update model view projection matrices to make the model appear on the renderer
+        /// </summary>
+        void setModelViewProjection(const glm::mat4& model, const glm::mat4& view, const glm::mat4& projection)
         {
             if (m_shader)
             {
@@ -71,7 +87,7 @@ namespace ECS
             }
         }
 
-        void setLightLocation(glm::vec3 lightPosition, glm::vec3 lightColor)
+        void setLightLocation(const glm::vec3& lightPosition, const glm::vec3& lightColor)
         {
             if (m_shader)
             {
@@ -80,6 +96,9 @@ namespace ECS
             }
         }
 
+        /// <summary>
+        /// Repeats the texture
+        /// </summary>
         void setRepeat(int repeat)
         {
             if (m_shader)

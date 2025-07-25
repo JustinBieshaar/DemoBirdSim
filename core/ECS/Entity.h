@@ -11,6 +11,11 @@ So hence the heads up. ;) */
 
 namespace ECS
 {
+    /// <summary>
+    /// Entity that holds components.
+    /// At this point in time, the entity can't have multiple of the same components.
+    /// This is by design to keep it simple and there's no necessity in having this supported by now.
+    /// </summary>
     class Entity
     {
     public:
@@ -47,7 +52,9 @@ namespace ECS
             auto it = m_components.find(typeid(T));
             if (it != m_components.end())
             {
-                return std::dynamic_pointer_cast<T>(it->second);
+                // static pointer as we must be 100% sure the component is added
+                // to this entity. Otherwise, kaboom. (lets see if this is sustainable, otherwise dynamic cast)
+                return std::static_pointer_cast<T>(it->second);
             }
             return nullptr;
         }

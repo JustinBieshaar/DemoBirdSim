@@ -23,7 +23,7 @@ void GameScene::load()
 {
 	Scene::load();
 
-    m_renderer = m_systemManager->addSystem<RenderSystem>(*this, glm::vec3{ 100, 10, 5 });
+    m_renderer = m_systemManager->addSystem<RenderSystem>(*this, glm::vec3{ 100, 1000, 5 });
 
     auto cam = createEntity<Camera>(m_mainBootstrapper->getInputManager(), glm::vec3{ 0,10, 30 }, 20, 0);
     auto inputManager = m_mainBootstrapper->getInputManager();
