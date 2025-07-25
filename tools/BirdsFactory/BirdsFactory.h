@@ -22,6 +22,8 @@ private:
     /// </summary>
     static std::string toMacro(const std::string& name);
 
+    // extracted generation methods for clarity
+
     static void generateBirdInterface(nlohmann::ordered_json& json);
     static void generateBirdClass(const std::string& name, nlohmann::ordered_json& json);
     static void generateDefines(nlohmann::ordered_json& birds);

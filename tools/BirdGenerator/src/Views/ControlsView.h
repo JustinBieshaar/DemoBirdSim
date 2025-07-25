@@ -2,9 +2,10 @@
 #include "IView.h"
 #include <json.hpp>
 #include <SignalHandler.h>
-#include "../Signals/JsonUpdatedSignal.h"
 #include <Signal.h>
 #include <glm/vec2.hpp>
+
+#include "../Signals/JsonUpdatedSignal.h"
 #include "../Managers/JsonManager.h"
 
 class ControlsView : public IView

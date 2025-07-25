@@ -31,10 +31,12 @@ void JsonManager::modifyBirdsJson(const nlohmann::json& json, bool log)
 void JsonManager::reset()
 {
     // Load birds.json
+    auto birdJsonPath = PathManager::getConfigPath("birds.json");
     std::ifstream input(PathManager::getConfigPath("birds.json"));
     if (!input)
     {
         JsonLogChannel.logError("Failed to open birds.json..");
+        JsonLogChannel.logError("Couldn't find json in path: " + birdJsonPath);
         return;
     }
 

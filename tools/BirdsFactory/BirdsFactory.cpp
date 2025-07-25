@@ -12,6 +12,7 @@
 #include <StringUtils.h>
 #include "JsonUtils.h"
 
+// defining the path of the generation directory
 const std::filesystem::path BASE_DIR = std::filesystem::path(__FILE__).parent_path();
 
 void BirdsFactory::generateBirds(nlohmann::ordered_json& birds)
