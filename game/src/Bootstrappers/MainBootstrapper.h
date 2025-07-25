@@ -9,21 +9,21 @@
 #include <SceneManager.h>
 #include <SignalHandler.h>
 
-class MainBootstrapper : public BaseBootstrapper
+class MainBootstrapper : public SimpleDI::BaseBootstrapper
 {
 public:
-    explicit MainBootstrapper(GLFWwindow* window) : BaseBootstrapper(), m_window(window) {}
+    explicit MainBootstrapper(GLFWwindow* window) : SimpleDI::BaseBootstrapper(), m_window(window) {}
 
     void configureBindings() override
     {
-        m_container->bind<ISceneManager, SceneManager>(DI::Lifetime::Singleton);
-        m_container->bind<IInputManager, InputManager>(DI::Lifetime::Singleton, m_window);
+        m_container->bind<ISceneManager, SceneManager>(SimpleDI::Lifetime::Singleton);
+        m_container->bind<IInputManager, InputManager>(SimpleDI::Lifetime::Singleton, m_window);
         
-        m_container->bind<Signals::SignalHandler, Signals::SignalHandler>(DI::Lifetime::Singleton);
+        m_container->bind<Signals::SignalHandler, Signals::SignalHandler>(SimpleDI::Lifetime::Singleton);
 
         //todo: make auto inject
         m_signalHandler = m_container->resolve<Signals::SignalHandler>();
-        m_container->bind<IPlayerManager, PlayerManager>(DI::Lifetime::Singleton, m_signalHandler);
+        m_container->bind<IPlayerManager, PlayerManager>(SimpleDI::Lifetime::Singleton, m_signalHandler);
     }
 
     void initialize() override

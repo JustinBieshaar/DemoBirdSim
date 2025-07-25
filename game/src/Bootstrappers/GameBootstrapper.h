@@ -6,7 +6,7 @@
 #include "../Scenes/SceneManager.h"
 
 // Add game specific services here.
-class GameBootstrapper : public BaseBootstrapper
+class GameBootstrapper : public SimpleDI::BaseBootstrapper
 {
 	void configureBindings() override
 	{

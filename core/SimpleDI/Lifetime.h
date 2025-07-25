@@ -1,19 +1,24 @@
 #pragma once
 
-namespace DI
+namespace SimpleDI
 {
 	enum class Lifetime
 	{
 		/// <summary>
-		/// Single object is available of this instance.
+		/// A single shared instance is created and reused. 
+		/// Created on first resolve, then cached and reused.
 		/// </summary>
 		Singleton,
+
 		/// <summary>
-		/// Instance is temporary.
+		/// A new independent instance is created on every resolve call.
+		/// The container does not retain ownership, so you must manage the lifetime via shared_ptr.
 		/// </summary>
 		Transient,
+
 		/// <summary>
-		/// Instance is pre-generated.
+		/// An existing, pre-constructed instance is bound and reused.
+		/// Useful for testing or externally managed services.
 		/// </summary>
 		Instance
 	};
