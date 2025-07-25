@@ -3,6 +3,7 @@
 #include "Lifetime.h"
 
 // Mock interfaces and implementations for testing
+// just very basic tests.
 
 struct IService
 {
@@ -34,8 +35,8 @@ private:
 
 TEST(SimpleDITest, SingletonBindingReturnsSameInstance)
 {
-    DIContainer container;
-    container.bind<IService, ServiceImpl>(DI::Lifetime::Singleton);
+    SimpleDI::DIContainer container;
+    container.bind<IService, ServiceImpl>(SimpleDI::Lifetime::Singleton);
 
     auto instance1 = container.resolve<IService>();
     auto instance2 = container.resolve<IService>();
@@ -46,8 +47,8 @@ TEST(SimpleDITest, SingletonBindingReturnsSameInstance)
 
 TEST(SimpleDITest, TransientBindingReturnsNewInstanceEachTime)
 {
-    DIContainer container;
-    container.bind<IService, ServiceImpl>(DI::Lifetime::Transient);
+    SimpleDI::DIContainer container;
+    container.bind<IService, ServiceImpl>(SimpleDI::Lifetime::Transient);
 
     auto instance1 = container.resolve<IService>();
     auto instance2 = container.resolve<IService>();
@@ -58,7 +59,7 @@ TEST(SimpleDITest, TransientBindingReturnsNewInstanceEachTime)
 
 TEST(SimpleDITest, BindInstanceReturnsSameInjectedObject)
 {
-    DIContainer container;
+    SimpleDI::DIContainer container;
 
     auto realInstance = std::make_shared<ServiceImpl>();
     container.bindInstance<IService>(realInstance);
@@ -71,7 +72,7 @@ TEST(SimpleDITest, BindInstanceReturnsSameInjectedObject)
 
 TEST(SimpleDITest, ThrowsOnUnboundType)
 {
-    DIContainer container;
+    SimpleDI::DIContainer container;
 
     EXPECT_THROW({
         container.resolve<IService>();
@@ -80,12 +81,12 @@ TEST(SimpleDITest, ThrowsOnUnboundType)
 
 TEST(SimpleDITest, BindingDifferentImplementationsWorks)
 {
-    DIContainer container;
+    SimpleDI::DIContainer container;
 
-    container.bind<IService, ServiceImpl>(DI::Lifetime::Transient);
+    container.bind<IService, ServiceImpl>(SimpleDI::Lifetime::Transient);
     auto service1 = container.resolve<IService>();
 
-    container.bind<IService, AnotherServiceImpl>(DI::Lifetime::Transient);
+    container.bind<IService, AnotherServiceImpl>(SimpleDI::Lifetime::Transient);
     auto service2 = container.resolve<IService>();
 
     EXPECT_EQ(service1->doSomething(), 42);
@@ -94,8 +95,8 @@ TEST(SimpleDITest, BindingDifferentImplementationsWorks)
 
 TEST(SimpleDITest, ConstructorArgumentsAreForwardedCorrectly)
 {
-    DIContainer container;
-    container.bind<IService, ParamService>(DI::Lifetime::Transient, 123);
+    SimpleDI::DIContainer container;
+    container.bind<IService, ParamService>(SimpleDI::Lifetime::Transient, 123);
 
     auto service = container.resolve<IService>();
     EXPECT_EQ(service->doSomething(), 123);
