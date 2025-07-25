@@ -5,6 +5,9 @@
 #include "../Systems/RenderSystem.h"
 #include "../Debug/ImGuiDebug/SceneGuiInspectorWindow.h"
 
+/// <summary>
+/// Constructs the game scene, adding all entities and places them accordingly.
+/// </summary>
 class GameScene : public Scenes::Scene
 {
 public:

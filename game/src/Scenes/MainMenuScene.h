@@ -7,6 +7,9 @@
 #include "../Systems/RenderSystem.h"
 #include "../Debug/ImGuiDebug/SceneGuiInspectorWindow.h"
 
+/// <summary>
+/// Constructs the entire main menu scene including a character selection.
+/// </summary>
 class MainMenuScene : public Scenes::Scene
 {
 public:

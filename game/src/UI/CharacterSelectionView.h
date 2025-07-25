@@ -7,6 +7,10 @@
 #include <vector>
 #include <string>
 
+/// <summary>
+/// Constucts character selection view ImGui controls.
+/// It invokes signal when characters are selected.
+/// </summary>
 class CharacterSelectionView
 {
 public:
@@ -23,6 +27,7 @@ private:
 
 	int m_selectedIndex = 0;
 
+	// ImGui view data
 	float m_arrowButtonSize = 30.0f;
 	float m_spacing = 125.0f;
 	float m_totalArrowWidth;

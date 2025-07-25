@@ -16,39 +16,57 @@ void RenderSystem::update(float deltaTime)
 
 void RenderSystem::render()
 {
-    // todo: update this list only when entities update.
+    // TODO optimization: Cache this list when entities/components change instead of every frame.
+    // should add a "entities updated" event in registry
     auto renderableEntities = m_registry.getEntitiesWith<ECS::Transform, ECS::MeshComponent>();
 
 #ifdef _DEBUG
+    // Enable wireframe rendering in debug builds (useful for visualizing geometry).
     if (EnableWireframeMode)
     {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 #endif
 
+    // Iterate over each entity with a Transform and MeshComponent
     for (auto entity : renderableEntities)
     {
+        // Retrieve Transform component (contains model matrix)
         ECS::Transform* transform = nullptr;
         if (!entity->tryGetComponent(transform))
-            continue;
+            continue;  // Skip if no transform
 
+        // Retrieve Mesh component (contains VAO, shader info, etc.)
         ECS::MeshComponent* mesh = nullptr;
         if (!entity->tryGetComponent(mesh))
-            continue;
+            continue;  // Skip if no mesh
 
+        // Render any mesh-specific logic (like bounding boxes or custom behavior)
         mesh->render();
 
+        // Retrieve camera's position for view matrix
         auto cameraPosition = m_camera->getComponent<ECS::Transform>();
 
-        // Use shader
-        mesh->useShader();
-        mesh->setModelViewProjection(transform->getTransformationMatrix(), m_camera->getViewMatrix(), m_camera->getProjectionMatrix());
+        // --- Begin shader setup and draw ---
+        mesh->useShader();  // Activate mesh shader
+
+        // Set Model-View-Projection matrices to the shader
+        mesh->setModelViewProjection(
+            transform->getTransformationMatrix(), // Model
+            m_camera->getViewMatrix(), // View
+            m_camera->getProjectionMatrix() // Projection
+        );
+
+        // Pass light info to shader
         mesh->setLightLocation(m_light->m_position, m_light->m_color);
 
-        // Render mesh
+        // Bind VAO for the mesh
         glBindVertexArray(mesh->m_vertexArrayObject);
+
+        // Enable shader attribute arrays (e.g., position, normals, uvs)
         mesh->enableShaderAttributes();
 
+        // If textured, bind texture to GL_TEXTURE0
         if (entity->hasComponent<ECS::TextureComponent>())
         {
             auto texture = entity->getComponent<ECS::TextureComponent>();
@@ -56,14 +74,17 @@ void RenderSystem::render()
             glBindTexture(GL_TEXTURE_2D, texture->m_textureID);
         }
 
+        // Issue the draw call using indices (GL_TRIANGLES)
         glDrawElements(GL_TRIANGLES, mesh->m_vertexCount, GL_UNSIGNED_INT, 0);
 
+        // Disable attribute arrays after drawing
         mesh->disableShaderAttributes();
-        mesh->stopShader();
-        glBindVertexArray(0);
+        mesh->stopShader(); // Unbind shader
+        glBindVertexArray(0); // Unbind VAO
     }
 
 #ifdef _DEBUG
+    // Reset polygon mode to fill mode (default)
     if (EnableWireframeMode)
     {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
