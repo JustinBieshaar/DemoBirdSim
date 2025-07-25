@@ -4,7 +4,7 @@
 #include "../../Global/Globals.h"
 #include <Components/MeshComponent.h>
 
-GlobalInspectorWindow::GlobalInspectorWindow(std::shared_ptr<ISceneManager> sceneManager) : ImGuiInspectorWindow("Globals"), m_sceneManager(sceneManager)
+GlobalInspectorWindow::GlobalInspectorWindow(std::shared_ptr<Scenes::ISceneManager> sceneManager) : ImGuiInspectorWindow("Globals"), m_sceneManager(sceneManager)
 {
 }
 

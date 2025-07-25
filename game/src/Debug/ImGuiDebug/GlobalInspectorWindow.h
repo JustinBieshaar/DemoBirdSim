@@ -7,12 +7,12 @@
 class GlobalInspectorWindow : public ImGuiInspectorWindow
 {
 public:
-	GlobalInspectorWindow(std::shared_ptr<ISceneManager> sceneManager);
+	GlobalInspectorWindow(std::shared_ptr<Scenes::ISceneManager> sceneManager);
 
 protected:
 	void renderInspectables() override;
 
 private:
-	std::shared_ptr<ISceneManager> m_sceneManager;
+	std::shared_ptr<Scenes::ISceneManager> m_sceneManager;
 };
 

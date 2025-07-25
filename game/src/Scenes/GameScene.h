@@ -5,7 +5,7 @@
 #include "../Systems/RenderSystem.h"
 #include "../Debug/ImGuiDebug/SceneGuiInspectorWindow.h"
 
-class GameScene : public Scene
+class GameScene : public Scenes::Scene
 {
 public:
 	GameScene(std::shared_ptr<MainBootstrapper> mainBootstrapper);

@@ -4,7 +4,7 @@
 /// <summary>
 /// Adds a new scene to the scene registry. (surprise ;P)
 /// </summary>
-void SceneManager::addScene(const std::string& sceneName, std::shared_ptr<Scene> scene)
+void Scenes::SceneManager::addScene(const std::string& sceneName, std::shared_ptr<Scene> scene)
 {
 	m_scenes[sceneName] = scene;
 }
@@ -13,7 +13,7 @@ void SceneManager::addScene(const std::string& sceneName, std::shared_ptr<Scene>
 /// Loads a scene by name and adds it to the active scenes if it's not already loaded.
 /// </summary>
 /// <param name="sceneName"></param>
-void SceneManager::loadScene(const std::string& sceneName)
+void Scenes::SceneManager::loadScene(const std::string& sceneName)
 {
 	auto target = m_scenes.find(sceneName);
 	if (target == m_scenes.end()) return;
@@ -33,7 +33,7 @@ void SceneManager::loadScene(const std::string& sceneName)
 /// <summary>
 /// Unloads a scene by name and removes it from the active scenes list.
 /// </summary>
-void SceneManager::unloadScene(const std::string& sceneName)
+void Scenes::SceneManager::unloadScene(const std::string& sceneName)
 {
 	auto target = m_scenes.find(sceneName);
 	if (target == m_scenes.end()) return;
@@ -47,7 +47,7 @@ void SceneManager::unloadScene(const std::string& sceneName)
 	m_activeScenes.erase(it, m_activeScenes.end());
 }
 
-void SceneManager::update(float deltaTime)
+void Scenes::SceneManager::update(float deltaTime)
 {
 	for (std::shared_ptr<Scene> scene : m_activeScenes)
 	{
@@ -55,7 +55,7 @@ void SceneManager::update(float deltaTime)
 	}
 }
 
-void SceneManager::render()
+void Scenes::SceneManager::render()
 {
 	for (std::shared_ptr<Scene> scene : m_activeScenes)
 	{
@@ -63,7 +63,7 @@ void SceneManager::render()
 	}
 }
 
-void SceneManager::renderImGui()
+void Scenes::SceneManager::renderImGui()
 {
 	for (std::shared_ptr<Scene> scene : m_activeScenes)
 	{

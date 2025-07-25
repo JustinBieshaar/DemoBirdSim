@@ -11,7 +11,7 @@
 #include "../Prefabs/Lighting/Light.h"
 #include "../Components/FollowTargetComponent.h"
 
-GameScene::GameScene(std::shared_ptr<MainBootstrapper> mainBootstrapper) : Scene(), m_mainBootstrapper(mainBootstrapper)
+GameScene::GameScene(std::shared_ptr<MainBootstrapper> mainBootstrapper) : Scenes::Scene(), m_mainBootstrapper(mainBootstrapper)
 {
     m_debugWindow = std::make_unique<SceneGuiInspectorWindow>("Game Scene", this);
 }
@@ -21,7 +21,7 @@ GameScene::GameScene(std::shared_ptr<MainBootstrapper> mainBootstrapper) : Scene
 /// </summary>
 void GameScene::load()
 {
-	Scene::load();
+    Scenes::Scene::load();
 
     m_renderer = m_systemManager->addSystem<RenderSystem>(*this, glm::vec3{ 100, 1000, 5 });
 

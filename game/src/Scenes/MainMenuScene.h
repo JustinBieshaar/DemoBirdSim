@@ -7,7 +7,7 @@
 #include "../Systems/RenderSystem.h"
 #include "../Debug/ImGuiDebug/SceneGuiInspectorWindow.h"
 
-class MainMenuScene : public Scene
+class MainMenuScene : public Scenes::Scene
 {
 public:
 	MainMenuScene(std::shared_ptr<MainBootstrapper> mainBootstrapper);
