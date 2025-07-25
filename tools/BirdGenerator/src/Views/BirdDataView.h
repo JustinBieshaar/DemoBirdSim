@@ -4,6 +4,9 @@
 #include <string>
 #include "../Managers/JsonManager.h"
 
+/// <summary>
+/// Renders all data of the current inspecting bird.
+/// </summary>
 class BirdDataView : public IView
 {
 public:

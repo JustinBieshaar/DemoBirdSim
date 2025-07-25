@@ -40,6 +40,13 @@ public:
         // this so short loading times won't be affecting
         auto now = std::chrono::steady_clock::now();
         std::chrono::duration<float> elapsed = now - s_startTime;
+
+        // Only show when time is passed.
+        // This is so we can prevent having very quick loads showing a loading screen.
+        // As if something takes e.g. 0.3 seconds, it may be just annoying to have a quick loading screen.
+        //
+        // However, another (may be better solution) is to make it always appear for at least x seconds.
+        // This way the loading is clear even when it loads fast. However, this is just a design decision.
         if (elapsed.count() < m_showLoadingAfterSeconds) 
             return;
 

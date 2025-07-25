@@ -37,7 +37,7 @@ void ControlsView::render()
         auto json = m_jsonManager->getBirdsJson();
         BirdsFactory::generateBirds(json);
 
-        BirdLogChannel.log("Generated successfully! W0000t");
+        BirdLogChannel.log("Generated successfully!");
     }
 
     ImGui::Text("Select bird");
@@ -108,26 +108,35 @@ void ControlsView::render()
 
 void ControlsView::selectBird(int direction)
 {
+    // Get reference to the birds JSON data (assumed to be a map of birdName -> birdData)
     auto& json = m_jsonManager->getBirdsJson();
+
+    // If JSON is empty, there are no birds to select
     if (json.empty()) return;
 
+    // Build a list of all bird keys (names) from the JSON
     std::vector<std::string> keys;
     for (auto& [key, _] : json.items())
         keys.push_back(key);
 
-    // Find current index
+    // Try to find the index of the currently active bird in the keys list
     auto it = std::find(keys.begin(), keys.end(), m_currentActiveBird);
     size_t index = (it != keys.end()) ? std::distance(keys.begin(), it) : 0;
 
-    // Compute new index with wrap-around
+    // Compute the new index based on direction, with wrap-around logic
     int newIndex = static_cast<int>(index) + direction;
     if (newIndex < 0)
-        newIndex = static_cast<int>(keys.size()) - 1;
+        newIndex = static_cast<int>(keys.size()) - 1; // wrap to last element
     else if (newIndex >= static_cast<int>(keys.size()))
-        newIndex = 0;
+        newIndex = 0; // wrap to first element
 
+    // Get the bird name at the new index
     const std::string& nextBirdName = keys[newIndex];
+
+    // Update the currently active bird
     m_currentActiveBird = nextBirdName;
+
+    // Notify the system that the bird has changed
     m_signalHandler->invokeSignal(ChangeBirdSignal{ nextBirdName, json[nextBirdName] });
 }
 

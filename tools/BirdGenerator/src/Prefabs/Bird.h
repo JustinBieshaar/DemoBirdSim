@@ -11,6 +11,13 @@
 
 #include "../Signals/ChangeBirdSignal.h"
 
+/// <summary>
+/// Bird that's rendering the current selected bird data.
+/// Using ChangeBirdSignal to change it's appearance.
+/// 
+/// Always unloads the previous bird when loading a new one. This could lead in recurring hic-ups when looping through large models
+/// as they will not be cached. (design flaw by now)
+/// </summary>
 class Bird : public ECS::GameObject
 {
 public:
@@ -28,7 +35,6 @@ private:
 	ColorShader* m_colorShader;
 
 	float m_rotationSpeed = .5f;
-	float m_test = 0.0f;
 
 	std::string m_name;
 };

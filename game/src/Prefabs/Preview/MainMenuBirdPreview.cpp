@@ -35,6 +35,9 @@ void MainMenuBirdPreview::update(float deltaTime)
 
 void MainMenuBirdPreview::onBirdChange(const IBird* bird)
 {
+    // I know I know... this is dry code from tools bird prefab as well..
+    // But this must be refactored to a better use anyway. My apologies for this dry instance :'(
+
     std::string texture = bird->getTexture();
     std::string objname = bird->getObj_name();
 

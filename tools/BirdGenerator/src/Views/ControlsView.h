@@ -8,6 +8,10 @@
 #include "../Signals/JsonUpdatedSignal.h"
 #include "../Managers/JsonManager.h"
 
+/// <summary>
+/// Has all the controls of the tool like;
+/// Generation, selection, adding new instances and uploads
+/// </summary>
 class ControlsView : public IView
 {
 public:

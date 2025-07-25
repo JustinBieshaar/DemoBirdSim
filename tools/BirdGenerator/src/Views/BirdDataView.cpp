@@ -112,6 +112,7 @@ void BirdDataView::render()
             }
 
             // fix edge case if you delete the last one.
+            // so index is not set out of range ;)
             if (index > 0 && index == json.size() - 1)
             {
                 index--;
