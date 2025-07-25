@@ -5,6 +5,17 @@
 #include "IInputManager.h"
 #include <unordered_map>
 
+
+/// <summary>
+/// Input manager handling GLFW input.
+/// 
+/// TODO: add event listeners for specific input like:
+/// "OnHorizontal" for a,d and left-arrow, right-arrow and controller input.
+/// "OnVertical" for w,s and up-arrow, down-arrow and controller input.
+/// And more!
+/// 
+/// But also to have option for remapping of input.
+/// </summary>
 class InputManager : public IInputManager
 {
 public:

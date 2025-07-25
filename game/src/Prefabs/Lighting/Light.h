@@ -3,6 +3,9 @@
 #include <glm/vec3.hpp>
 #include <Entity.h>
 
+/// <summary>
+/// Simple light class.
+/// </summary>
 class Light : public ECS::Entity
 {
 public:

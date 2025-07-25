@@ -9,6 +9,12 @@
 #include <SceneManager.h>
 #include <SignalHandler.h>
 
+/// <summary>
+/// Defines the main services used during the entire life-cycle of the project.
+/// 
+/// This must be instantiated at the start of the application so it can be injected in any state of the project.
+/// Unfortunately I could not make auto inject work. So it all has to be done manually for now.
+/// </summary>
 class MainBootstrapper : public SimpleDI::BaseBootstrapper
 {
 public:
@@ -21,7 +27,7 @@ public:
         
         m_container->bind<Signals::SignalHandler, Signals::SignalHandler>(SimpleDI::Lifetime::Singleton);
 
-        //todo: make auto inject
+        //todo: make auto inject for auto resolve ;)
         m_container->bind<IPlayerManager, PlayerManager>(SimpleDI::Lifetime::Singleton, m_container->resolve<Signals::SignalHandler>());
         m_container->resolve<IPlayerManager>(); // resolving immediately because it needs to listen to a signal.
     }

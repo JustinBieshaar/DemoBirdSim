@@ -5,6 +5,10 @@
 
 #include <memory>
 
+/// <summary>
+/// This was a test prefab for initial model loading.
+/// Just keeping it in for now as it's an ancient artifact of this project ;P
+/// </summary>
 class Capsule : public ECS::GameObject
 {
 public:

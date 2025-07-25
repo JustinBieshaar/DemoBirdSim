@@ -40,6 +40,7 @@ void CameraComponent::Zoom(float delta)
 	SetFOV(m_fov - delta);
 }
 
+// inspector values
 void CameraComponent::renderInspectorImGui()
 {
 	ImGui::Text("View setting:");

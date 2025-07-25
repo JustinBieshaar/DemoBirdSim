@@ -6,6 +6,9 @@
 #include <Entity.h>
 #include <Scene.h>
 
+/// <summary>
+/// Exposing scene entities
+/// </summary>
 class SceneGuiInspectorWindow : public ImGuiInspectorWindow
 {
 public:

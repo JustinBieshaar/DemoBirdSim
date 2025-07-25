@@ -4,6 +4,9 @@
 #include <memory>
 #include <ISceneManager.h>
 
+/// <summary>
+/// Exposing global values.
+/// </summary>
 class GlobalInspectorWindow : public ImGuiInspectorWindow
 {
 public:

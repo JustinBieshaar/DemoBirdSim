@@ -9,6 +9,9 @@
 #include <ObserverHandler.h>
 #include <optional>
 
+/// <summary>
+/// Previewing bird in main menu.
+/// </summary>
 class MainMenuBirdPreview : public ECS::GameObject
 {
 public:

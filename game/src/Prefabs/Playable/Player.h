@@ -11,6 +11,10 @@
 #include <TexturedShader.h>
 #include <ColorShader.h>
 
+/// <summary>
+/// Player prefab which controls the player via input.
+/// For now it only moves around. It should fly at some point as this evolves.
+/// </summary>
 class Player : public ECS::GameObject
 {
 public:

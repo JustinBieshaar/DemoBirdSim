@@ -5,6 +5,9 @@
 #include "../../Components/CameraComponent.h"
 #include <GameObject.h>
 
+/// <summary>
+/// Camera prefab that holds camera component and can be controlled with input.
+/// </summary>
 class Camera : public ECS::GameObject
 {
 public:

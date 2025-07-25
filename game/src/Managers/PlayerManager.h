@@ -3,6 +3,9 @@
 #include "IPlayerManager.h"
 #include <SignalHandler.h>
 
+/// <summary>
+/// Just holds IBird data which is chosen by charactar selection
+/// </summary>
 class PlayerManager : public IPlayerManager
 {
 public:

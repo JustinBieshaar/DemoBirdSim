@@ -6,6 +6,9 @@
 #include <Entity.h>
 #include <IInspectable.h>
 
+/// <summary>
+/// Follow a target transform component.
+/// </summary>
 class FollowTargetComponent : public ECS::Component, public IInspectable
 {
 public:

@@ -223,32 +223,47 @@ void BirdsFactory::generateRegisterIncludes(nlohmann::ordered_json& birds)
 void BirdsFactory::runPremake()
 {
 #ifdef _WIN32
-    // Windows (both 32-bit and 64-bit)
+    // Proceed only on Windows platforms
 #else
-    std::cout << "This does only work in windows.. Please ask Justin Scott Bieshaar to add your OS support. ;)\n";
+    // Unsupported OS: friendly warning and early return
+    std::cout << "This does only work in Windows.. Please ask Justin Scott Bieshaar to add your OS support. ;)\n";
     return;
 #endif
 
+    // Get the absolute path of this source file at compile time
     std::filesystem::path currentFile = std::filesystem::path(__FILE__);
-    std::filesystem::path currentDir = currentFile.parent_path(); // BirdsFactory/
+
+    // Derive the directory containing this file (i.e., BirdsFactory/)
+    std::filesystem::path currentDir = currentFile.parent_path();
+
+    // Compute the solution root directory by going two levels up
     std::filesystem::path solutionDir = std::filesystem::absolute(currentDir / "../../");
+
+    // Construct the full path to the premake script
     std::filesystem::path batPath = solutionDir / "premake-win.bat";
 
+    // Check if the .bat file actually exists before trying to run it
     if (!std::filesystem::exists(batPath))
     {
         std::cerr << "ERROR: premake-win.bat not found at: " << batPath << "\n";
         return;
     }
 
+    // Extract the directory containing the .bat file
     std::filesystem::path batDir = batPath.parent_path();
 
-    // This command sets the working directory to the .bat location, then runs it
+    // Compose the system command:
+    // - Use `cmd /C` to execute a single command
+    // - Change to the .bat directory with `cd /d`
+    // - `echo.` is a trick to ensure the batch file gets called properly
     std::string command = "cmd /C \"cd /d \"" + batDir.string() + "\" && echo. | premake-win.bat\"";
 
     std::cout << "Running command: " << command << "\n";
 
+    // Execute the command
     int result = std::system(command.c_str());
 
+    // Check the result of the system call
     if (result != 0)
     {
         std::cerr << "Error running premake-win.bat. Exit code: " << result << "\n";
