@@ -1,3 +1,7 @@
+/* This file contains summaries for even the most obvious methods as it's acting as a library.
+That way each method can be understood without diving into the code. I know some like and other dislike this.
+So hence the heads up. ;) */
+
 #pragma once
 #include <vector>
 #include <memory>
@@ -12,6 +16,10 @@ namespace ECS
 	class Registry
 	{
 	public:
+
+		/// <summary>
+		/// Creates an entity of given type and stores it for future reference. (And inspector window for example)
+		/// </summary>
 		template<typename T, typename... Args>
 		std::shared_ptr<T> createEntity(Args... args)
 		{
@@ -22,6 +30,11 @@ namespace ECS
 			return entity;
 		}
 
+		/// <summary>
+		/// Returns all entities with given components. You can pass multiple components.
+		/// getEntitiesWith<Transform, MeshComponent> will return all entities with both components.
+		/// NOTE; entities are only included who own ALL given components.
+		/// </summary>
 		template<typename... Components>
 		std::vector<ECS::Entity*> getEntitiesWith()
 		{

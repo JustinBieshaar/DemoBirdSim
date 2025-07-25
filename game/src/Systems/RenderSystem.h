@@ -1,16 +1,18 @@
 #pragma once
 #include <glm/vec3.hpp>
 
+#include <memory>
 #include <System.h>
 #include <Registry.h>
 #include "../Prefabs/Camera/Camera.h"
 #include "../Prefabs/Lighting/Light.h"
 
-class RenderSystem : ECS::System
+class RenderSystem : public ECS::System
 {
 public:
-	RenderSystem(ECS::Registry& registry, Light* light)
-		: m_registry(registry), m_light(light) { }
+	RenderSystem(ECS::Registry& registry, glm::vec3 lightPosition)
+		: m_registry(registry), m_light(std::make_unique<Light>(lightPosition)) { }
+	~RenderSystem() { clear(); }
 
 	void update(float deltaTime) override;
 	void render();
@@ -22,6 +24,6 @@ private:
 	ECS::Registry& m_registry;
 	std::shared_ptr<Camera> m_camera;
 
-	Light* m_light;
+	std::unique_ptr<Light> m_light;
 };
 

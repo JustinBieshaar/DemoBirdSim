@@ -13,13 +13,15 @@
 MainMenuScene::MainMenuScene(std::shared_ptr<MainBootstrapper> mainBootstrapper) :
     Scene(), m_mainBootstrapper(mainBootstrapper)
 {
-    m_renderer = std::make_unique<RenderSystem>(*this, new Light({ 100,10,5 }));
     m_debugWindow = std::make_unique<SceneGuiInspectorWindow>("MainMenu Scene", this);
 }
 
 void MainMenuScene::load()
 {
     Scene::load();
+
+    m_renderer = m_systemManager->addSystem<RenderSystem>(*this, glm::vec3{ 100, 10, 5 });
+
     auto cam = createEntity<Camera>(m_mainBootstrapper->getInputManager(), glm::vec3{ 0,10, 30 }, 20, 0);
     auto inputManager = m_mainBootstrapper->getInputManager();
 
@@ -42,7 +44,6 @@ void MainMenuScene::unload()
 {
     Scene::unload();
     m_entities.clear();
-    m_renderer->clear();
     m_debugWindow->clear();
 }
 

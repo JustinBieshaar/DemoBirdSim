@@ -21,6 +21,7 @@ public:
 private:
 	std::shared_ptr<MainBootstrapper> m_mainBootstrapper;
 	std::unique_ptr<SceneGuiInspectorWindow> m_debugWindow;
-	std::unique_ptr<RenderSystem> m_renderer;
+
+	RenderSystem* m_renderer;
 };
 

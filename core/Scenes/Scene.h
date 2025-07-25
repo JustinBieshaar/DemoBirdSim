@@ -5,6 +5,7 @@
 #include <IInspectable.h>
 #include <Registry.h>
 #include <Loader.h>
+#include <SystemManager.h>
 
 /// <summary>
 /// Base class representing a scene in the application or game.
@@ -23,6 +24,7 @@ public:
 	virtual void load()
 	{
 		m_loader = std::make_shared<Loader>();
+		m_systemManager = std::make_unique<ECS::SystemManager>();
 	}
 
 	/// <summary>
@@ -33,6 +35,9 @@ public:
 	{
 		m_loader->cleanup();
 		m_loader.reset();
+
+		m_systemManager->cleanup();
+		m_systemManager.reset();
 	}
 
 	virtual bool isLoaded() = 0;
@@ -46,6 +51,8 @@ public:
 			entity->update(deltaTime);
 			entity->updateAllComponents(deltaTime);
 		}
+
+		m_systemManager->update(deltaTime);
 	}
 
 	virtual void render() = 0;
@@ -55,4 +62,5 @@ public:
 
 protected:
 	std::shared_ptr<Loader> m_loader;
+	std::unique_ptr<ECS::SystemManager> m_systemManager;
 };

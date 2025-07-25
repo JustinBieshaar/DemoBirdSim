@@ -1,4 +1,8 @@
- #pragma once
+/* This file contains summaries for even the most obvious methods as it's acting as a library.
+That way each method can be understood without diving into the code. I know some like and other dislike this.
+So hence the heads up. ;) */
+
+#pragma once
 #include <cstdint>
 #include <memory>
 #include <typeindex>
@@ -109,6 +113,9 @@ namespace ECS
             }
         }
 
+        /// <summary>
+        /// Loops through all components to update them.
+        /// </summary>
         void updateAllComponents(float deltaTime)
         {
             for (const auto& [type, component] : m_components)
