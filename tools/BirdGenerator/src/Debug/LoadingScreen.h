@@ -3,7 +3,13 @@
 #include <string>
 #include <chrono>
 
-// just static for easy access
+/// <summary>
+/// Quick and dirty easy accessible loading screen.
+/// I am definetly NOT proud of this, but making it static got the job done quickly.
+/// Plus as it has a single purpose I did not feel to bad for it. Just a bit ashamed it's static.
+/// 
+/// (It would've been better to use SimpleDI in this tool.. my apologies <3)
+/// </summary>
 class LoadingScreen
 {
 
@@ -27,15 +33,18 @@ public:
 
     static void render()
     {
+        // only showing when it is loading.
         if (!s_isLoading)
             return;
 
         // this so short loading times won't be affecting
         auto now = std::chrono::steady_clock::now();
         std::chrono::duration<float> elapsed = now - s_startTime;
-        if (elapsed.count() < m_showLoadingAfterSeconds) // show only if more than 0.5 seconds passed
+        if (elapsed.count() < m_showLoadingAfterSeconds) 
             return;
 
+        // Rendering a full screen window
+        // which is black and has a text in the middle.
         ImGui::SetNextWindowPos(ImVec2(0, 0));
         ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 

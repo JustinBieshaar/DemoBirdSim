@@ -3,6 +3,9 @@
 #include <memory>
 #include <SignalHandler.h>
 
+/// <summary>
+/// View interface for all tool ImGui views.
+/// </summary>
 class IView
 {
 public:
