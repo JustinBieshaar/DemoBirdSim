@@ -22,12 +22,11 @@ void MainMenuScene::load()
 
     m_renderer = m_systemManager->addSystem<RenderSystem>(*this, glm::vec3{ 0, 10, 10 });
 
-    auto cam = createEntity<Camera>(m_mainBootstrapper->getInputManager(), glm::vec3{ 0,10, 30 }, 20, 0);
-    auto inputManager = m_mainBootstrapper->getInputManager();
+    auto inputManager = m_mainBootstrapper->resolve<IInputManager>();
+    auto signalHandler = m_mainBootstrapper->resolve<Signals::SignalHandler>();
 
-    //todo: make init for this so it's not created on every load. But for now this works :)
+    auto cam = createEntity<Camera>(inputManager, glm::vec3{ 0,10, 30 }, 20, 0);
 
-    auto signalHandler = m_mainBootstrapper->getSignalHandler();
     m_characterSelection = std::make_unique<CharacterSelectionView>(signalHandler);
     auto player = createEntity<MainMenuBirdPreview>(m_loader, signalHandler);
 
@@ -80,7 +79,7 @@ void MainMenuScene::renderImGui()
 
     m_characterSelection->renderImGui();
 
-    // === Centered Play Button ===
+    // Centered Play Button 
     ImVec2 buttonSize = ImVec2(200, 50);
     float buttonX = (Window_Width - buttonSize.x) * 0.5f;
     float buttonY = Window_Height - 200.0f;
@@ -90,8 +89,9 @@ void MainMenuScene::renderImGui()
     {
         MainMenuSceneLogChannel.log("Start loading game scene!");
 
-        m_mainBootstrapper->getSceneManager()->loadScene("Game");
-        m_mainBootstrapper->getSceneManager()->unloadScene("Menu");
+        auto sceneManager = m_mainBootstrapper->resolve<Scenes::ISceneManager>();
+        sceneManager->loadScene("Game");
+        sceneManager->unloadScene("Menu");
     }
 
     m_debugWindow->render();

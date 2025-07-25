@@ -19,11 +19,11 @@ namespace SimpleDI
         /// </summary>
         virtual void configureBindings() = 0;
 
-        /// <summary>
-        /// Optional hook that runs after bindings are configured.
-        /// Can be used to resolve shared services, perform validation, or any startup logic.
-        /// </summary>
-        virtual void initialize() {}
+        template <typename Interface>
+        std::shared_ptr<Interface> resolve()
+        {
+            return m_container->resolve<Interface>();
+        }
 
     protected:
         std::unique_ptr<DIContainer> m_container;

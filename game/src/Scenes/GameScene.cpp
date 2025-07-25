@@ -25,11 +25,11 @@ void GameScene::load()
 
     m_renderer = m_systemManager->addSystem<RenderSystem>(*this, glm::vec3{ 100, 1000, 5 });
 
-    auto cam = createEntity<Camera>(m_mainBootstrapper->getInputManager(), glm::vec3{ 0,10, 30 }, 20, 0);
-    auto inputManager = m_mainBootstrapper->getInputManager();
+    auto inputManager = m_mainBootstrapper->resolve<IInputManager>();
+    auto cam = createEntity<Camera>(inputManager, glm::vec3{ 0,10, 30 }, 20, 0);
 
     // Create various entities: player capsules and terrain chunks
-    auto player = createEntity<Player>(m_loader, inputManager, m_mainBootstrapper->getPlayerManager()->getBird() , glm::vec3{ 0,0,-5 });
+    auto player = createEntity<Player>(m_loader, inputManager, m_mainBootstrapper->resolve<IPlayerManager>()->getBird(), glm::vec3{0,0,-5});
     createEntity<Capsule>(m_loader, glm::vec3(5, 0, -8));
     createEntity<Terrain>(m_loader, glm::vec3(0, 0, -1));
     createEntity<Terrain>(m_loader, glm::vec3(-1, 0, -1));

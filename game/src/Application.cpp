@@ -62,7 +62,6 @@ bool Application::init()
 
     m_mainBootstrapper = std::make_shared<MainBootstrapper>(m_window);
     m_mainBootstrapper->configureBindings();
-    m_mainBootstrapper->initialize();
 
     return true;
 }
@@ -75,7 +74,7 @@ void Application::render()
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    m_mainBootstrapper->getSceneManager()->render();
+    m_mainBootstrapper->resolve<Scenes::ISceneManager>()->render();
 }
 
 // We only need one frame instance for this entire demo. So we generate one here in application
@@ -86,7 +85,7 @@ void Application::renderImGui()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    m_mainBootstrapper->getSceneManager()->renderImGui();
+    m_mainBootstrapper->resolve<Scenes::ISceneManager>()->renderImGui();
 
 #if _DEBUG
     m_globalInspectorWindow->render();
@@ -100,11 +99,13 @@ void Application::renderImGui()
 
 void Application::run()
 {
-    auto sceneManager = m_mainBootstrapper->getSceneManager();
+    auto sceneManager = m_mainBootstrapper->resolve<Scenes::ISceneManager>();
     sceneManager->addScene("Menu", std::make_shared<MainMenuScene>(m_mainBootstrapper));
     sceneManager->addScene("Game", std::make_shared<GameScene>(m_mainBootstrapper));
 
     sceneManager->loadScene("Menu");
+
+    auto inputManager = m_mainBootstrapper->resolve<IInputManager>();
 
     m_globalInspectorWindow = std::make_unique<GlobalInspectorWindow>(sceneManager);
 
@@ -118,13 +119,13 @@ void Application::run()
         glfwPollEvents();
 
         // update all
-        m_mainBootstrapper->getInputManager()->update(deltaTime);
-        m_mainBootstrapper->getSceneManager()->update(deltaTime);
+        inputManager->update(deltaTime);
+        sceneManager->update(deltaTime);
 
         ThreadUtils::processMainThreadTasks(); // important to call main thread tasks
 
         // late update all
-        m_mainBootstrapper->getInputManager()->lateUpdate(deltaTime);
+        inputManager->lateUpdate(deltaTime);
 
         render();
         renderImGui();
