@@ -4,7 +4,7 @@
 #include <Color.h>
 
 // declarations
-extern LogChannel DataLogChannel;
-extern LogChannel ControlsLogChannel;
-extern LogChannel BirdLogChannel;
-extern LogChannel JsonLogChannel;
+extern Console::LogChannel DataLogChannel;
+extern Console::LogChannel ControlsLogChannel;
+extern Console::LogChannel BirdLogChannel;
+extern Console::LogChannel JsonLogChannel;

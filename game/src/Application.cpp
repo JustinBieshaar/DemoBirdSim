@@ -90,7 +90,7 @@ void Application::renderImGui()
 
 #if _DEBUG
     m_globalInspectorWindow->render();
-    Console::drawImGui();
+    Console::Console::drawImGui();
 #endif
 
     ImGui::Render();

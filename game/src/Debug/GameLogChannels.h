@@ -4,6 +4,6 @@
 #include <Color.h>
 
 // declarations
-extern LogChannel BirdLogChannel;
-extern LogChannel MainMenuSceneLogChannel;
-extern LogChannel ApplicationLogChannel;
+extern Console::LogChannel BirdLogChannel;
+extern Console::LogChannel MainMenuSceneLogChannel;
+extern Console::LogChannel ApplicationLogChannel;

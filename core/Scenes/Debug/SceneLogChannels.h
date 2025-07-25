@@ -4,4 +4,4 @@
 #include <Color.h>
 
 // declarations
-extern LogChannel SceneLogChannel;
+extern Console::LogChannel SceneLogChannel;

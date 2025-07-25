@@ -94,7 +94,7 @@ void BirdGeneratorApp::renderUI()
         view->render();
     }
 
-    Console::drawImGui();
+    Console::Console::drawImGui();
 
     LoadingScreen::render();
 
