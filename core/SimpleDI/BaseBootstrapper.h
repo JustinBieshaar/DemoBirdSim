@@ -19,11 +19,18 @@ namespace SimpleDI
         /// </summary>
         virtual void configureBindings() = 0;
 
+        virtual void link(DIContainer* container)
+        {
+            m_container->linkContainer(container);
+        }
+
         template <typename Interface>
         std::shared_ptr<Interface> resolve()
         {
             return m_container->resolve<Interface>();
         }
+
+        DIContainer* getContainer() { return m_container.get(); }
 
     protected:
         std::unique_ptr<DIContainer> m_container;

@@ -4,16 +4,35 @@ So hence the heads up. ;) */
 
 #pragma once
 
-#include <functional>
-#include <memory>
-#include <unordered_map>
-#include <typeindex>
-#include <stdexcept>
+#include <functional>     // std::function, std::bind
+#include <memory>         // std::shared_ptr, std::make_shared
+#include <unordered_map>  // std::unordered_map
+#include <typeindex>      // std::type_index
+#include <stdexcept>      // std::runtime_error
+#include <utility>        // std::forward, std::move
+#include <tuple>          // std::tuple, std::apply, std::tuple_size, etc.
+#include <type_traits>    // std::decay_t, std::void_t, std::false_type
+#include <iostream>       // std::cerr (for logging/debugging)
 
+#include "ConstructorTraits.h"
+#include "Binding.h"
 #include "Lifetime.h"
 
 namespace SimpleDI
 {
+
+    template<typename Tuple, std::size_t... I>
+    auto generate_args_impl(std::index_sequence<I...>)
+    {
+        return std::make_tuple(resolve<std::tuple_element_t<I, Tuple>>()...);
+    }
+
+    template<typename Tuple>
+    auto generate_args()
+    {
+        return generate_args_impl<Tuple>(std::make_index_sequence<std::tuple_size_v<Tuple>>{});
+    }
+
     /// <summary>
     /// A minimal dependency injection container supporting Singleton, Transient, and pre-instantiated lifetimes.
     /// I've been considering to dive in Boost DI, as I read some cool articles about it. However, as I once in my
@@ -31,38 +50,81 @@ namespace SimpleDI
         /// </summary>
         /// <param name="lifetime">Lifetime of the created instance (Singleton or Transient).</param>
         /// <param name="args">Arguments forwarded to the constructor of Impl.</param>
-        template <typename Interface, typename Impl, typename... Args>
-        void bind(Lifetime lifetime, Args&&... args)
+        template <typename Interface, typename Impl, typename... ExtraArgs>
+        void bind(Lifetime lifetime, ExtraArgs&&... args)
         {
-            Binding binding;
-            binding.lifetime = lifetime;
+            auto binding = std::make_shared<Binding>();
+            binding->lifetime = lifetime;
 
             if (lifetime == Lifetime::Singleton)
             {
+                if constexpr (has_constructor_traits<Impl>::value)
+                {
+                    std::cout << "Construtor traits for " << typeid(Impl).name() <<" are found! \n";
+                }
+
                 // Factory lambda captures the 'binding' object and all constructor arguments.
                 // The '... args = std::forward<Args>(args)' is C++20 syntax: it expands the parameter pack in the capture list.
                 // If this needs to run in C++ 17, the lambda needs to be refactored to use std::apply instead. (something like 'binding->cachedInstance = std::apply(/*lambda in here*/);')
-                binding.factory = [binding, ... args = std::forward<Args>(args)]() mutable -> std::shared_ptr<void>
+                binding->factory = [binding, ... args = std::forward<ExtraArgs>(args)]() mutable -> std::shared_ptr<void>
                     {
                         // Singleton: only create the instance once and reuse it
-                        if (!binding.cachedInstance)
+                        if (!binding->cachedInstance)
                         {
-                            binding.cachedInstance = std::make_shared<Impl>(args...);
+                            binding->cachedInstance = std::make_shared<Impl>(args...);
                         }
-                        return binding.cachedInstance;
+                        return binding->cachedInstance;
                     };
             }
             else if (lifetime == Lifetime::Transient)
             {
-                // Factory lambda captures constructor args (by move)
-                // C++20 lambda capture pack: expands args into capture list
-                // If this needs to run in C++ 17, the lambda needs to be refactored to use std::apply instead.
-                // (something like 'binding.factory = [argTuple = std::move(argTuple)]() -> std::shared_ptr<void> { return std::apply(/*lambda in here*/);}'
-                binding.factory = [... args = std::forward<Args>(args)]() -> std::shared_ptr<void>
+                if constexpr (has_constructor_traits<Impl>::value && std::tuple_size_v<typename SimpleDI::ConstructorTraits<Impl>::Args> > 0)
+                {
+                    using Args = typename SimpleDI::ConstructorTraits<Impl>::Args;
+                    std::cout << "Constructor traits for " << typeid(Impl).name() << " are found!\n";
+
+                    // Inline logging of types (optional)
+                    [] <std::size_t... Is>(std::index_sequence<Is...>)
                     {
-                        // Always create a new instance (transient)
-                        return std::make_shared<Impl>(args...);
-                    };
+                        ((std::cout << (Is == 0 ? "" : ", ") << typeid(std::tuple_element_t<Is, Args>).name()), ...);
+                        std::cout << "!\n";
+                    }(std::make_index_sequence<std::tuple_size_v<Args>>{});
+
+                    // Create the factory using std::apply to expand resolved dependencies
+                    binding->factory = [this]() -> std::shared_ptr<void>
+                        {
+                            using Args = typename SimpleDI::ConstructorTraits<Impl>::Args;
+                            auto resolvedArgs = [this]<typename... Deps>(std::tuple<Deps...>)
+                            {
+                                return std::make_tuple(resolve<Deps>()...);  // capture `this` for resolve
+                            }(Args{});
+
+                            return std::apply([](auto&&... unpacked)
+                                {
+                                    ((std::cout << "Arg type: " << typeid(decltype(unpacked)).name() << "\n"), ...);
+                                    return nullptr;
+                                }, std::move(resolvedArgs));
+                        };
+
+
+                    //binding->factory = [... args = std::forward<ExtraArgs>(args)]() -> std::shared_ptr<void>
+                    //    {
+                    //        // Always create a new instance (transient)
+                    //        return std::make_shared<Impl>(args...);
+                    //    };
+                }
+                else
+                {
+                    // Factory lambda captures constructor args (by move)
+                    // C++20 lambda capture pack: expands args into capture list
+                    // If this needs to run in C++ 17, the lambda needs to be refactored to use std::apply instead.
+                    // (something like 'binding.factory = [argTuple = std::move(argTuple)]() -> std::shared_ptr<void> { return std::apply(/*lambda in here*/);}'
+                    binding->factory = [... args = std::forward<ExtraArgs>(args)]() -> std::shared_ptr<void>
+                        {
+                            // Always create a new instance (transient)
+                            return std::make_shared<Impl>(args...);
+                        };
+                }
             }
 
             m_bindings[typeid(Interface)] = std::move(binding);
@@ -81,11 +143,10 @@ namespace SimpleDI
             binding.cachedInstance = instance;
             binding.factory = [instance]() -> std::shared_ptr<void>
                 {
-                    // as we already have the instance, we just need to return it.
                     return instance;
                 };
 
-            m_bindings[typeid(Interface)] = std::move(binding);
+            m_bindings[typeid(Interface)] = std::make_shared<Binding>(std::move(binding));
         }
 
         /// <summary>
@@ -99,26 +160,31 @@ namespace SimpleDI
             {
                 throw std::runtime_error("Type not bound!");
             }
-            return std::static_pointer_cast<Interface>(it->second.factory());
+            return std::static_pointer_cast<Interface>(it->second->factory());
+        }
+
+        /// <summary>
+        /// Links by copying all the links from another container
+        /// so they can be used to inject in this container as well.
+        /// </summary>
+        /// <param name="other"></param>
+        void linkContainer(const DIContainer* other)
+        {
+            for (const auto& [type, binding] : other->m_bindings)
+            {
+                if (m_bindings.find(type) == m_bindings.end())
+                {
+                    m_bindings[type] = binding;
+                }
+            }
+        }
+
+        const std::unordered_map<std::type_index, std::shared_ptr<Binding>>& bindings() const
+        {
+            return m_bindings;
         }
 
     private:
-
-        struct Binding
-        {
-            Lifetime lifetime;
-            /// <summary>
-            /// factory is used to define the creation of the type. So when this type is being resolved it's using it's factory for creation.
-            /// </summary>
-            std::function<std::shared_ptr<void>()> factory;
-
-            /// <summary>
-            /// Cached instance is used for singleton use case to ensure there's only one by caching it.
-            /// If there's no cached instance, we'll generate one.
-            /// </summary>
-            std::shared_ptr<void> cachedInstance;
-        };
-
-        std::unordered_map<std::type_index, Binding> m_bindings;
+        std::unordered_map<std::type_index, std::shared_ptr<Binding>> m_bindings;
     };
 }
