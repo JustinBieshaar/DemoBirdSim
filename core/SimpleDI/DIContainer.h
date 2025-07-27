@@ -4,15 +4,16 @@ So hence the heads up. ;) */
 
 #pragma once
 
-#include <functional>     // std::function, std::bind
-#include <memory>         // std::shared_ptr, std::make_shared
-#include <unordered_map>  // std::unordered_map
-#include <typeindex>      // std::type_index
-#include <stdexcept>      // std::runtime_error
-#include <utility>        // std::forward, std::move
-#include <tuple>          // std::tuple, std::apply, std::tuple_size, etc.
-#include <type_traits>    // std::decay_t, std::void_t, std::false_type
-#include <iostream>       // std::cerr (for logging/debugging)
+#include <functional>
+#include <memory>
+#include <unordered_map>
+#include <typeindex>
+#include <stdexcept>
+#include <utility>
+#include <tuple>
+#include <type_traits>
+#include <iostream>
+#include <vector>
 
 #include "ConstructorTraits.h"
 #include "Binding.h"
@@ -58,63 +59,83 @@ namespace SimpleDI
 
             if (lifetime == Lifetime::Singleton)
             {
-                if constexpr (has_constructor_traits<Impl>::value)
+                if constexpr (has_constructor_traits<Impl>::value && std::tuple_size_v<typename SimpleDI::ConstructorTraits<Impl>::Args> > 0)
                 {
-                    std::cout << "Construtor traits for " << typeid(Impl).name() <<" are found! \n";
-                }
+                    // - With constructor traits
+                    // DOES NOT USE EXTRA ARGUMENTS
 
-                // Factory lambda captures the 'binding' object and all constructor arguments.
-                // The '... args = std::forward<Args>(args)' is C++20 syntax: it expands the parameter pack in the capture list.
-                // If this needs to run in C++ 17, the lambda needs to be refactored to use std::apply instead. (something like 'binding->cachedInstance = std::apply(/*lambda in here*/);')
-                binding->factory = [binding, ... args = std::forward<ExtraArgs>(args)]() mutable -> std::shared_ptr<void>
-                    {
-                        // Singleton: only create the instance once and reuse it
-                        if (!binding->cachedInstance)
+                    using Args = typename SimpleDI::ConstructorTraits<Impl>::Args;
+
+                    // Create the factory using std::apply to expand resolved dependencies
+                    binding->factory = [this, binding]() -> std::shared_ptr<void>
                         {
-                            binding->cachedInstance = std::make_shared<Impl>(args...);
-                        }
-                        return binding->cachedInstance;
-                    };
+                            // Singleton: only create the instance once and reuse it
+                            if (!binding->cachedInstance)
+                            {
+                                using Args = typename SimpleDI::ConstructorTraits<Impl>::Args;
+                                auto resolvedArgs = [this]<typename... Deps>(std::tuple<Deps...>)
+                                {
+                                    //((std::cout << "Resolving dependency of type: " << typeid(Deps).name() << std::endl), ...);
+                                    return std::make_tuple(resolve<typename Deps::element_type>()...);  // capture `this` for resolve
+                                }(Args{});
+
+                                binding->cachedInstance = std::apply([](auto&&... unpacked)
+                                    {
+                                        return std::make_shared<Impl>(std::forward<decltype(unpacked)>(unpacked)...);
+                                    }, std::move(resolvedArgs));
+                            }
+
+                            return binding->cachedInstance;
+                        };
+                }
+                else
+                {
+                    // - Fallback code
+                    // 
+                    // Factory lambda captures the 'binding' object and all constructor arguments.
+                    // The '... args = std::forward<Args>(args)' is C++20 syntax: it expands the parameter pack in the capture list.
+                    // If this needs to run in C++ 17, the lambda needs to be refactored to use std::apply instead. (something like 'binding->cachedInstance = std::apply(/*lambda in here*/);')
+                    binding->factory = [binding, ... args = std::forward<ExtraArgs>(args)]() mutable -> std::shared_ptr<void>
+                        {
+                            // Singleton: only create the instance once and reuse it
+                            if (!binding->cachedInstance)
+                            {
+                                binding->cachedInstance = std::make_shared<Impl>(args...);
+                            }
+                            return binding->cachedInstance;
+                        };
+                }
             }
             else if (lifetime == Lifetime::Transient)
             {
                 if constexpr (has_constructor_traits<Impl>::value && std::tuple_size_v<typename SimpleDI::ConstructorTraits<Impl>::Args> > 0)
                 {
+                    // - With constructor traits
+                    // DOES NOT USE EXTRA ARGUMENTS
+
                     using Args = typename SimpleDI::ConstructorTraits<Impl>::Args;
-                    std::cout << "Constructor traits for " << typeid(Impl).name() << " are found!\n";
 
-                    // Inline logging of types (optional)
-                    [] <std::size_t... Is>(std::index_sequence<Is...>)
-                    {
-                        ((std::cout << (Is == 0 ? "" : ", ") << typeid(std::tuple_element_t<Is, Args>).name()), ...);
-                        std::cout << "!\n";
-                    }(std::make_index_sequence<std::tuple_size_v<Args>>{});
-
-                    // Create the factory using std::apply to expand resolved dependencies
+                    // Create the factory using constructor traits to automatically resolve dependencies.
+                    // This uses std::apply to unpack the resolved dependencies tuple and forward them to the constructor.
+                    // Each type in the constructor traits tuple is resolved from the container before constructing the instance.
                     binding->factory = [this]() -> std::shared_ptr<void>
                         {
                             using Args = typename SimpleDI::ConstructorTraits<Impl>::Args;
                             auto resolvedArgs = [this]<typename... Deps>(std::tuple<Deps...>)
                             {
-                                return std::make_tuple(resolve<Deps>()...);  // capture `this` for resolve
+                                return std::make_tuple(resolve<typename Deps::element_type>()...);  // capture `this` for resolve
                             }(Args{});
 
                             return std::apply([](auto&&... unpacked)
                                 {
-                                    ((std::cout << "Arg type: " << typeid(decltype(unpacked)).name() << "\n"), ...);
-                                    return nullptr;
+                                    return std::make_shared<Impl>(std::forward<decltype(unpacked)>(unpacked)...);
                                 }, std::move(resolvedArgs));
                         };
-
-
-                    //binding->factory = [... args = std::forward<ExtraArgs>(args)]() -> std::shared_ptr<void>
-                    //    {
-                    //        // Always create a new instance (transient)
-                    //        return std::make_shared<Impl>(args...);
-                    //    };
                 }
                 else
                 {
+                    // - Fallback code
+                    // 
                     // Factory lambda captures constructor args (by move)
                     // C++20 lambda capture pack: expands args into capture list
                     // If this needs to run in C++ 17, the lambda needs to be refactored to use std::apply instead.
@@ -155,10 +176,20 @@ namespace SimpleDI
         template <typename Interface>
         std::shared_ptr<Interface> resolve()
         {
+            auto type = typeid(Interface).name();
             auto it = m_bindings.find(typeid(Interface));
             if (it == m_bindings.end())
             {
-                throw std::runtime_error("Type not bound!");
+                for (auto otherContainer : m_sharedContainers)
+                {
+                    if (!otherContainer->IsBound<Interface>())
+                        continue;
+
+                    return otherContainer->resolve<Interface>();
+                }
+
+                std::cout << "Type " << typeid(Interface).name() << " not bound!\n";
+                return nullptr;
             }
             return std::static_pointer_cast<Interface>(it->second->factory());
         }
@@ -168,23 +199,24 @@ namespace SimpleDI
         /// so they can be used to inject in this container as well.
         /// </summary>
         /// <param name="other"></param>
-        void linkContainer(const DIContainer* other)
+        void linkContainer(std::shared_ptr<DIContainer> container)
         {
-            for (const auto& [type, binding] : other->m_bindings)
-            {
-                if (m_bindings.find(type) == m_bindings.end())
-                {
-                    m_bindings[type] = binding;
-                }
-            }
+            m_sharedContainers.push_back(container);
         }
 
-        const std::unordered_map<std::type_index, std::shared_ptr<Binding>>& bindings() const
+        template <typename Interface>
+        bool IsBound()
         {
-            return m_bindings;
+            auto type = typeid(Interface).name();
+            auto it = m_bindings.find(typeid(Interface));
+            if (it == m_bindings.end())
+                return false;
+
+            return true;
         }
 
     private:
+        std::vector<std::shared_ptr<DIContainer>> m_sharedContainers;
         std::unordered_map<std::type_index, std::shared_ptr<Binding>> m_bindings;
     };
 }

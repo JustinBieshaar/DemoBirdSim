@@ -25,6 +25,7 @@ private:
     float m_lastTime;
 
     std::shared_ptr<MainBootstrapper> m_mainBootstrapper;
+    std::shared_ptr<Scenes::ISceneManager> m_sceneManager;
     std::unique_ptr<GlobalInspectorWindow> m_globalInspectorWindow;
 };
 

@@ -10,7 +10,7 @@ namespace SimpleDI
     class BaseBootstrapper
     {
     public:
-        BaseBootstrapper() : m_container(std::make_unique<DIContainer>()) {}
+        BaseBootstrapper() : m_container(std::make_shared<DIContainer>()) {}
         virtual ~BaseBootstrapper() = default;
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace SimpleDI
         /// </summary>
         virtual void configureBindings() = 0;
 
-        virtual void link(DIContainer* container)
+        virtual void link(std::shared_ptr<DIContainer> container)
         {
             m_container->linkContainer(container);
         }
@@ -30,9 +30,9 @@ namespace SimpleDI
             return m_container->resolve<Interface>();
         }
 
-        DIContainer* getContainer() { return m_container.get(); }
+        std::shared_ptr<DIContainer> getContainer() { return m_container; }
 
     protected:
-        std::unique_ptr<DIContainer> m_container;
+        std::shared_ptr<DIContainer> m_container;
     };
 }

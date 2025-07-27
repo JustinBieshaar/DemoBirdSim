@@ -28,7 +28,7 @@ public:
         m_container->bind<Signals::SignalHandler, Signals::SignalHandler>(SimpleDI::Lifetime::Singleton);
 
         //todo: make auto inject for auto resolve ;)
-        m_container->bind<IPlayerManager, PlayerManager>(SimpleDI::Lifetime::Singleton, m_container->resolve<Signals::SignalHandler>());
+        m_container->bind<IPlayerManager, PlayerManager>(SimpleDI::Lifetime::Singleton);
         m_container->resolve<IPlayerManager>(); // resolving immediately because it needs to listen to a signal.
     }
 

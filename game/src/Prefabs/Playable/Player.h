@@ -24,6 +24,7 @@
 class Player : public IPlayer, public ECS::GameObject
 {
 public:
+	Player();
 	Player(std::shared_ptr<ILoader> loader, std::shared_ptr<IInputManager> inputManager, std::shared_ptr<IPlayerManager> playerManager, std::shared_ptr<IPlayerProgressService> playerProgressService);
 
 	void update(float deltaTime) override;
