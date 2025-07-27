@@ -29,11 +29,7 @@ public:
 		m_container->bind<IPlayerProgressService, PlayerProgressService>(SimpleDI::Lifetime::Transient);
 
 		// TODO: auto bind
-		m_container->bind<IPlayer, Player>(SimpleDI::Lifetime::Transient, 
-			resolve<ILoader>(), 
-			m_mainBootstrapper->resolve<IInputManager>(),
-			m_mainBootstrapper->resolve<IPlayerManager>(),
-			resolve<IPlayerProgressService>());
+		m_container->bind<IPlayer, Player>(SimpleDI::Lifetime::Transient);
 	}
 
 private:

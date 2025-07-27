@@ -6,6 +6,10 @@
 #include <Components/TextureComponent.h>
 
 
+Player::Player() : GameObject()
+{
+}
+
 Player::Player(std::shared_ptr<ILoader> loader, std::shared_ptr<IInputManager> inputManager, std::shared_ptr<IPlayerManager> playerManager, std::shared_ptr<IPlayerProgressService> playerProgressService)
     : GameObject(), m_loader(loader), m_inputManager(inputManager), m_playerProgressService(playerProgressService)
 {

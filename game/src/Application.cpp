@@ -83,7 +83,7 @@ void Application::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear both buffers
 
     // Call scene-specific render logic
-    m_mainBootstrapper->resolve<Scenes::ISceneManager>()->render();
+    m_sceneManager->render();
 }
 
 // We only need one frame instance for this entire demo. So we generate one here in application
@@ -97,7 +97,7 @@ void Application::renderImGui()
     ImGui::NewFrame();
 
     // Call current scene's ImGui UI rendering
-    m_mainBootstrapper->resolve<Scenes::ISceneManager>()->renderImGui();
+    m_sceneManager->renderImGui();
 
 #if _DEBUG
     // Only show developer UI in debug mode
@@ -114,17 +114,17 @@ void Application::renderImGui()
 void Application::run()
 {
     // Set up the scenes (e.g., menu and game)
-    auto sceneManager = m_mainBootstrapper->resolve<Scenes::ISceneManager>();
-    sceneManager->addScene("Menu", std::make_shared<MainMenuScene>(m_mainBootstrapper));
-    sceneManager->addScene("Game", std::make_shared<GameScene>(m_mainBootstrapper));
-    sceneManager->loadScene("Menu");
+    m_sceneManager = m_mainBootstrapper->resolve<Scenes::ISceneManager>();
+    m_sceneManager->addScene("Menu", std::make_shared<MainMenuScene>(m_mainBootstrapper));
+    m_sceneManager->addScene("Game", std::make_shared<GameScene>(m_mainBootstrapper));
+    m_sceneManager->loadScene("Menu");
     // TODO: fix scene string bind. Maybe add some defines or auto generation for this at some point
 
     // Retrieve input manager
     auto inputManager = m_mainBootstrapper->resolve<IInputManager>();
 
     // Create global inspector (debug view of ECS)
-    m_globalInspectorWindow = std::make_unique<GlobalInspectorWindow>(sceneManager);
+    m_globalInspectorWindow = std::make_unique<GlobalInspectorWindow>(m_sceneManager);
 
     // Timing setup
     m_lastTime = glfwGetTime();
@@ -140,7 +140,7 @@ void Application::run()
 
         // Update logic
         inputManager->update(deltaTime);
-        sceneManager->update(deltaTime);
+        m_sceneManager->update(deltaTime);
 
         // Handle tasks queued for the main thread
         ThreadUtils::processMainThreadTasks();

@@ -26,6 +26,7 @@ void GameScene::load()
 
     // making new game bootstrapper so it will regenerate services every time this scene is being loaded.
     m_gameBootstrapper = std::make_unique<GameBootstrapper>(m_mainBootstrapper, m_loader);
+    m_gameBootstrapper->link(m_mainBootstrapper->getContainer());
     m_gameBootstrapper->configureBindings();
 
     m_renderer = m_systemManager->addSystem<RenderSystem>(*this, glm::vec3{ 100, 1000, 5 });
