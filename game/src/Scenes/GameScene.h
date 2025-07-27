@@ -4,6 +4,7 @@
 #include "../Bootstrappers/MainBootstrapper.h"
 #include "../Systems/RenderSystem.h"
 #include "../Debug/ImGuiDebug/SceneGuiInspectorWindow.h"
+#include "../Bootstrappers/GameBootstrapper.h"
 
 /// <summary>
 /// Constructs the game scene, adding all entities and places them accordingly.
@@ -24,6 +25,7 @@ public:
 private:
 	std::shared_ptr<MainBootstrapper> m_mainBootstrapper;
 	std::unique_ptr<SceneGuiInspectorWindow> m_debugWindow;
+	std::unique_ptr<GameBootstrapper> m_gameBootstrapper;
 
 	RenderSystem* m_renderer;
 };

@@ -5,13 +5,13 @@
 #include <TexturedShader.h>
 #include "../../Global/Globals.h"
 
-Terrain::Terrain(std::shared_ptr<Loader> loader, const glm::vec3& position) : GameObject(glm::vec3(position.x * Terrain_Size, 0, position.z * Terrain_Size))
+Terrain::Terrain(std::shared_ptr<ILoader> loader, const glm::vec3& position) : GameObject(glm::vec3(position.x * Terrain_Size, 0, position.z * Terrain_Size))
 {
 	generate(loader);
     addComponent<ECS::TextureComponent>(loader, "terrain.png");
 }
 
-void Terrain::generate(std::shared_ptr<Loader> loader)
+void Terrain::generate(std::shared_ptr<ILoader> loader)
 {
     // Total number of vertices
     int count = Terrain_VertexCount * Terrain_VertexCount;

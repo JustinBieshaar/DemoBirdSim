@@ -17,6 +17,8 @@ namespace Scenes
 	class Scene : public ECS::Registry, public IInspectable, public std::enable_shared_from_this<Scene>
 	{
 	public:
+		Scene() { }
+
 		virtual ~Scene() = default;
 
 		/// <summary>
@@ -63,7 +65,7 @@ namespace Scenes
 		void renderInspectorImGui() override;
 
 	protected:
-		std::shared_ptr<Loader> m_loader;
+		std::shared_ptr<ILoader> m_loader;
 		std::unique_ptr<ECS::SystemManager> m_systemManager;
 	};
 }

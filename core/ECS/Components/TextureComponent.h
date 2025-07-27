@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "Loader.h"
+#include "ILoader.h"
 #include "Component.h"
 
 namespace ECS
@@ -11,7 +11,7 @@ namespace ECS
 	public:
 		GLuint m_textureID;
 
-		TextureComponent(std::shared_ptr<Loader> loader, const std::string& fileName = "default.png")
+		TextureComponent(std::shared_ptr<ILoader> loader, const std::string& fileName = "default.png")
 		{
 			m_textureID = loader->loadTexture(fileName);
 		}

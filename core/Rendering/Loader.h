@@ -1,16 +1,8 @@
 #pragma once
 
-#include <glad/glad.h>
+#include "ILoader.h"
 
-#include <memory>
-#include <vector>
-
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-#include <string>
-#include <unordered_map>
-
-class Loader
+class Loader : public ILoader
 {
 public: 
 	/// <summary>
@@ -18,17 +10,17 @@ public:
 	/// Returns the vertex array object (vao) id and the vertex count. These can then be stored in e.g. MeshComponent
 	/// to render the mesh with it's vao id and amount of vertices.
 	/// </summary>
-	std::tuple<GLuint, size_t> loadToMeshComponent(const std::vector<float>& vertices, const std::vector<float>& textureCoordinates, const std::vector<float>& normals, const std::vector<GLuint>& indices);
+	std::tuple<GLuint, size_t> loadToMeshComponent(const std::vector<float>& vertices, const std::vector<float>& textureCoordinates, const std::vector<float>& normals, const std::vector<GLuint>& indices) override;
 
 	/// <summary>
 	/// Loads a texture using stbi and binds it to opengl render pipeline.
 	/// Returns the index the texture is stored at.
 	/// </summary>
-	GLuint loadTexture(const std::string& path);
-	void unloadTexture(const GLuint& textureId);
+	GLuint loadTexture(const std::string& path) override;
+	void unloadTexture(const GLuint& textureId) override;
 
-	void unloadMesh(const GLuint& vao);
-	void cleanup();
+	void unloadMesh(const GLuint& vao) override;
+	void cleanup() override;
 
 private:
 	std::vector<GLuint> m_vertexArrayObjects;

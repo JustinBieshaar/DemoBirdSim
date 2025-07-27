@@ -1,5 +1,5 @@
 #pragma once
-#include <Loader.h>
+#include <ILoader.h>
 #include <Entity.h>
 #include <GameObject.h>
 #include <SignalHandler.h>
@@ -15,7 +15,7 @@
 class MainMenuBirdPreview : public ECS::GameObject
 {
 public:
-	MainMenuBirdPreview(std::shared_ptr<Loader> loader, std::shared_ptr<Signals::SignalHandler> signalHandler,
+	MainMenuBirdPreview(std::shared_ptr<ILoader> loader, std::shared_ptr<Signals::SignalHandler> signalHandler,
 		const glm::vec3& position = {}, const glm::vec3& rotation = {}, const glm::vec3& scale = glm::vec3(1.0f));
 
 	~MainMenuBirdPreview();
@@ -24,7 +24,7 @@ public:
 private:
 	void onBirdChange(const IBird* bird);
 
-	std::shared_ptr<Loader> m_loader;
+	std::shared_ptr<ILoader> m_loader;
 	std::shared_ptr<Signals::SignalHandler> m_signalHandler;
 
 	std::unique_ptr<TexturedShader> m_texturedShader;

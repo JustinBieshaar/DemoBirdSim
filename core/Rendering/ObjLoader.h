@@ -145,7 +145,7 @@ namespace ObjLoader
 	/// Reads an obj file and parses it into a MeshComponent object.
 	/// This can then be used to render this mesh.
 	/// </summary>
-	inline std::tuple<GLuint, size_t> loadMeshFromObjFile(std::string fileName, std::shared_ptr<Loader> loader, bool withSuffix = true, bool invertUvs = false)
+	inline std::tuple<GLuint, size_t> loadMeshFromObjFile(std::string fileName, std::shared_ptr<ILoader> loader, bool withSuffix = true, bool invertUvs = false)
 	{
 		auto [positions, uvs, normals, indices] = readMeshFile(fileName, withSuffix, invertUvs);
 		auto mesh = loader->loadToMeshComponent(positions, uvs, normals, indices);
@@ -155,7 +155,7 @@ namespace ObjLoader
 
 	inline void loadMeshFromObjFileAsync(
 		const std::string& fileName,
-		std::shared_ptr<Loader> loader,
+		std::shared_ptr<ILoader> loader,
 		std::function<void(std::tuple<GLuint, size_t>)> onLoaded,
 		bool withSuffix = true,
 		bool invertUvs = false)

@@ -1,12 +1,16 @@
 #pragma once
-#include <Loader.h>
+#include <ILoader.h>
 #include <Entity.h>
 #include <GameObject.h>
 
 #include <IBird.h>
 
 #include <memory>
+
+#include "IPlayer.h"
 #include "../../Managers/IInputManager.h"
+#include "../../Managers/IPlayerManager.h"
+#include "../../Services/IPlayerProgressService.h"
 
 #include <TexturedShader.h>
 #include <ColorShader.h>
@@ -15,17 +19,18 @@
 /// Player prefab which controls the player via input.
 /// For now it only moves around. It should fly at some point as this evolves.
 /// </summary>
-class Player : public ECS::GameObject
+class Player : public IPlayer, public ECS::GameObject
 {
 public:
-	Player(std::shared_ptr<Loader> loader, std::shared_ptr<IInputManager> inputManager, const IBird* birdData, const glm::vec3& position = {}, const glm::vec3& rotation = {}, const glm::vec3& scale = glm::vec3(1.0f));
+	Player(std::shared_ptr<ILoader> loader, std::shared_ptr<IInputManager> inputManager, std::shared_ptr<IPlayerManager> playerManager, std::shared_ptr<IPlayerProgressService> playerProgressService);
 
 	void update(float deltaTime) override;
 private:
 	void construct(const IBird* birdData);
 
-	std::shared_ptr<Loader> m_loader;
+	std::shared_ptr<ILoader> m_loader;
 	std::shared_ptr<IInputManager> m_inputManager;
+	std::shared_ptr<IPlayerProgressService> m_playerProgressService;
 
 	std::unique_ptr<TexturedShader> m_texturedShader;
 	std::unique_ptr<ColorShader> m_colorShader;

@@ -9,7 +9,7 @@
 #include <Components/MeshComponent.h>
 #include <Components/TextureComponent.h>
 
-MainMenuBirdPreview::MainMenuBirdPreview(std::shared_ptr<Loader> loader, std::shared_ptr<Signals::SignalHandler> signalHandler, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) :
+MainMenuBirdPreview::MainMenuBirdPreview(std::shared_ptr<ILoader> loader, std::shared_ptr<Signals::SignalHandler> signalHandler, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) :
 	GameObject(position, rotation, scale), m_loader(loader), m_signalHandler(signalHandler)
 {
     m_colorShader = std::make_unique<ColorShader>();

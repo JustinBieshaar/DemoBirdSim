@@ -4,7 +4,8 @@
 #include <SignalHandler.h>
 
 /// <summary>
-/// Just holds IBird data which is chosen by charactar selection
+/// Just holds IBird data which is chosen by charactar selection managing what bird is used
+/// for the player.
 /// </summary>
 class PlayerManager : public IPlayerManager
 {

@@ -31,6 +31,15 @@ namespace ECS
 		}
 
 		/// <summary>
+		/// Directly add entity.
+		/// This entity may be created already outside this registry.
+		/// </summary>
+		void addEntity(std::shared_ptr<Entity> entity)
+		{
+			m_entities.push_back(entity);
+		}
+
+		/// <summary>
 		/// Returns all entities with given components. You can pass multiple components.
 		/// getEntitiesWith<Transform, MeshComponent> will return all entities with both components.
 		/// NOTE; entities are only included who own ALL given components.

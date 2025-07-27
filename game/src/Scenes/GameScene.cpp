@@ -21,7 +21,12 @@ GameScene::GameScene(std::shared_ptr<MainBootstrapper> mainBootstrapper) : Scene
 /// </summary>
 void GameScene::load()
 {
+    // load generates a new loader
     Scenes::Scene::load();
+
+    // making new game bootstrapper so it will regenerate services every time this scene is being loaded.
+    m_gameBootstrapper = std::make_unique<GameBootstrapper>(m_mainBootstrapper, m_loader);
+    m_gameBootstrapper->configureBindings();
 
     m_renderer = m_systemManager->addSystem<RenderSystem>(*this, glm::vec3{ 100, 1000, 5 });
 
@@ -31,8 +36,20 @@ void GameScene::load()
     auto cam = createEntity<Camera>(inputManager, glm::vec3{ 0,10, 30 }, 20, 0);
 
     // Create various entities: player capsules and terrain chunks
-    auto player = createEntity<Player>(m_loader, inputManager, playerManager->getBird(), glm::vec3{0,0,-5});
+    //auto player = createEntity<Player>(m_loader, inputManager, playerManager->getBird(), glm::vec3{0,0,-5});
+    auto playerInterface = m_gameBootstrapper->resolve<IPlayer>();
+
+    // casting to entity so we can fetch data and add it to entities.
+    // this as a player must be by design an entity within how the systems work.
+    // so we can assume this is an entity.
+    auto player = std::dynamic_pointer_cast<ECS::GameObject>(playerInterface);
+    addEntity(player);
+
+    // create capsule just to show off a capsule ;P
     createEntity<Capsule>(m_loader, glm::vec3(5, 0, -8));
+
+    // generating a large terrain.
+    // TODO: auto terrain generation.
     createEntity<Terrain>(m_loader, glm::vec3(0, 0, -1));
     createEntity<Terrain>(m_loader, glm::vec3(-1, 0, -1));
     createEntity<Terrain>(m_loader, glm::vec3(0, 0, 0));
@@ -49,7 +66,7 @@ void GameScene::load()
 /// </summary>
 void GameScene::unload()
 {
-    Scene::unload();
+    Scenes::Scene::unload();
     m_entities.clear();
 }
 
@@ -60,7 +77,7 @@ bool GameScene::isLoaded()
 
 void GameScene::update(float deltaTime)
 {
-	Scene::update(deltaTime);
+    Scenes::Scene::update(deltaTime);
 	m_renderer->update(deltaTime);
 }
 

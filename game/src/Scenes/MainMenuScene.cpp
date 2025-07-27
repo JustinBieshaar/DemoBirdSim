@@ -11,14 +11,14 @@
 #include <iostream>
 
 MainMenuScene::MainMenuScene(std::shared_ptr<MainBootstrapper> mainBootstrapper) :
-    Scene(), m_mainBootstrapper(mainBootstrapper)
+    Scenes::Scene(), m_mainBootstrapper(mainBootstrapper)
 {
     m_debugWindow = std::make_unique<SceneGuiInspectorWindow>("MainMenu Scene", this);
 }
 
 void MainMenuScene::load()
 {
-    Scene::load();
+    Scenes::Scene::load();
 
     m_renderer = m_systemManager->addSystem<RenderSystem>(*this, glm::vec3{ 0, 10, 10 });
 
@@ -42,7 +42,7 @@ void MainMenuScene::load()
 
 void MainMenuScene::unload()
 {
-    Scene::unload();
+    Scenes::Scene::unload();
     m_entities.clear();
     m_debugWindow->clear();
 }
@@ -54,7 +54,7 @@ bool MainMenuScene::isLoaded()
 
 void MainMenuScene::update(float deltaTime)
 {
-    Scene::update(deltaTime);
+    Scenes::Scene::update(deltaTime);
     m_renderer->update(deltaTime);
 }
 

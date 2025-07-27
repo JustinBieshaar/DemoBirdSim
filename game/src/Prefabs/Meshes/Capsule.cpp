@@ -5,7 +5,7 @@
 #include <TexturedShader.h>
 #include <Components/MeshComponent.h>
 
-Capsule::Capsule(std::shared_ptr<Loader> loader, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject(position, rotation, scale)
+Capsule::Capsule(std::shared_ptr<ILoader> loader, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject(position, rotation, scale)
 {
 	auto [vao, vertexCount] = ObjLoader::loadMeshFromObjFile("Capsule", loader);
 

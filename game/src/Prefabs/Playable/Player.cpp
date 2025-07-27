@@ -6,13 +6,13 @@
 #include <Components/TextureComponent.h>
 
 
-Player::Player(std::shared_ptr<Loader> loader, std::shared_ptr<IInputManager> inputManager, const IBird* birdData, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) 
-    : GameObject(position, rotation, scale), m_loader(loader), m_inputManager(inputManager)
+Player::Player(std::shared_ptr<ILoader> loader, std::shared_ptr<IInputManager> inputManager, std::shared_ptr<IPlayerManager> playerManager, std::shared_ptr<IPlayerProgressService> playerProgressService)
+    : GameObject(), m_loader(loader), m_inputManager(inputManager), m_playerProgressService(playerProgressService)
 {
     m_colorShader = std::make_unique<ColorShader>();
     m_texturedShader = std::make_unique<TexturedShader>();
 
-    construct(birdData);
+    construct(playerManager->getBird());
 }
 
 void Player::update(float deltaTime)
