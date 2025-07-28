@@ -1,7 +1,12 @@
 # 🐦 Bird Game Simulator – C++ Demo Project 2025 (readme WIP)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Made With C++](https://img.shields.io/badge/made%20with-C++20-blue.svg)](https://en.cppreference.com)
-[![GitHub Repo stars](https://img.shields.io/github/stars/JustinBieshaar/DemoBirdSim?style=social)](https://github.com/JustinBieshaar/DemoBirdSim)
+[![GitHub Repo stars](https://img.shields.io/github/stars/JustinBieshaar/DemoBirdSim)](https://github.com/JustinBieshaar/DemoBirdSim)
+
+[![Instagram](https://img.shields.io/badge/instagram-@justinbieshaar-E4405F?logo=instagram&logoColor=white)](https://instagram.com/justinbieshaar)
+[![TikTok](https://img.shields.io/badge/tiktok-@justinbieshaar-000000?logo=tiktok&logoColor=white)](https://tiktok.com/@justinbieshaar)
+[![YouTube](https://img.shields.io/badge/youtube-@justinbieshaar-FF0000?logo=youtube&logoColor=white)](https://youtube.com/@justinbieshaar)
+
 
 Hi there! 👋
 Welcome to my 2025 C++ demo project – a playful, hands-on showcase of my skills in modern C++ game development.
@@ -18,6 +23,12 @@ So that's where this idea came from and I am happy to bring you along with me th
 ---
 
 ## 🖼️ Screenshots
+Game:
+<img width="1326" height="801" alt="image" src="https://github.com/user-attachments/assets/e3147b06-e0d6-484f-bf89-3d85e606e2ce" />
+<img width="1288" height="777" alt="image" src="https://github.com/user-attachments/assets/f9355dd0-f110-437a-a62c-c3835efc034f" />
+
+Tool:
+<img width="809" height="651" alt="image" src="https://github.com/user-attachments/assets/1b9c4f18-c695-4da4-ac75-771eee70e274" />
 
 ---
 
@@ -78,6 +89,6 @@ Open the generated solution/project in your IDE and hit build.
 ---
 
 ## 📬 Final Notes
-This demo is more than just a codebase — it’s a snapshot of where I am as a developer, how I think about architecture, and how I approach challenges creatively and independently.
+I had a lot of fun creating this demo. It allows me to show my capabilities in transitioning my knowledge from creating systems and tools in Unity C# to using modern C++. 
 
 Thanks for checking it out! Feel free to open an issue, leave feedback, or just say hi. 👋
