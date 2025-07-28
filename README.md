@@ -22,6 +22,11 @@ So that's where this idea came from and I am happy to bring you along with me th
 
 ---
 
+## 🛠️ Technical documentation
+WIP - Coming soon
+
+---
+
 ## 🖼️ Screenshots
 Game:
 <img width="1326" height="801" alt="image" src="https://github.com/user-attachments/assets/e3147b06-e0d6-484f-bf89-3d85e606e2ce" />
@@ -49,6 +54,7 @@ This project includes:
 - 🧪 Custom Dependency Injection (DI) – Designed to make system wiring clean and testable
 - 📣 Custom Signal System – For decoupled communication between systems
 - 🔧 Code generation pipeline – Converts JSON bird definitions into native C++ types
+- ⚠️ Custom logging - For easy logging with visuals and prefixes for better visibility
 
 ---
 
@@ -72,20 +78,13 @@ This project includes:
    cd bird-game-simulator
 
 2. **Generate project files**
-- Windows run premake-win.bat
-- todo support linux and mac
+
+Windows run premake-win.bat
+
+'// todo support linux and mac'
 
 3. **Build and run**
 Open the generated solution/project in your IDE and hit build.
-
----
-
-# Tools
-
-
----
-
-# Known flaws/issues
 
 ---
 
