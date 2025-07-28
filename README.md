@@ -34,6 +34,7 @@ Game:
 
 Tool:
 <img width="809" height="651" alt="image" src="https://github.com/user-attachments/assets/1b9c4f18-c695-4da4-ac75-771eee70e274" />
+<img width="802" height="640" alt="image" src="https://github.com/user-attachments/assets/a9c41fe0-f6e0-47b4-9b7d-61e251f97686" />
 
 ---
 
@@ -44,7 +45,9 @@ This project includes:
 - ✅ Custom bird creation tool, using JSON input and code generation, built for non-technical users
 - ✅ Reusable core libraries to isolate shared logic between the game and tool
 - ✅ Custom logger with log channels for coloring and prefix with ImGui rendering support
+- ✅ Reading obj files asynchroniously
 - ✅ Unit tests for the core systems
+- ✅ Custom utilities for conveniences and threading
 - ✅ Simple 3D bird simulation, where you can select and control generated birds in a terrain environment
 
 ---
@@ -67,6 +70,13 @@ This project includes:
 - [ImGuiFileDialog](https://github.com/aiekick/ImGuiFileDialog) – File picker for ImGui  
 - [nlohmann/json](https://github.com/nlohmann/json) – JSON parsing  
 - [stbi_image.h](https://github.com/nothings/stb/blob/master/stb_image.h) – stbi_image.h for texture loading
+
+---
+
+## ©️ Used assets
+I only used a free asset online for rendering the goose. All other resources have been produced by myself.
+
+For the goose asset, you can find it here: [Goose Free 3D model](https://www.cgtrader.com/free-3d-models/animal/bird/goose-8e4e96e1-0072-462d-b7e7-b6aed2f9ef3e) – on cgttrader.com
 
 ---
 
