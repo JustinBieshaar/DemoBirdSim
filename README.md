@@ -38,8 +38,9 @@ This project includes:
 - ✅ Premake build setup for cross-platform project generation
 - ✅ Custom bird creation tool, using JSON input and code generation, built for non-technical users
 - ✅ Reusable core libraries to isolate shared logic between the game and tool
-- ✅ Simple 3D bird simulation, where you can select and control generated birds in a terrain environment
+- ✅ Custom logger with log channels for coloring and prefix with ImGui rendering support
 - ✅ Unit tests for the core systems
+- ✅ Simple 3D bird simulation, where you can select and control generated birds in a terrain environment
 
 ---
 
