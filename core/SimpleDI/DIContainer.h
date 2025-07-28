@@ -66,25 +66,35 @@ namespace SimpleDI
 
                     using Args = typename SimpleDI::ConstructorTraits<Impl>::Args;
 
-                    // Create the factory using std::apply to expand resolved dependencies
+                    // Factory lambda that creates and caches a singleton instance of Impl.
+                    // It uses ConstructorTraits to automatically resolve constructor dependencies from the container.
                     binding->factory = [this, binding]() -> std::shared_ptr<void>
                         {
-                            // Singleton: only create the instance once and reuse it
+                            // Check if the singleton instance has already been created.
                             if (!binding->cachedInstance)
                             {
+                                // Get the constructor argument types for Impl from ConstructorTraits.
                                 using Args = typename SimpleDI::ConstructorTraits<Impl>::Args;
-                                auto resolvedArgs = [this]<typename... Deps>(std::tuple<Deps...>)
-                                {
-                                    //((std::cout << "Resolving dependency of type: " << typeid(Deps).name() << std::endl), ...);
-                                    return std::make_tuple(resolve<typename Deps::element_type>()...);  // capture `this` for resolve
-                                }(Args{});
 
-                                binding->cachedInstance = std::apply([](auto&&... unpacked)
+                                // Use a lambda with template parameter pack expansion to resolve each dependency in Args.
+                                // Deps... are expected to be std::shared_ptr<T>, so we extract T via Deps::element_type
+                                auto resolvedArgs = [this]<typename... Dependency>(std::tuple<Dependency...>)
+                                {
+                                    // Resolve each dependency using the DI container and collect into a tuple.
+                                    return std::make_tuple(resolve<typename Dependency::element_type>()...);
+                                }(Args{});  // Instantiates the templated lambda with the Args tuple.
+
+                                // Unpack the resolved arguments and forward them to the constructor of Impl.
+                                // The result is stored as the singleton instance in cachedInstance.
+                                binding->cachedInstance = std::apply(
+                                    [](auto&&... unpacked)
                                     {
                                         return std::make_shared<Impl>(std::forward<decltype(unpacked)>(unpacked)...);
-                                    }, std::move(resolvedArgs));
+                                    },
+                                    std::move(resolvedArgs));
                             }
 
+                            // Return the singleton instance (either newly created or cached).
                             return binding->cachedInstance;
                         };
                 }
@@ -120,12 +130,19 @@ namespace SimpleDI
                     // Each type in the constructor traits tuple is resolved from the container before constructing the instance.
                     binding->factory = [this]() -> std::shared_ptr<void>
                         {
+                            // Get the constructor argument types for Impl from ConstructorTraits.
                             using Args = typename SimpleDI::ConstructorTraits<Impl>::Args;
-                            auto resolvedArgs = [this]<typename... Deps>(std::tuple<Deps...>)
-                            {
-                                return std::make_tuple(resolve<typename Deps::element_type>()...);  // capture `this` for resolve
-                            }(Args{});
 
+                            // Use a lambda with template parameter pack expansion to resolve each dependency in Args.
+                            // Deps... are expected to be std::shared_ptr<T>, so we extract T via Deps::element_type
+                            auto resolvedArgs = [this]<typename... Dependency>(std::tuple<Dependency...>)
+                            {
+                                // Resolve each dependency using the DI container and collect into a tuple.
+                                return std::make_tuple(resolve<typename Dependency::element_type>()...);
+                            }(Args{});  // Instantiates the templated lambda with the Args tuple.
+
+                            // Unpack the resolved arguments and forward them to the constructor of Impl.
+                            // As this is transient, it always returns a new instance.
                             return std::apply([](auto&&... unpacked)
                                 {
                                     return std::make_shared<Impl>(std::forward<decltype(unpacked)>(unpacked)...);
