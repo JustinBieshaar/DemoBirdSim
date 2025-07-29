@@ -70,13 +70,11 @@ TEST(SimpleDITest, BindInstanceReturnsSameInjectedObject)
     EXPECT_EQ(resolved, realInstance); // Must be the exact same shared_ptr
 }
 
-TEST(SimpleDITest, ThrowsOnUnboundType)
+TEST(SimpleDITest, ExpectNullptrOnUnboundResolve)
 {
     SimpleDI::DIContainer container;
 
-    EXPECT_THROW({
-        container.resolve<IService>();
-        }, std::runtime_error);
+    EXPECT_EQ(container.resolve<IService>(), nullptr);
 }
 
 TEST(SimpleDITest, BindingDifferentImplementationsWorks)
@@ -100,4 +98,54 @@ TEST(SimpleDITest, ConstructorArgumentsAreForwardedCorrectly)
 
     auto service = container.resolve<IService>();
     EXPECT_EQ(service->doSomething(), 123);
+}
+
+// Auto binding tests
+struct IDependency
+{
+    virtual ~IDependency() = default;
+    virtual int getValue() = 0;
+};
+
+class DependencyImpl : public IDependency
+{
+public:
+    int getValue() override { return 99; }
+};
+
+struct IServiceAutoBind
+{
+    virtual ~IServiceAutoBind() = default;
+    virtual int doSomething() = 0;
+};
+
+class DependentService : public IServiceAutoBind
+{
+public:
+    DependentService() {} // required for compiling
+    DependentService(std::shared_ptr<IDependency> dep) : m_dep(dep) {}
+    int doSomething() override { return m_dep->getValue(); }
+
+private:
+    std::shared_ptr<IDependency> m_dep;
+};
+
+template<>
+struct SimpleDI::ConstructorTraits<DependentService>
+{
+    using Args = std::tuple<std::shared_ptr<IDependency>>;
+};
+
+TEST(SimpleDITest, AutoBindingResolvesConstructorDependencies)
+{
+    SimpleDI::DIContainer container;
+
+    // Bind the dependency manually
+    container.bind<IDependency, DependencyImpl>(SimpleDI::Lifetime::Singleton);
+
+    // Bind IService using auto-constructor injection (auto-binds IDependency)
+    container.bind<IServiceAutoBind, DependentService>(SimpleDI::Lifetime::Singleton);
+
+    auto service = container.resolve<IServiceAutoBind>();
+    EXPECT_EQ(service->doSomething(), 99);  // Should resolve IDependency automatically
 }
