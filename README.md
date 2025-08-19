@@ -22,8 +22,17 @@ So that's where this idea came from and I am happy to bring you along with me th
 
 ---
 
+### 🎥 YouTube Video
+I also created a **technical, educational devlog** detailing the decisions and process behind this project:
+
+[![Watch the video](https://img.youtube.com/vi/1guaoNIkENE/0.jpg)](https://www.youtube.com/watch?v=1guaoNIkENE)
+
+---
+
 ## 🛠️ Technical documentation
 WIP - Coming soon
+
+[Read here!](https://docs.google.com/document/d/11US5D-VAdEOowlMRiDJ4UuWGr4xGeWZATa8Fj1MsF2o)
 
 ---
 
@@ -53,7 +62,7 @@ This project includes:
 ---
 
 ## 🧱 Architecture Highlights
-- 🧩 Custom Entity-Component System (ECS) – Lightweight, flexible, and built from scratch
+- 🧩 Custom Entity-Component System (ECS) – Lightweight, flexible, Behavioural components, and built from scratch
 - 🧪 Custom Dependency Injection (DI) – Designed to make system wiring clean and testable
 - 📣 Custom Signal System – For decoupled communication between systems
 - 🔧 Code generation pipeline – Converts JSON bird definitions into native C++ types
@@ -73,10 +82,9 @@ This project includes:
 
 ---
 
-## ©️ Used assets
-I only used a free asset online for rendering the goose. All other resources have been produced by myself.
-
-For the goose asset, you can find it here: [Goose Free 3D model](https://www.cgtrader.com/free-3d-models/animal/bird/goose-8e4e96e1-0072-462d-b7e7-b6aed2f9ef3e) – on cgttrader.com
+## ©️ Assets
+- Only the goose model is from a free online source: [Goose Free 3D Model](https://www.cgtrader.com/free-3d-models/animal/bird/goose-8e4e96e1-0072-462d-b7e7-b6aed2f9ef3e)  
+- All other assets were created by me  
 
 ---
 
@@ -84,8 +92,9 @@ For the goose asset, you can find it here: [Goose Free 3D model](https://www.cgt
 
 1. **Clone the repo**
    ```bash
-   git clone https://github.com/your-username/bird-game-simulator.git
-   cd bird-game-simulator
+   git clone --recurse-submodules git@github.com:JustinBieshaar/DemoBirdSim.git "BirdGameSimulator"
+
+Important to make sure all submodules are pulled as well.
 
 2. **Generate project files**
 
